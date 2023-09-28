@@ -67,3 +67,26 @@ function createPhoneNumber(numbers) {
 function args_count() {
   return arguments.length
 }
+// задача 10
+function isLeapYear(year) {
+  if (
+    (year % 4 === 0 && year % 100 != 0) ||
+    (year % 100 === 0 && year % 400 === 0)
+  ) {
+    return true
+  } else {
+    return false
+  }
+}
+// задача 11
+var countSheep = function (num) {
+  let sleep = ''
+  if (num > 0) {
+    for (let i = 1; i <= num; i++) {
+      sleep = sleep + `${i} sheep...`
+    }
+    return sleep
+  } else {
+    return ''
+  }
+}
