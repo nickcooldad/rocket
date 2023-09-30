@@ -98,3 +98,30 @@ function nbYear(p0, percent, aug, p) {
   }
   return i
 }
+// задача 13 (решение мое = неправильное)
+function isPerfect(n) {
+  let sum = 0
+  for (i = 1; i < n - 1; i++) {
+    if (n % i === 0) {
+      sum += i
+    }
+  }
+  return sum === n ? true : false
+}
+
+//решение правильное не мое!
+const isPerfect = (num = 1) => {
+  if (num === 1) {
+    return false
+  }
+  let sum = 1
+  for (let i = 2; i <= Math.floor(Math.sqrt(num)); i++) {
+    if (num % i === 0) {
+      sum = sum + i + num / i
+      if (sum > num) {
+        return false
+      }
+    }
+  }
+  return sum === num
+}
