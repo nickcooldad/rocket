@@ -1,12 +1,8 @@
-var countSheep = function (num) {
-  let sleep = ''
-  if (num > 0) {
-    for (let i = 1; i <= num; i++) {
-      sleep = sleep + `${i} sheep...`
-    }
-    return sleep
-  } else {
-    return ''
+function nbYear(p0, percent, aug, p) {
+  let i = 0
+  for (i; p0 < p; i++) {
+    p0 = Math.trunc(p0 + (p0 * percent) / 100 + aug)
   }
+  return i
 }
-countSheep(5)
+nbYear(1500, 5, 100, 5000)
