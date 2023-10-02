@@ -135,3 +135,13 @@ function filter_list(arr) {
   }
   return newlist
 }
+//задача 15
+function findShort(s) {
+  let newfind = s.split(' ')
+  let arr = []
+  for (let item of newfind) {
+    arr.push(item.length)
+  }
+  let i = Math.min.apply(Math, arr)
+  return i
+}
