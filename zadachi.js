@@ -145,3 +145,8 @@ function findShort(s) {
   let i = Math.min.apply(Math, arr)
   return i
 }
+// задача 16
+function positiveSum(arr) {
+  // filtr
+  return arr.filter(index => index > 0).reduce((acc, item) => acc + item, 0)
+}
