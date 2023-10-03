@@ -150,3 +150,40 @@ function positiveSum(arr) {
   // filtr
   return arr.filter(index => index > 0).reduce((acc, item) => acc + item, 0)
 }
+//задача 17 function generateShape(integer) {
+function generateShape(integer) {
+  let array = []
+  for (let i = 0; i < integer ** 2 + integer - 1; i++) {
+    array.push('+')
+  }
+  for (let j = integer + 1; j < integer ** 2 + integer; j += integer + 1) {
+    array.fill('\n', j - 1, j)
+  }
+  return array.join('').toString()
+}
+// задача 18 (тупое решение)
+function getCount(str) {
+  let num = 0
+  for (let str1 of str) {
+    if (
+      str1.includes('a') === true ||
+      str1.includes('e') === true ||
+      str1.includes('i') === true ||
+      str1.includes('o') === true ||
+      str1.includes('u') === true
+    )
+      num += 1
+    console.log(str1)
+  }
+  return num
+}
+getCount('abarfgrbae')
+
+//задача 18 (адекватное решение)
+function getCount(str) {
+  const arr = ['a', 'e', 'i', 'o', 'u']
+
+  return str
+    .split('')
+    .reduce((acc, item) => (arr.includes(item) ? acc + 1 : acc), 0)
+}
