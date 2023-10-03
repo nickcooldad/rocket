@@ -1,23 +1,23 @@
-// 1 задача
+// 1(0) задача
 function evenOrOdd(number) {
   return number % 2 === 0 ? 'Even' : 'Odd'
 }
-//    2 задача
+//    2(1) задача
 function opposite(number) {
   return -number
 }
-//  3 задача
+//  3(2) задача
 function century(year) {
   return Math.ceil(year / 100)
 }
-//   4 задача
+//   4(3) задача
 function abbrevName(name) {
   let arr = name.split(' ')
   let name1 = arr[0][0].toUpperCase()
   let surname = arr[1][0].toUpperCase()
   return `${name1}.${surname}`
 }
-// 5 задача (1 решение)
+// 5(4) задача (1 решение)
 function solution(str) {
   let sum = ''
   for (let i = 0; i < str.length; i++) {
@@ -25,11 +25,11 @@ function solution(str) {
   }
   return sum
 }
-// 5 задача (2 решение)
+// 5(4) задача (2 решение)
 function solution(str) {
   return str.split('').reverse().join('')
 }
-// 6 задача (1 решение)
+// 6(5) задача (1 решение)
 function maskify(cc) {
   let data = cc.split('')
   let arr0 = []
@@ -42,32 +42,32 @@ function maskify(cc) {
     return [...arr0, ...arr1].join('')
   } else return data.join('')
 }
-// 6 задача (2 решение)
+// 6(5) задача (2 решение)
 function maskify(cc) {
   return cc.slice(-4).padStart(cc.length, '#')
 }
-// задача 7 (1 решение)
+// задача 7(6) (1 решение)
 function removeChar(str) {
   let arr = str.split('')
   arr.pop()
   arr.shift()
   return arr.join('')
 }
-// задача 7 (2 решение)
+// задача 7(6) (2 решение)
 function removeChar(str) {
   return str.slice(1, -1)
 }
-// задача 8
+// задача 8 (7)
 function createPhoneNumber(numbers) {
   return `(${numbers.slice(0, 3).join('')}) ${numbers
     .slice(3, 6)
     .join('')}-${numbers.slice(6).join('')}`
 }
-// задача 9
+// задача 9(8)
 function args_count() {
   return arguments.length
 }
-// задача 10
+// задача 10(9)
 function isLeapYear(year) {
   if (
     (year % 4 === 0 && year % 100 != 0) ||
@@ -78,7 +78,7 @@ function isLeapYear(year) {
     return false
   }
 }
-// задача 11
+// задача 11 (10)
 var countSheep = function (num) {
   let sleep = ''
   if (num > 0) {
@@ -90,7 +90,7 @@ var countSheep = function (num) {
     return ''
   }
 }
-// задача 12
+// задача 12 (11)
 function nbYear(p0, percent, aug, p) {
   let i = 0
   for (i; p0 < p; i++) {
@@ -98,7 +98,7 @@ function nbYear(p0, percent, aug, p) {
   }
   return i
 }
-// задача 13 (решение мое = неправильное)
+// задача 13 (12) (решение мое = неправильное)
 function isPerfect(n) {
   let sum = 0
   for (i = 1; i < n - 1; i++) {
@@ -125,7 +125,7 @@ const isPerfect = (num = 1) => {
   }
   return sum === num
 }
-// задача 14 (массивы и строки)
+// задача 14(100) (массивы и строки)
 function filter_list(arr) {
   let newlist = []
   for (let item of arr) {
@@ -135,7 +135,7 @@ function filter_list(arr) {
   }
   return newlist
 }
-//задача 15
+//задача 15(101)
 function findShort(s) {
   let newfind = s.split(' ')
   let arr = []
@@ -145,12 +145,12 @@ function findShort(s) {
   let i = Math.min.apply(Math, arr)
   return i
 }
-// задача 16
+// задача 16(102)
 function positiveSum(arr) {
   // filtr
   return arr.filter(index => index > 0).reduce((acc, item) => acc + item, 0)
 }
-//задача 17 function generateShape(integer) {
+//задача 17(103)
 function generateShape(integer) {
   let array = []
   for (let i = 0; i < integer ** 2 + integer - 1; i++) {
@@ -161,7 +161,7 @@ function generateShape(integer) {
   }
   return array.join('').toString()
 }
-// задача 18 (тупое решение)
+// задача 18(104) (тупое решение)
 function getCount(str) {
   let num = 0
   for (let str1 of str) {
@@ -179,7 +179,7 @@ function getCount(str) {
 }
 getCount('abarfgrbae')
 
-//задача 18 (адекватное решение)
+//задача 18(104) (адекватное решение)
 function getCount(str) {
   const arr = ['a', 'e', 'i', 'o', 'u']
 
@@ -187,7 +187,7 @@ function getCount(str) {
     .split('')
     .reduce((acc, item) => (arr.includes(item) ? acc + 1 : acc), 0)
 }
-// задача 19
+// задача 19(105)
 
 function digPow(n, p) {
   let num = n
