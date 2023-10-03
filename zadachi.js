@@ -203,3 +203,13 @@ function digPow(n, p) {
     return -1
   }
 }
+//задача 20(106)
+function min(arr, toReturn) {
+  let array = arr.reduce(
+    (prev, item, index) => {
+      return item < prev[1] ? [index, item] : prev
+    },
+    [0, arr[0]],
+  )
+  return toReturn === 'value' ? array[1] : array[0]
+}
