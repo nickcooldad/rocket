@@ -1,25 +1,16 @@
-//includes
-function getCount(str) {
-  let num = 0
-  for (let str1 of str) {
-    if (
-      str1.includes('a') === true ||
-      str1.includes('e') === true ||
-      str1.includes('i') === true ||
-      str1.includes('o') === true ||
-      str1.includes('u') === true
-    )
-      num += 1
-    console.log(str1)
-  }
-  return num
-}
-getCount('abarfgrbae')
-
-function getCount(str) {
-  const arr = ['a', 'e', 'i', 'o', 'u']
-
-  return str
+//reduce
+function digPow(n, p) {
+  let num = n
+    .toString()
     .split('')
-    .reduce((acc, item) => (arr.includes(item) ? acc + 1 : acc), 0)
+    .map(Number)
+    .reduce((prev, item, index) => {
+      return prev + item ** (p + index)
+    }, 0)
+  if (num % n === 0) {
+    return num / n
+  } else {
+    return -1
+  }
 }
+console.log(digPow(46288, 3))
