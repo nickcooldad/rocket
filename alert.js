@@ -1,10 +1,23 @@
-function min(arr, toReturn) {
-  let array = arr.reduce(
-    (prev, item, index) => {
-      return item < prev[1] ? [index, item] : prev
-    },
-    [0, arr[0]],
-  )
-  return toReturn === 'value' ? array[1] : array[0]
+//filter includes
+function arrayDiff(a, b) {
+  return a.filter(function (element, index, array) {
+    element => !b.includes(element)
+  })
 }
-console.log(min([1, 2, 3, 4, 5, 6], 'value'))
+consol.log(arrayDiff([1, 2, 3, 4, 5], [2, 3]))
+
+let filteredArray = a.filter(function (item) {
+  return !b.includes(item)
+})
+
+let c = a.reduce((acc, item) => {
+  if (!b.includes(item)) acc.push(item)
+  return acc
+}, [])
+
+//filter includes
+
+function arrayDiff(a, b) {
+  return a.filter(element => !b.includes(element))
+}
+console.log(arrayDiff([1, 2, 3, 4, 5], [2, 3]))

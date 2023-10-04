@@ -213,3 +213,8 @@ function min(arr, toReturn) {
   )
   return toReturn === 'value' ? array[1] : array[0]
 }
+
+//задача 21(107)
+function arrayDiff(a, b) {
+  return a.filter(element => !b.includes(element))
+}
