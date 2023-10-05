@@ -1,11 +1,11 @@
 function insertDash(num) {
-  return num
-    .toString()
-    .split('')
-    .map(Number)
-    .filter(item => item % 2 === 1)
-    .forEach((item, index, array) => {
-      return item + 1
-    }, 0)
+  num = num.toString().split('').map(Number)
+  for (let i = 1; i < num.length; i++) {
+    if (num[i] % 2 != 0 && num[i - 1] % 2 != 0) {
+      num.splice(i, 0, '-').join('')
+      i++
+    }
+  }
+  return num.join('')
 }
-console.log(insertDash(1234567))
+console.log(insertDash(1245679))
