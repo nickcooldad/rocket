@@ -218,3 +218,15 @@ function min(arr, toReturn) {
 function arrayDiff(a, b) {
   return a.filter(element => !b.includes(element))
 }
+// задача 22(108)
+var capitals = function (word) {
+  let arr = word.split('')
+  let ar2 = []
+  let ar1 = word.toLowerCase().split('')
+
+  for (let i = 0; i <= arr.length; i++)
+    if (arr[i] != ar1[i]) {
+      ar2.push(i)
+    }
+  return ar2
+}

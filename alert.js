@@ -1,23 +1,11 @@
-//filter includes
-function arrayDiff(a, b) {
-  return a.filter(function (element, index, array) {
-    element => !b.includes(element)
-  })
+var capitals = function (word) {
+  let arr = word.split('')
+  let ar2 = []
+  let ar1 = word.toLowerCase().split('')
+
+  for (let i = 0; i <= arr.length; i++)
+    if (arr[i] != ar1[i]) {
+      ar2.push(i)
+    }
+  return ar2
 }
-consol.log(arrayDiff([1, 2, 3, 4, 5], [2, 3]))
-
-let filteredArray = a.filter(function (item) {
-  return !b.includes(item)
-})
-
-let c = a.reduce((acc, item) => {
-  if (!b.includes(item)) acc.push(item)
-  return acc
-}, [])
-
-//filter includes
-
-function arrayDiff(a, b) {
-  return a.filter(element => !b.includes(element))
-}
-console.log(arrayDiff([1, 2, 3, 4, 5], [2, 3]))
