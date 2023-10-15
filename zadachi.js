@@ -261,3 +261,27 @@ function bingo(ticket, win) {
   )
   return arwin.length >= win ? 'Winner!' : 'Loser!'
 }
+//задача 26(112)
+function rowWeights(array) {
+  let number1 = array
+    .filter((item, index, array) => {
+      if (index % 2 === 0) {
+        return array[index]
+      }
+    })
+    .reduce((acc, item, index, arr) => {
+      return (acc = acc + item)
+    }, 0)
+  let number2 = array
+    .filter((item, index, array) => {
+      if (index % 2 != 0) {
+        return array[index]
+      }
+    })
+    .reduce((acc, item, index, arr) => {
+      return (acc = acc + item)
+    }, 0)
+  let ar = []
+  ar.push(number1, number2)
+  return ar
+}

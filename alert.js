@@ -1,20 +1,27 @@
-function bingo(ticket, win) {
-  let arwin = ticket.filter(item1 =>
-    item1[0].split('').some((item, index, array) => {
-      console.log(item, item1[1])
-      return array[index].charCodeAt(0) === item1[1]
-    }),
-  )
-  return arwin.length >= win ? 'Winner!' : 'Loser!'
+// reduce
+function rowWeights(array) {
+  let number1 = array
+    .filter((item, index, array) => {
+      if (index % 2 === 0) {
+        return array[index]
+      }
+    })
+    .reduce((acc, item, index, arr) => {
+      return (acc = acc + item)
+    }, 0)
+  let number2 = array
+    .filter((item, index, array) => {
+      if (index % 2 != 0) {
+        return array[index]
+      }
+    })
+    .reduce((acc, item, index, arr) => {
+      return (acc = acc + item)
+    }, 0)
+  //console.log(number1, number2)
+  let ar = []
+  ar.push(number1, number2)
+  //console.log(ar)
+  return ar
 }
-
-console.log(
-  bingo(
-    [
-      ['ABC', 65],
-      ['HGR', 74],
-      ['BYHT', 74],
-    ],
-    1,
-  ),
-)
+console.log(rowWeights([80]))
