@@ -1,7 +1,8 @@
 function bingo(ticket, win) {
-  let arwin = ticket.filter(item =>
-    item.some((item, index, array) => {
-      return array[0].charCodeAt(index) === array[1]
+  let arwin = ticket.filter(item1 =>
+    item1[0].split('').some((item, index, array) => {
+      console.log(item, item1[1])
+      return array[index].charCodeAt(0) === item1[1]
     }),
   )
   return arwin.length >= win ? 'Winner!' : 'Loser!'
@@ -10,15 +11,10 @@ function bingo(ticket, win) {
 console.log(
   bingo(
     [
-      ['YFW', 73],
-      ['TCDWPO', 87],
-      ['XQ', 90],
-      ['JLEFYL', 87],
-      ['MMUG', 79],
-      ['NG', 81],
-      ['FB', 70],
-      ['OOLB', 86],
+      ['ABC', 65],
+      ['HGR', 74],
+      ['BYHT', 74],
     ],
-    2,
+    1,
   ),
 )
