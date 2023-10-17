@@ -297,3 +297,14 @@ function scrollingText(text) {
   })
   return ar
 }
+//задача 28(114)
+function expandedForm(num) {
+  let ar = []
+  let result = num.toString().split('')
+  result.map((item, index, array) => {
+    if (item != '0') {
+      ar.push(item * 10 ** (array.length - 1 - index))
+    }
+  })
+  return ar.join(' + ')
+}
