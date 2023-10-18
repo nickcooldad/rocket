@@ -285,6 +285,7 @@ function rowWeights(array) {
   ar.push(number1, number2)
   return ar
 }
+<<<<<<< HEAD
 //задача 27(113)
 function scrollingText(text) {
   let result = text.toUpperCase().split('')
@@ -313,3 +314,5 @@ const arrCheck = value => {
   return value.every(item => Array.isArray(item))
 }
 console.log(arrCheck([{}, {}]))
+=======
+>>>>>>> 77fb50b72b26a8b934f721cb2cbba2294bfac8c1

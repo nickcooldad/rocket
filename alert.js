@@ -1,8 +1,4 @@
-function box(num) {
-  let array = []
-  array.length = num * num
-  array.fill('-')
-  array
-  return array
+const arrCheck = value => {
+  return value.every(item => Array.isArray(item))
 }
-console.log(box(3))
+console.log(arrCheck([{}, {}]))
