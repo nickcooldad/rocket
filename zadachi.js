@@ -314,5 +314,3 @@ const arrCheck = value => {
   return value.every(item => Array.isArray(item))
 }
 console.log(arrCheck([{}, {}]))
-=======
->>>>>>> 77fb50b72b26a8b934f721cb2cbba2294bfac8c1
