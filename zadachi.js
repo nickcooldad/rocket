@@ -308,3 +308,8 @@ function expandedForm(num) {
   })
   return ar.join(' + ')
 }
+//задача 29(115)
+const arrCheck = value => {
+  return value.every(item => Array.isArray(item))
+}
+console.log(arrCheck([{}, {}]))
