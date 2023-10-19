@@ -285,3 +285,31 @@ function rowWeights(array) {
   ar.push(number1, number2)
   return ar
 }
+//задача 27(113)
+function scrollingText(text) {
+  let result = text.toUpperCase().split('')
+  let ar = []
+
+  result.map((item, index, array) => {
+    return ar.push(
+      result.slice(index).join('') + result.slice(0, index).join(''),
+    )
+  })
+  return ar
+}
+//задача 28(114)
+function expandedForm(num) {
+  let ar = []
+  let result = num.toString().split('')
+  result.map((item, index, array) => {
+    if (item != '0') {
+      ar.push(item * 10 ** (array.length - 1 - index))
+    }
+  })
+  return ar.join(' + ')
+}
+// задача 29 (115)
+const arrCheck = value => {
+  return value.every(item => Array.isArray(item))
+}
+console.log(arrCheck([{}, {}]))
