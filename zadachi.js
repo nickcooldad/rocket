@@ -313,3 +313,25 @@ const arrCheck = value => {
   return value.every(item => Array.isArray(item))
 }
 console.log(arrCheck([{}, {}]))
+//задача 30 (116)
+function box(num) {
+  let ar1 = []
+  ar1.length = [num]
+  ar1.fill('-', 0)
+
+  let ar2 = []
+  ar2.length = [num]
+  ar2
+    .fill()
+    .fill('-', 0)
+    .fill(' ', 1, num - 1)
+  let result = []
+  console.log(ar1, ar2)
+  ar1.map((item, index) => {
+    return index === num - 1 || index === 0
+      ? result.push(ar1.join(''))
+      : result.push(ar2.join(''))
+  })
+
+  return result
+}
