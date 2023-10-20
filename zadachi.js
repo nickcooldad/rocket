@@ -396,3 +396,7 @@ function countSmileys(arr) {
     }
   }, 0)
 }
+//задача 31 (121)
+function smallEnough(a, limit) {
+  return a.every(item => item <= limit)
+}
