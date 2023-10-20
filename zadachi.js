@@ -335,3 +335,9 @@ function box(num) {
 
   return result
 }
+// задача 31 (117)
+function findMagic(arr) {
+  return arr.findIndex((item, index, array) => {
+    return array[index] === index
+  })
+}
