@@ -357,3 +357,23 @@ obfuscate = function (email) {
     })
     .join('')
 }
+// задача 33 (119)
+function checkExam(array1, array2) {
+  let result = array1
+    .map((item, index, array) => {
+      let result = 0
+      if (array1[index] === array2[index]) {
+        return (result += +4)
+      }
+      if (array1[index] != array2[index] && array2[index] != '') {
+        return (result -= 1)
+      }
+      if (array2[index] === '') {
+        return (result += 0)
+      }
+    })
+    .reduce((acc, item) => {
+      return acc + item
+    })
+  return result > 0 ? result : 0
+}
