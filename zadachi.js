@@ -341,3 +341,19 @@ function findMagic(arr) {
     return array[index] === index
   })
 }
+// задача 32 (118)
+obfuscate = function (email) {
+  return email
+    .split('')
+    .map(item => {
+      if (item === '@') {
+        return ' [at] '
+      }
+      if (item === '.') {
+        return ' [dot] '
+      } else {
+        return item
+      }
+    })
+    .join('')
+}
