@@ -400,3 +400,18 @@ function countSmileys(arr) {
 function smallEnough(a, limit) {
   return a.every(item => item <= limit)
 }
+//задача 32 (200)
+function rgb(r, g, b) {
+  let result = [r, g, b]
+  return result
+    .map(item => {
+      return item >= 0 && item <= 255
+        ? item.toString(16)
+        : Math.min(Math.max(item, 0), 255).toString(16)
+    })
+    .map(elem => {
+      return elem.length < 2 ? '0' + elem : elem
+    })
+    .join('')
+    .toUpperCase()
+}
