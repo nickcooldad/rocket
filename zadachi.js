@@ -415,3 +415,14 @@ function rgb(r, g, b) {
     .join('')
     .toUpperCase()
 }
+//задача 33 (201)
+function twoSum(numbers, target) {
+  for (let i = 0; i < numbers.length; i++) {
+    for (let j = 0 + 1; j < numbers.length; j++) {
+      const sum = numbers[i] + numbers[j]
+      if (target === sum) {
+        return [i, j]
+      }
+    }
+  }
+}
