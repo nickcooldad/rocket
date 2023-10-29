@@ -426,3 +426,24 @@ function twoSum(numbers, target) {
     }
   }
 }
+// задача 34 (202)
+function getLengthOfMissingArray(arrayOfArrays) {
+  if (
+    arrayOfArrays === null ||
+    arrayOfArrays.length === 0 ||
+    arrayOfArrays.some(item => item === null || item.length === 0)
+  ) {
+    return 0
+  }
+  let result = arrayOfArrays
+    .sort((a, b) => {
+      return a.length > b.length ? 1 : -1
+    })
+    .map(item => item.length)
+
+  for (let i = 0; i < result.length; i++) {
+    if (result[i] + 1 != result[i + 1]) {
+      return result[i] + 1
+    }
+  }
+}
