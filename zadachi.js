@@ -466,3 +466,22 @@ function proofread(str) {
     .map(item => item[0].toUpperCase() + item.slice(1, item.length))
     .join('. ')
 }
+//задача 37 (205)
+function formatWords(words) {
+  if (
+    words === null ||
+    words === undefined ||
+    words.join() === '' ||
+    words.length === 0
+  ) {
+    return ''
+  }
+  {
+    let ar = words.filter(
+      item => item != null && item.length != 0 && item != '',
+    )
+    return ar.length === 1
+      ? ar.join('')
+      : ar.slice(0, ar.length - 1).join(', ') + ' and ' + ar.at(-1)
+  }
+}
