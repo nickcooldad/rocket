@@ -457,3 +457,12 @@ function dataReverse(data) {
   }
   return result.reverse().flat()
 }
+//задача 36 (204)
+function proofread(str) {
+  return str
+    .replace(/ie/gi, 'ei')
+    .toLowerCase()
+    .split('. ')
+    .map(item => item[0].toUpperCase() + item.slice(1, item.length))
+    .join('. ')
+}
