@@ -485,3 +485,14 @@ function formatWords(words) {
       : ar.slice(0, ar.length - 1).join(', ') + ' and ' + ar.at(-1)
   }
 }
+//задача 38 (206)
+function deleteDigit(n) {
+  const result = n.toString().split('')
+  return Math.max(
+    ...result.map((item, index) => {
+      const ar = [...result]
+      ar.splice(index, 1)
+      return +ar.join('')
+    }),
+  )
+}
