@@ -496,3 +496,27 @@ function deleteDigit(n) {
     }),
   )
 }
+//задача 39 (207) мое решение
+function findEvenIndex(arr) {
+  let num1 = arr.map((item1, index1) => {
+    return arr.slice(0, index1).reduce((acc2, item2) => {
+      return (acc2 += item2)
+    }, 0)
+  })
+  let num2 = arr.map((item3, index3) => {
+    return arr.slice(index3 + 1, arr.length).reduce((acc3, item4) => {
+      return (acc3 += item4)
+    }, 0)
+  })
+  return [...num1, ...num2].findIndex((element, ind, ar) => {
+    return ar[ind] === ar[ind + arr.length]
+  })
+}
+// нормальное решение
+function findEvenIndex(arr) {
+  return arr.findIndex(
+    (_, i) =>
+      arr.slice(0, i).reduce((acc, c) => acc + c, 0) ===
+      arr.slice(i + 1).reduce((acc, c) => acc + c, 0),
+  )
+}
