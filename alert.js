@@ -1,43 +1,39 @@
-function indexEqualsValue(array) {
-  let start = 0,
-    end = array.length,
-    found = false,
-    position = -1,
-    middle
-  while (found === false && start <= end) {
-    middle = Math.floor((start + end) / 2)
-    if (array[middle] === middle) {
-      found = true
-      position = middle
-      return position
-    }
+function validParentheses(parenStr) {
+  let left = []
+  let right = []
+  let left1 = []
+  let right1 = []
+  if (
+    parenStr.length % 2 != 0 ||
+    parenStr === undefined ||
+    parenStr === null ||
+    parenStr === ')('
+  ) {
+    return false
   }
-  if (middle < array[middle]) {
-    end = middle - 1
-  } else {
-    start = middle + 1
+  if (parenStr === '') {
+    return true
+  }
+  {
+    parenStr.split('').map((elem, index, array) => {
+      return array[index] === '(' ? left.push(index) : right.push(index)
+    })
+    left.map((item, index1, array1) => {
+      if (item + 1 === left[index1 + 1]) {
+        left1.push(index1)
+      }
+    })
+
+    right.map((item1, index2, array2) => {
+      if (item1 + 1 === right[index2 + 1]) {
+        right1.push(index2)
+      }
+    })
+    console.log(left1, right1)
+    return left1.every(
+      (item3, index3) =>
+        item3 <= right1[index3] && left1.length === right1.length,
+    )
   }
 }
-
-console.log(indexEqualsValue([-5, 1, 2, 3, 4, 5, 7, 10, 15]))
-
-function indexEqualsValue(arr) {
-  let start = 0
-  let end = arr.length - 1
-  let result = -1
-
-  while (start <= end) {
-    const mid = Math.floor((start + end) / 2)
-    if (arr[mid] === mid) {
-      result = mid
-      right = mid - 1 // Проверяем более низкий индекс с тем же значением
-    } else if (arr[mid] < mid) {
-      start = mid + 1
-    } else {
-      end = mid - 1
-    }
-  }
-
-  return result
-}
-console.log(indexEqualsValue([-5, 1, 2, 3, 4, 5, 7, 10, 15]))
+console.log(validParentheses('()))'))
