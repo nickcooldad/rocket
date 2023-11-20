@@ -587,3 +587,35 @@ function validParentheses(parenStr) {
   }
   return curr === 0
 }
+//задача 43
+function calculate(expression) {
+  if (expression.split('').every(item => item != ' ' && +item != NaN)) {
+    return parseFloat(expression)
+  }
+  {
+    let token = expression.split(' '),
+      num = []
+
+    for (let i = token.length - 1; i >= 0; i--) {
+      if (!isNaN(parseFloat(token[i]))) {
+        num.push(+token[i])
+      } else {
+        let num1 = num.pop(),
+          num2 = num.pop()
+        if (token[i] === '+') {
+          num.push(num1 + num2)
+        }
+        if (token[i] === '-') {
+          num.push(num1 - num2)
+        }
+        if (token[i] === '*') {
+          num.push(num1 * num2)
+        }
+        if (token[i] === '/') {
+          num.push(num1 / num2)
+        }
+      }
+    }
+    return num[0]
+  }
+}
