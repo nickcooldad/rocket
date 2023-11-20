@@ -587,7 +587,7 @@ function validParentheses(parenStr) {
   }
   return curr === 0
 }
-//задача 43
+//задача 43 (211)
 function calculate(expression) {
   if (expression.split('').every(item => item != ' ' && +item != NaN)) {
     return parseFloat(expression)
