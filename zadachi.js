@@ -619,3 +619,19 @@ function calculate(expression) {
     return num[0]
   }
 }
+//задача 44 (212)
+var runLengthEncoding = function (str) {
+  let string = str.split(''),
+    result = [],
+    j = 1
+  for (let i = 0; i < string.length; i++) {
+    if (string[i] === string[i + 1]) {
+      j += 1
+    }
+    if (string[i] != string[i + 1]) {
+      result.push([j, string[i]])
+      j = 1
+    }
+  }
+  return result
+}
