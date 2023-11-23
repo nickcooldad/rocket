@@ -647,3 +647,33 @@ function isPrime(num) {
   }
   return true
 }
+//задача 46 (214)
+function zeroPlentiful(arr) {
+  let j = 1,
+    result = []
+  if (arr.length < 4) {
+    return 0
+  }
+  {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === 0 && arr[i] === arr[i + 1]) {
+        j += 1
+      }
+      if (arr[i] === 0 && arr[i] != arr[i + 1]) {
+        result.push(j)
+      }
+
+      if (arr[i] != 0 && arr[i] != arr[i + 1]) {
+        result.push(0)
+        j = 1
+      }
+    }
+  }
+  return result.filter(item => item > 0).every(elem => elem >= 4)
+    ? result
+        .filter(el => el >= 4)
+        .reduce((acc, element) => {
+          return (acc += 1)
+        }, 0)
+    : 0
+}
