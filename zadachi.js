@@ -672,7 +672,7 @@ function zeroPlentiful(arr) {
   return result.filter(item => item > 0).every(elem => elem >= 4)
     ? result
         .filter(el => el >= 4)
-        .reduce((acc, element) => {
+        .reduce(acc => {
           return (acc += 1)
         }, 0)
     : 0
