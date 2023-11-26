@@ -685,4 +685,19 @@ function kebabize(str) {
     .map(item => item.toLowerCase())
     .join('-')
 }
-//задача 48
+//задача 48 (216)
+function abbreviate(string) {
+  return string
+    .split(/(?=\W)/g)
+    .map(item => {
+      if (item.replace(/\s/, '').length <= 3) {
+        return item
+      }
+      if (item[0] != item.replace(/[a-zA-Z]/g, '')) {
+        return `${item[0]}${item.length - 2}${item[item.length - 1]}`
+      } else {
+        return `${item[0]}${item[1]}${item.length - 3}${item[item.length - 1]}`
+      }
+    })
+    .join('')
+}
