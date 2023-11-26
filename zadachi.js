@@ -647,3 +647,11 @@ function isPrime(num) {
   }
   return true
 }
+//задача 46 (214)
+function kebabize(str) {
+  return str
+    .replace(/[^\D]/g, '')
+    .split(/(?=[A-Z])/)
+    .map(item => item.toLowerCase())
+    .join('-')
+}
