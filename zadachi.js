@@ -701,3 +701,18 @@ function abbreviate(string) {
     })
     .join('')
 }
+//задача 49 (217)
+function isValidIP(str) {
+  return str.split('.').every((item, index, array) => {
+    if (item.length === 1 && array.length === 4 && item >= 0) {
+      return true
+    }
+    if (
+      item.length > 1 &&
+      array.length === 4 &&
+      item.replace(/\d/g, '') === ''
+    ) {
+      return item[0] != 0 && item >= 1 && item <= 255
+    }
+  })
+}
