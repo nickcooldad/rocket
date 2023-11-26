@@ -685,3 +685,4 @@ function kebabize(str) {
     .map(item => item.toLowerCase())
     .join('-')
 }
+//задача 48
