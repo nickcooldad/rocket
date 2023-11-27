@@ -716,3 +716,19 @@ function isValidIP(str) {
     }
   })
 }
+//задача 50 (218)
+function incrementString(string) {
+  let text = [],
+    number = [],
+    lastindex = string
+      .split('')
+      .findLastIndex(item => item.replace(/[a-zA-Z]/g, '') === '') // крайний индекс где начинается текст
+  string.split('').map((elem, index) => {
+    index <= lastindex ? text.push(elem) : number.push(elem) // заполняем массивы текстои и числами
+  })
+  return `${text.join('')}${
+    number.length === 0
+      ? 1
+      : (+number.join('') + 1).toString().padStart(number.length, '0') // padStart заполняет нулями
+  }`
+}
