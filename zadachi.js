@@ -732,3 +732,25 @@ function incrementString(string) {
       : (+number.join('') + 1).toString().padStart(number.length, '0') // padStart заполняет нулями
   }`
 }
+//задача 51 (219)
+var format = function (str, obj) {
+  Array.isArray(obj)
+    ? (obj = obj.reduce((acc, item, index) => {
+        acc[index] = item
+        return acc
+      }, {}))
+    : obj
+  return str
+    .split(' ')
+    .map(item => {
+      for (let key in obj) {
+        if (item.includes(`{${key}}`)) {
+          return item.replace(`{${key}}`, obj[key])
+        }
+      }
+      {
+        return item
+      }
+    })
+    .join(' ')
+}
