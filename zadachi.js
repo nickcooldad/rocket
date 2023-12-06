@@ -754,3 +754,12 @@ var format = function (str, obj) {
     })
     .join(' ')
 }
+//задача 52 (300)
+function hexStringToRGB(hexString) {
+  let obj = {
+    r: parseInt(hexString.slice(1, 3), 16),
+    g: parseInt(hexString.slice(3, 5), 16),
+    b: parseInt(hexString.slice(5), 16),
+  }
+  return obj
+}
