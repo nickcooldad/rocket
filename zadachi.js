@@ -797,3 +797,13 @@ function scoreboard(string) {
     .map(item => score[item])
     .filter(elem => typeof elem === 'number')
 }
+//задача 55 (303)
+function outed(meet, boss) {
+  let result = 0
+  for (let key in meet) {
+    key === boss ? (result += meet[key] * 2) : (result += meet[key])
+  }
+  return result / Object.keys(meet).length <= 5
+    ? 'Get Out Now!'
+    : 'Nice Work Champ!'
+}
