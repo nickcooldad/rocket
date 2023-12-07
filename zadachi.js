@@ -763,3 +763,18 @@ function hexStringToRGB(hexString) {
   }
   return obj
 }
+//задача 53 (301)
+function DNAStrand(dna) {
+  let obj = {
+    A: 'T',
+    T: 'A',
+    C: 'G',
+    G: 'C',
+  }
+  return dna
+    .split('')
+    .map(function (key) {
+      return obj[key]
+    })
+    .join('')
+}
