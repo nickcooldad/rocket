@@ -807,3 +807,31 @@ function outed(meet, boss) {
     ? 'Get Out Now!'
     : 'Nice Work Champ!'
 }
+//задача 56 (304)
+const whosOnline = friends => {
+  let obj = {
+    online: [],
+    offline: [],
+    away: [],
+  }
+
+  for (let friend of friends) {
+    const {username, status, lastActivity} = friend
+
+    if (status === 'online' && lastActivity > 10) {
+      obj.away.push(username)
+    } else if (status === 'offline') {
+      obj.offline.push(username)
+    } else if (status === 'online' && lastActivity <= 10) {
+      obj.online.push(username)
+    }
+  }
+
+  for (let key in obj) {
+    if (obj[key].length === 0) {
+      delete obj[key]
+    }
+  }
+
+  return obj
+}
