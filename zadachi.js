@@ -845,3 +845,23 @@ function duplicateEncode(word) {
     })
     .join('')
 }
+//задача 58 (306)
+var isAnagram = function (test, original) {
+  let obj = {}
+
+  for (let key of original.toLowerCase()) {
+    obj[key] = (obj[key] || 0) + 1
+  }
+
+  for (let letter of test.toLowerCase()) {
+    for (let str in obj) {
+      if (letter === str) {
+        obj[str] -= 1
+      }
+      if (obj[str] === 0) {
+        delete obj[str]
+      }
+    }
+  }
+  return Object.keys(obj).length === 0 && test.length === original.length
+}
