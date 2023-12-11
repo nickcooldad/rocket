@@ -835,3 +835,13 @@ const whosOnline = friends => {
 
   return obj
 }
+//задача 57 (305)
+function duplicateEncode(word) {
+  return word
+    .toLowerCase()
+    .split('')
+    .map((item, index, array) => {
+      return array.indexOf(item) === array.lastIndexOf(item) ? '(' : ')'
+    })
+    .join('')
+}
