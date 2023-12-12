@@ -865,3 +865,8 @@ var isAnagram = function (test, original) {
   }
   return Object.keys(obj).length === 0 && test.length === original.length
 }
+//задача 59 (306)
+function arithmetic(a, b, operator) {
+  let result = {add: a + b, subtract: a - b, multiply: a * b, divide: a / b}
+  return result[operator]
+}
