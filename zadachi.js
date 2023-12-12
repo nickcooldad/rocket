@@ -870,3 +870,19 @@ function arithmetic(a, b, operator) {
   let result = {add: a + b, subtract: a - b, multiply: a * b, divide: a / b}
   return result[operator]
 }
+//задача 60 (307)
+function pluck(objs, name) {
+  return objs.map(item => {
+    for (let key in item) {
+      if (key === name) {
+        return item[key]
+      }
+    }
+  })
+}
+
+function pluck(objs, name) {
+  return objs.map(function (obj) {
+    return obj[name]
+  })
+}
