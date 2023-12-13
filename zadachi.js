@@ -896,3 +896,11 @@ function objConcat(arr) {
   })
   return result
 }
+//задача 62 (309)
+function removeDuplicateWords(s) {
+  let result = {}
+  s.split(' ').map(item => {
+    result[item] = item
+  })
+  return Object.keys(result).join(' ')
+}
