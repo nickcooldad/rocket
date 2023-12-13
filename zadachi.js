@@ -929,3 +929,10 @@ function greetDevelopers(list) {
     return item
   })
 }
+//задача 65 (312)
+function myLanguages(results) {
+  return Object.entries(results)
+    .filter(item => item[1] >= 60)
+    .sort((a, b) => b[1] - a[1])
+    .map(elem => elem[0])
+}
