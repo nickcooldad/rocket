@@ -920,3 +920,12 @@ function findUnique(numbers) {
 function findUnique(numbers) {
   return numbers.reduce((a, b) => a ^ b)
 }
+//задача 64 (311)
+function greetDevelopers(list) {
+  return list.map(item => {
+    for (key in item) {
+      item.greeting = `Hi ${item.firstName}, what do you like the most about ${item.language}?`
+    }
+    return item
+  })
+}
