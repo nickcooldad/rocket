@@ -904,3 +904,19 @@ function removeDuplicateWords(s) {
   })
   return Object.keys(result).join(' ')
 }
+//задача 63 (310)
+function findUnique(numbers) {
+  let result = {}
+  numbers.map(item => {
+    result[item] = (result[item] || 0) + 1
+  })
+  for (let key in result) {
+    if (result[key] === 1) {
+      return +key
+    }
+  }
+}
+
+function findUnique(numbers) {
+  return numbers.reduce((a, b) => a ^ b)
+}
