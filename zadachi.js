@@ -886,3 +886,13 @@ function pluck(objs, name) {
     return obj[name]
   })
 }
+//задача 61 (308)
+function objConcat(arr) {
+  let result = {}
+  arr.map(item => {
+    for (key in item) {
+      result[key] = item[key]
+    }
+  })
+  return result
+}
