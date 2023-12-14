@@ -1,7 +1,13 @@
-function myLanguages(results) {
-  return Object.entries(results)
-    .filter(item => item[1] >= 60)
-    .sort((a, b) => b[1] - a[1])
-    .map(elem => elem[0])
+function groupAnagrams(words) {
+  let result = {}
+  words.forEach(word => {
+    let item = word.split('').sort().join('')
+    if (!result[item]) {
+      result[item] = []
+    }
+    result[item].push(word)
+  })
+  return Object.values(result)
 }
-console.log(myLanguages({Java: 10, Ruby: 80, Python: 65}))
+
+console.log(groupAnagrams(['tsar', 'rat', 'tar', 'star', 'tars', 'cheese']))

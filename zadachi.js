@@ -936,3 +936,15 @@ function myLanguages(results) {
     .sort((a, b) => b[1] - a[1])
     .map(elem => elem[0])
 }
+// задача 66 (313)
+function groupAnagrams(words) {
+  let result = {}
+  words.forEach(word => {
+    let item = word.split('').sort().join('')
+    if (!result[item]) {
+      result[item] = []
+    }
+    result[item].push(word)
+  })
+  return Object.values(result)
+}
