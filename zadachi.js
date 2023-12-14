@@ -991,3 +991,9 @@ function findPair(arr1, arr2) {
   }
   return sum
 }
+//задача 68 (400)
+function sortByLength(array) {
+  return array.sort((a, b) => {
+    return a.length - b.length
+  })
+}
