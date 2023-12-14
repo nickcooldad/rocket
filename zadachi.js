@@ -948,3 +948,46 @@ function groupAnagrams(words) {
   })
   return Object.values(result)
 }
+//задача 67 (314)
+function findPair(arr1, arr2) {
+  let obj = {},
+    result = {},
+    res = {},
+    sum = []
+  arr1.forEach((item, index) => {
+    obj[index] = arr1[index] + arr2[index]
+  })
+  for (let key1 in obj) {
+    for (let key2 in obj) {
+      if (key1 !== key2 && obj[key1] === obj[key2]) {
+        result[key1] = obj[key1]
+      }
+    }
+  }
+  Object.values(result).map(item => {
+    res[item] = (res[item] || 0) + 1
+  }),
+    (min = Math.max(...Object.values(res)))
+  for (let max in res) {
+    if (res[max] != min) {
+      delete res[max]
+    }
+  }
+  max1 = Math.max(...Object.keys(res))
+  if (Object.values(res).length > 1) {
+    for (let i in result) {
+      if (result[i] === max1) {
+        sum.push([arr1[i], arr2[i]])
+      }
+    }
+  } else {
+    for (let i in result) {
+      for (let j in res) {
+        if (result[i] === +j) {
+          sum.push([arr1[i], arr2[i]])
+        }
+      }
+    }
+  }
+  return sum
+}
