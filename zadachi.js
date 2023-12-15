@@ -997,3 +997,23 @@ function sortByLength(array) {
     return a.length - b.length
   })
 }
+//задача 69 (401)
+function dbSort(a) {
+  console.log(a)
+  return a.sort(function (a, b) {
+    if (typeof a === 'number' && typeof b === 'number') {
+      return a - b
+    }
+    if (typeof a === 'string' && typeof b === 'string') {
+      return a.localeCompare(b)
+    }
+    if (typeof a === 'number') {
+      return -1
+    }
+    if (typeof b === 'number') {
+      return 1
+    } else {
+      return String(a).localeCompare(String(b))
+    }
+  })
+}
