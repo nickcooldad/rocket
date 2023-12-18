@@ -1019,13 +1019,7 @@ function dbSort(a) {
 }
 //задача 71(402)
 function sortArray(array) {
-  let arr = []
-  array.map(item => {
-    if (item % 2 != 0) {
-      arr.push(item)
-    }
-  })
-  arr.sort((a, b) => a - b)
+  let arr = array.filter(item => item % 2 != 0).sort((a, b) => a - b)
   return array.map(elem => {
     return elem % 2 === 0 ? elem : arr.shift()
   })
