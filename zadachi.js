@@ -1037,3 +1037,11 @@ function sum(num) {
   }
   return j
 }
+//задача 73 (405)
+function alphabetized(s) {
+  return s
+    .replace(/[^a-zA-Z]/gi, '')
+    .split('')
+    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+    .join('')
+}
