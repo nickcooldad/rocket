@@ -1017,10 +1017,23 @@ function dbSort(a) {
     }
   })
 }
-//задача 71(402)
+//задача 71(403)
 function sortArray(array) {
   let arr = array.filter(item => item % 2 != 0).sort((a, b) => a - b)
   return array.map(elem => {
     return elem % 2 === 0 ? elem : arr.shift()
   })
+}
+//задача 72 (404)
+function sortByBit(array) {
+  return array.sort((a, b) => sum(a) - sum(b) || a - b)
+}
+function sum(num) {
+  let j = 0
+  for (let i of num.toString(2)) {
+    if (i === '1') {
+      j++
+    }
+  }
+  return j
 }
