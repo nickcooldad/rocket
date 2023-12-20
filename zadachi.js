@@ -1045,3 +1045,24 @@ function alphabetized(s) {
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .join('')
 }
+//задача 74 (406)
+function sortStringsByVowels(strings) {
+  return strings
+    .map(item => [sumLetterVowels(item), item])
+    .sort((a, b) =>
+      a[0] === b[0]
+        ? strings.indexOf(a[1]) - strings.indexOf(b[1])
+        : b[0] - a[0],
+    )
+    .map(elem => elem[1])
+}
+
+function sumLetterVowels(sum) {
+  let j = 0,
+    result = []
+  for (let num = 0; num < sum.length; num++) {
+    !sum[num].match(/[aeiouAEIOU]/g) ? (result.push(j), (j = 0)) : j++
+  }
+  result.push(j)
+  return Math.max(...result)
+}
