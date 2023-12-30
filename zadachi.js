@@ -1118,3 +1118,11 @@ function computeRanks(number, games) {
 
   return positions
 }
+//задача 76 (408)
+function solve(arr) {
+  let frequency = {}
+  for (let num of arr) {
+    frequency[num] = (frequency[num] || 0) + 1
+  }
+  return arr.sort((a, b) => frequency[b] - frequency[a] || a - b)
+}
