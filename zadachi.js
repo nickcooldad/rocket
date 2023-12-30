@@ -1017,6 +1017,38 @@ function dbSort(a) {
     }
   })
 }
+//задача 70 (402)
+class Student {
+  constructor(age, gpa, fullName) {
+    this.age = age
+    this.gpa = gpa
+    this.fullName = fullName
+  }
+}
+
+function sortStudentsByAge(students) {
+  students.sort(
+    (a, b) =>
+      b.gpa - a.gpa ||
+      a.fullName.split(' ')[1][0].localeCompare(b.fullName.split(' ')[1][0]) ||
+      a.age - b.age,
+  )
+  return Object.entries(students)
+    .map(item => item[1].fullName)
+    .join(',')
+}
+
+// Пример использования
+let studentsar = [
+  new Student(23, 88, 'David Goodman'),
+  new Student(25, 82, 'Mark Rose'),
+  new Student(22, 90, 'Jane Doe'),
+  new Student(25, 90, 'Jane Dane'),
+]
+
+let sortedStudentsByAge = sortStudentsByAge(studentsar)
+console.log(sortedStudentsByAge)
+
 //задача 71(403)
 function sortArray(array) {
   let arr = array.filter(item => item % 2 != 0).sort((a, b) => a - b)
@@ -1126,7 +1158,7 @@ function solve(arr) {
   }
   return arr.sort((a, b) => frequency[b] - frequency[a] || a - b)
 }
-//задача 77 (709)
+//задача 77 (409)
 function convertHashToArray(hash) {
   return Object.entries(hash).sort((a, b) => a[0].localeCompare(b[0]))
 }
