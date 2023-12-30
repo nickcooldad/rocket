@@ -1126,3 +1126,7 @@ function solve(arr) {
   }
   return arr.sort((a, b) => frequency[b] - frequency[a] || a - b)
 }
+//задача 77 (709)
+function convertHashToArray(hash) {
+  return Object.entries(hash).sort((a, b) => a[0].localeCompare(b[0]))
+}
