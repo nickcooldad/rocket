@@ -1066,3 +1066,55 @@ function sumLetterVowels(sum) {
   result.push(j)
   return Math.max(...result)
 }
+//задача 75 (407)
+function computeRanks(number, games) {
+  let teams = Array.from({length: number}, (_, i) => i)
+  let points = Array(number).fill(0)
+  let goalDiff = Array(number).fill(0)
+  let goalsScored = Array(number).fill(0)
+  for (const game of games) {
+    const [teamA, teamB, goalA, goalB] = game
+    if (goalA > goalB) {
+      points[teamA] += 2
+    } else if (goalA < goalB) {
+      points[teamB] += 2
+    } else {
+      points[teamA] += 1
+      points[teamB] += 1
+    }
+
+    goalDiff[teamA] += goalA - goalB
+    goalDiff[teamB] += goalB - goalA
+
+    goalsScored[teamA] += goalA
+    goalsScored[teamB] += goalB
+  }
+  console.log(points, goalDiff, goalsScored)
+
+  teams.sort((a, b) => {
+    return (
+      points[b] - points[a] ||
+      goalDiff[b] - goalDiff[a] ||
+      goalsScored[b] - goalsScored[a]
+    )
+  })
+
+  let positions = Array(number).fill(0)
+  let currentPosition = 1
+  for (let i = 0; i < number; i++) {
+    if (
+      i === 0 ||
+      (i > 0 &&
+        (points[teams[i]] < points[teams[i - 1]] ||
+          goalDiff[teams[i]] < goalDiff[teams[i - 1]] ||
+          goalsScored[teams[i]] < goalsScored[teams[i - 1]]))
+    ) {
+      positions[teams[i]] = currentPosition
+    } else {
+      positions[teams[i]] = positions[teams[i - 1]]
+    }
+    currentPosition++
+  }
+
+  return positions
+}
