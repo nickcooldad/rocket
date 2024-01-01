@@ -1151,3 +1151,5 @@ const zipWith = (f, a, b) =>
   (a.length < b.length ? a : b).map((_, i) => f(a[i], b[i]))
 //задача 80 (502)
 const multiplyAll = arg1 => arg2 => arg1.map(item => item * arg2)
+//задача 81 (503)
+const chain = (input, fs) => fs.reduce((acc, item) => item(acc), input)
