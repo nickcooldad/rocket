@@ -1146,3 +1146,6 @@ function detectInt(...args) {
     return i
   }
 }
+//задача 79 (501)
+const zipWith = (f, a, b) =>
+  (a.length < b.length ? a : b).map((_, i) => f(a[i], b[i]))
