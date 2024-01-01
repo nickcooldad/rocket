@@ -1018,36 +1018,6 @@ function dbSort(a) {
   })
 }
 //задача 70 (402)
-class Student {
-  constructor(age, gpa, fullName) {
-    this.age = age
-    this.gpa = gpa
-    this.fullName = fullName
-  }
-}
-
-function sortStudentsByAge(students) {
-  students.sort(
-    (a, b) =>
-      b.gpa - a.gpa ||
-      a.fullName.split(' ')[1][0].localeCompare(b.fullName.split(' ')[1][0]) ||
-      a.age - b.age,
-  )
-  return Object.entries(students)
-    .map(item => item[1].fullName)
-    .join(',')
-}
-
-// Пример использования
-let studentsar = [
-  new Student(23, 88, 'David Goodman'),
-  new Student(25, 82, 'Mark Rose'),
-  new Student(22, 90, 'Jane Doe'),
-  new Student(25, 90, 'Jane Dane'),
-]
-
-let sortedStudentsByAge = sortStudentsByAge(studentsar)
-console.log(sortedStudentsByAge)
 
 //задача 71(403)
 function sortArray(array) {
@@ -1161,4 +1131,18 @@ function solve(arr) {
 //задача 77 (409)
 function convertHashToArray(hash) {
   return Object.entries(hash).sort((a, b) => a[0].localeCompare(b[0]))
+}
+//задача 78 (500)
+function detectInt(...args) {
+  if (args.length === 0) {
+    return 1
+  }
+
+  let i = 1
+  while (!args.every(item => item(i))) {
+    i++
+  }
+  {
+    return i
+  }
 }
