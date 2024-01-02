@@ -1153,3 +1153,8 @@ const zipWith = (f, a, b) =>
 const multiplyAll = arg1 => arg2 => arg1.map(item => item * arg2)
 //задача 81 (503)
 const chain = (input, fs) => fs.reduce((acc, item) => item(acc), input)
+//задача 82 (504)
+const dropWhile = (array, predicate) =>
+  array.findIndex(item => !predicate(item)) === -1
+    ? []
+    : array.slice(array.findIndex(item => !predicate(item)))
