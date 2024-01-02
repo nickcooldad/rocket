@@ -1163,3 +1163,14 @@ const compose =
   (...args) =>
   x =>
     args.reduce((acc, item) => item(acc), x)
+//задача 84 (506)
+const makeLooper = str => {
+  let count = 0
+  return () => {
+    if (count < str.length) {
+      return str[count++]
+    }
+    count = 0
+    return str[count++]
+  }
+}
