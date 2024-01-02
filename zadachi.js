@@ -1158,3 +1158,8 @@ const dropWhile = (array, predicate) =>
   array.findIndex(item => !predicate(item)) === -1
     ? []
     : array.slice(array.findIndex(item => !predicate(item)))
+//задача 83 (505)
+const compose =
+  (...args) =>
+  x =>
+    args.reduce((acc, item) => item(acc), x)
