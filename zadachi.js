@@ -1174,3 +1174,82 @@ const makeLooper = str => {
     return str[count++]
   }
 }
+//задача 85 (507)
+function generator(sequencer) {
+  return {
+    next: function () {
+      return sequencer()()
+    },
+  }
+}
+
+function dummySeq() {
+  return () => 'dummy'
+}
+
+let iFactorial = -1,
+  sumFactorial = 1
+function factorialSeq() {
+  return function () {
+    iFactorial++
+    return iFactorial <= 1
+      ? sumFactorial
+      : (sumFactorial = sumFactorial * iFactorial)
+  }
+}
+
+let iFibonacci = -1,
+  sumArrFibonacci = []
+
+function fibonacciSeq() {
+  return function () {
+    iFibonacci++
+    iFibonacci <= 1
+      ? sumArrFibonacci.push(1)
+      : sumArrFibonacci.push(
+          (sumArrFibonacci[iFibonacci - 1] || 0) +
+            (sumArrFibonacci[iFibonacci - 2] || 0),
+        )
+    return sumArrFibonacci[iFibonacci]
+  }
+}
+
+let irangeSeq = -1,
+  stepirangeSeq = 5
+function rangeSeq(start = 5, step = 3) {
+  return function () {
+    irangeSeq++
+    return irangeSeq === 0 ? start : (stepirangeSeq += step)
+  }
+}
+let iPrimeSeq = 1
+function primeSeq() {
+  return function () {
+    while (true) {
+      iPrimeSeq++
+      let isPrime = true
+      for (let j = 2; j <= Math.sqrt(iPrimeSeq); j++) {
+        if (iPrimeSeq % j === 0) {
+          isPrime = false
+          break
+        }
+      }
+      if (isPrime) {
+        return iPrimeSeq
+      }
+    }
+  }
+}
+let iPartialSumSeq = -1,
+  sumPartialSumSeq = 0
+function partialSumSeq(args = [-1, 4, 2, 5]) {
+  return function () {
+    iPartialSumSeq++
+
+    return iPartialSumSeq < args.length
+      ? (sumPartialSumSeq += args[iPartialSumSeq])
+      : (() => {
+          throw new Error('End of sequence error expected')
+        })()
+  }
+}
