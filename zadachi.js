@@ -1258,3 +1258,9 @@ var multiFilter =
   (...args) =>
   el =>
     args.every(item => item(el))
+//задача 87(509)
+function flip(fn) {
+  return function (...args) {
+    return fn(...args.reverse())
+  }
+}
