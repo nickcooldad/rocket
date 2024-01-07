@@ -1253,3 +1253,8 @@ function partialSumSeq(args = [-1, 4, 2, 5]) {
         })()
   }
 }
+//задача 86(508)
+var multiFilter =
+  (...args) =>
+  el =>
+    args.every(item => item(el))
