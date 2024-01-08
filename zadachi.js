@@ -1267,15 +1267,28 @@ function flip(fn) {
 }
 
 //задача 87(509)
-// function memo(fn) {
-//   let cache = {}
-//   return function (n) {
-//     if (n in cache) {
-//       return cache[n]
-//     }
-//     return (cache[n] = fn(n))
-//   }
-// }
+function memo(fn) {
+  let cache = {}
+  return function (n) {
+    if (n in cache) {
+      return cache[n]
+    }
+    return (cache[n] = fn(n))
+  }
+}
+//////////
+function memo(fn) {
+  let cache = new Map()
+  return function () {
+    let key = arguments[0]
+    if (cache.has(key)) {
+      return cache.get(key)
+    }
+    cache.set(key, fn(key))
+    return cache.get(key)
+  }
+}
+
 //задача 88(510)
 function once(fn) {
   let runFunction = false
