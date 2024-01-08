@@ -1261,6 +1261,28 @@ var multiFilter =
 //задача 87(509)
 function flip(fn) {
   return function (...args) {
+    console.log(fn(...args.reverse()))
     return fn(...args.reverse())
+  }
+}
+
+//задача 87(509)
+// function memo(fn) {
+//   let cache = {}
+//   return function (n) {
+//     if (n in cache) {
+//       return cache[n]
+//     }
+//     return (cache[n] = fn(n))
+//   }
+// }
+//задача 88(510)
+function once(fn) {
+  let runFunction = false
+  return (...args) => {
+    if (!runFunction) {
+      runFunction = true
+      return fn(...args)
+    }
   }
 }
