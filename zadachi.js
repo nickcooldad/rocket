@@ -1318,3 +1318,30 @@ function spyOn(func) {
 
   return spy
 }
+//задач 90 (513)
+function frequency(arr, options = {}) {
+  const {compareTo, criteria} = options
+
+  const frequencyMap = new Map()
+
+  arr.forEach(value => {
+    const key = criteria ? criteria(value) : value
+    const currentFrequency = frequencyMap.get(key) || 0
+    frequencyMap.set(key, currentFrequency + 1)
+  })
+
+  const sortedEntries = Array.from(frequencyMap.entries()).sort(
+    (entry1, entry2) => {
+      if (compareTo) {
+        return compareTo(entry1[0], entry2[0], entry1[1], entry2[1])
+      } else {
+        // Сортировка по умолчанию в естественном порядке
+        if (entry1[0] < entry2[0]) return -1
+        if (entry1[0] > entry2[0]) return 1
+        return 0
+      }
+    },
+  )
+
+  return sortedEntries.map(([key, value]) => [key, value])
+}
