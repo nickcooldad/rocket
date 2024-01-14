@@ -1345,3 +1345,24 @@ function frequency(arr, options = {}) {
 
   return sortedEntries.map(([key, value]) => [key, value])
 }
+//задача 91 (514)
+function groupBy(items, cb) {
+  // Используем Map для группировки элементов
+  let group = [...items].reduce(function (acc, item, index) {
+    let key = cb(item, index)
+    // Инициализируем acc[key] как массив, если он не существует
+    if (!acc.has(key)) {
+      acc.set(key, [])
+    }
+    // Добавляем элемент в массив
+    acc.get(key).push(item)
+    return acc
+  }, new Map())
+  // Преобразовываем Map в объект без прототипа
+  let resultObject = Object.create(null)
+  group.forEach((value, key) => {
+    resultObject[key] = value
+  })
+  // Возвращаем результат группировки
+  return resultObject
+}
