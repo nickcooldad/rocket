@@ -1398,3 +1398,36 @@ function groupBy(array, classifier, downstream, accumulatorSupplier) {
     return result
   }, new Map())
 }
+//задача 92-516
+function createMessage(firstMessage) {
+  let cache = [firstMessage]
+  function create(message) {
+    if (message) {
+      cache.push(message)
+      return create
+    }
+    return cache.join(' ')
+  }
+  return create
+}
+
+function createMessage(initialMessage) {
+  // Инициализация массива для хранения слов
+  const words = [initialMessage]
+
+  // Внутренняя функция для обработки повторных вызовов
+  function inner(message) {
+    // Если передано сообщение, добавляем его в массив
+    if (message) {
+      words.push(message)
+      // Возвращаем внутреннюю функцию для возможности цепочки вызовов
+      return inner
+    }
+
+    // Если сообщение не передано, объединяем массив и возвращаем конечную строку
+    return words.join(' ')
+  }
+
+  // Возвращаем внутреннюю функцию
+  return inner
+}
