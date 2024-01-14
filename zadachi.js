@@ -1366,3 +1366,35 @@ function groupBy(items, cb) {
   // Возвращаем результат группировки
   return resultObject
 }
+//задача 91 - 515
+function groupBy(array, classifier, downstream, accumulatorSupplier) {
+  return array.reduce((acc, item) => {
+    let key = classifier(item)
+    if (!acc.has(key)) {
+      acc.set(key, accumulatorSupplier())
+    }
+    acc.set(key, downstream(acc.get(key), item))
+    return acc
+  }, new Map())
+}
+//
+function groupBy(array, classifier, downstream, accumulatorSupplier) {
+  return array.reduce((result, element) => {
+    // Шаг 1: Получение ключа для элемента массива с использованием функции classifier
+    const key = classifier(element)
+
+    // Шаг 2: Проверка, есть ли уже значение для данного ключа в Map
+    const currentValue = result.has(key)
+      ? result.get(key)
+      : accumulatorSupplier()
+
+    // Шаг 3: Применение функции downstream к текущему значению и текущему элементу
+    const value = downstream(currentValue, element)
+
+    // Шаг 4: Установка нового значения для ключа в Map
+    result.set(key, value)
+
+    // Шаг 5: Возврат обновленного Map для использования в следующих итерациях
+    return result
+  }, new Map())
+}
