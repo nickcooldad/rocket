@@ -1451,3 +1451,19 @@ function add(x) {
   // Возвращаем внутреннюю функцию
   return inner
 }
+//задача 94-518
+function curryPartial(func, ...args) {
+  return args.length >= func.length
+    ? func(...args)
+    : (...args2) => curryPartial(func, ...args, ...args2)
+}
+//
+function curryPartial(func, ...args) {
+  if (args.length >= func.length) {
+    return func(...args)
+  } else {
+    return function (...args2) {
+      return curryPartial(func, ...args, ...args2)
+    }
+  }
+}
