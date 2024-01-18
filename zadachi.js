@@ -1467,3 +1467,35 @@ function curryPartial(func, ...args) {
     }
   }
 }
+//задача 94-518
+class Router {
+  constructor() {
+    this.cache = []
+  }
+  bind(link, method, action) {
+    this.cache.push([link, method].join(), action)
+  }
+  runRequest(link, method) {
+    let features = [link, method].join()
+    return this.cache.includes(features)
+      ? this.cache[this.cache.lastIndexOf(features) + 1]()
+      : 'Error 404: Not Found'
+  }
+}
+//..........................
+class Router {
+  constructor() {
+    this.routes = new Map()
+  }
+
+  bind(url, method, action) {
+    this.routes.set(url + ':' + method, action)
+  }
+
+  runRequest(url, method) {
+    if (!this.routes.has(url + ':' + method)) {
+      return 'Error 404: Not Found'
+    }
+    return this.routes.get(url + ':' + method)()
+  }
+}
