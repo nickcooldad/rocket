@@ -1467,7 +1467,7 @@ function curryPartial(func, ...args) {
     }
   }
 }
-//задача 94-518
+//задача 95-600
 class Router {
   constructor() {
     this.cache = []
@@ -1498,4 +1498,23 @@ class Router {
     }
     return this.routes.get(url + ':' + method)()
   }
+}
+//задача 96-601
+Array.prototype.square = function () {
+  return this.map(item => item ** 2)
+}
+Array.prototype.cube = function () {
+  return this.map(item => item ** 3)
+}
+Array.prototype.average = function () {
+  return this.sum() / this.length
+}
+Array.prototype.sum = function () {
+  return this.reduce((acc, item) => (acc += item), 0)
+}
+Array.prototype.even = function () {
+  return this.filter(item => item % 2 === 0)
+}
+Array.prototype.odd = function () {
+  return this.filter(item => item % 2 !== 0)
 }
