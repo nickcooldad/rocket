@@ -1518,3 +1518,11 @@ Array.prototype.even = function () {
 Array.prototype.odd = function () {
   return this.filter(item => item % 2 !== 0)
 }
+//задача 97-602
+Array.prototype.groupBy = function (fn) {
+  return [...this].reduce(function (acc, item) {
+    let key = !fn ? item : fn(item)
+    !acc[key] ? (acc[key] = [item]) : acc[key].push(item)
+    return acc
+  }, {})
+}
