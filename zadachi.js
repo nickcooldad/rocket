@@ -1526,3 +1526,18 @@ Array.prototype.groupBy = function (fn) {
     return acc
   }, {})
 }
+//задача 98 - 603
+Object.prototype.hash = function (string) {
+  let key = string.split('.')
+  return key.reduce((acc, item) => {
+    acc = acc !== undefined && acc.hasOwnProperty(item) ? acc[item] : undefined
+    return acc
+  }, this)
+}
+//
+Object.prototype.hash = function (string) {
+  var arr = string.split('.')
+  return arr.reduce(function (acc, item) {
+    return acc ? acc[item] : acc
+  }, this)
+}
