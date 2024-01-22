@@ -1541,3 +1541,16 @@ Object.prototype.hash = function (string) {
     return acc ? acc[item] : acc
   }, this)
 }
+//задача 99 - 604
+Array.prototype.reduce = function (process, initial) {
+  console.log(process.toString())
+  let accumulator = initial !== undefined ? initial : this[0],
+    index = initial !== undefined ? 0 : 1
+  if (process() !== undefined) {
+    while (index < this.length) {
+      accumulator = process(accumulator, this[index])
+      index++
+    }
+    return accumulator
+  }
+}
