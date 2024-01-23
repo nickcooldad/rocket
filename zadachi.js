@@ -1554,3 +1554,11 @@ Array.prototype.reduce = function (process, initial) {
     return accumulator
   }
 }
+//задача 100 - 605
+Object.defineProperty(Array.prototype, 'insert', {
+  value: function (index, value) {
+    index >= this.length ? this.push(value) : this.splice(index, 0, value)
+    return this
+  },
+  enumerable: false,
+})
