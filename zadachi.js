@@ -1572,3 +1572,23 @@ class Person {
     return `${this.name}s age is ${this.age}`
   }
 }
+// задача 102-607
+function NamedOne(firstName, lastName) {
+  this.firstName = firstName
+  this.lastName = lastName
+
+  Object.defineProperty(this, 'fullName', {
+    get() {
+      return `${this.firstName} ${this.lastName}`
+    },
+    set(value) {
+      const names = value.split(' ')
+      if (names.length === 2) {
+        this.firstName = names[0]
+        this.lastName = names[1]
+      }
+    },
+    enumerable: true,
+    configurable: true,
+  })
+}
