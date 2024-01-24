@@ -1562,3 +1562,13 @@ Object.defineProperty(Array.prototype, 'insert', {
   },
   enumerable: false,
 })
+//задача 101-606
+class Person {
+  constructor(name, age) {
+    this.name = name
+    this.age = age
+  }
+  get info() {
+    return `${this.name}s age is ${this.age}`
+  }
+}
