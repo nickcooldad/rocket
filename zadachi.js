@@ -1607,3 +1607,9 @@ class Person {
     return `Welcome to Planet Earth ${raceName}s`
   }
 }
+//задача 104-609
+class Cat extends Animal {
+  speak() {
+    return `${this.name} meows`
+  }
+}
