@@ -1613,3 +1613,20 @@ class Cat extends Animal {
     return `${this.name} meows`
   }
 }
+//задача 105-610
+function Lazy() {
+  this.operation = []
+}
+
+Lazy.prototype.add = function (fn, ...args) {
+  this.operation.push([fn, args])
+  return this
+}
+
+Lazy.prototype.invoke = function (target) {
+  let result = target
+  for (const [funct, property] of this.operation) {
+    result = funct(...property, ...result)
+  }
+  return result
+}
