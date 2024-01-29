@@ -1630,3 +1630,19 @@ Lazy.prototype.invoke = function (target) {
   }
   return result
 }
+//задача 106-611
+var addOne = function (e) {
+  return e + 1
+}
+var square = function (e) {
+  return e * e
+}
+///
+Object.prototype.pipe = function (fn) {
+  return e => {
+    return fn(this(e))
+  }
+}
+Function.prototype.pipe = function (fn) {
+  return (...e) => fn(this(...e))
+}
