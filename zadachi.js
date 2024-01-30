@@ -1646,3 +1646,30 @@ Object.prototype.pipe = function (fn) {
 Function.prototype.pipe = function (fn) {
   return (...e) => fn(this(...e))
 }
+// задача 107-612
+Function.prototype.call2 = function (context, ...args) {
+  let fn = this
+  originalcontext = context.fnLaunch
+  context.fnLaunch = fn
+  const result = context.fnLaunch(...args)
+  context.fnLaunch = originalcontext
+  return result
+}
+//
+Function.prototype.call = function (context, ...args) {
+  // Если контекст не передан, используем глобальный объект (например, window в браузере)
+  context = context || window
+
+  // Создаем уникальный идентификатор для функции в контексте, чтобы избежать конфликтов с существующими свойствами
+  const uniqueId = 'fn_' + Date.now()
+  context[uniqueId] = this
+
+  // Вызываем функцию с переданными аргументами
+  const result = context[uniqueId](...args)
+
+  // Удаляем временное свойство из контекста
+  delete context[uniqueId]
+
+  // Возвращаем результат выполнения функции
+  return result
+}
