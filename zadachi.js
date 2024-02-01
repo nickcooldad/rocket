@@ -1677,7 +1677,6 @@ Function.prototype.call = function (context, ...args) {
 function nouveau(Constructor, ...args) {
   let instance = Object.create(Constructor.prototype)
   let result = Constructor.call(instance, ...args)
-  console.log(result === null)
   return Object.keys(instance).length === 0 &&
     result !== null &&
     (typeof result === 'object' || typeof result === 'function')
@@ -1689,4 +1688,14 @@ function nouveau(Constructor, ...args) {
   let instance = Object.create(Constructor.prototype)
   let result = Constructor.call(instance, ...args)
   return Object(result) === result ? result : instance
+}
+//задача 109-614
+function Point(x, y) {
+  this.x = x
+  this.y = y
+}
+Function.prototype.create = function (x, y) {
+  let obj = Object.create(this.prototype)
+  this.call(obj, x, y)
+  return obj
 }
