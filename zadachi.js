@@ -1673,3 +1673,20 @@ Function.prototype.call = function (context, ...args) {
   // Возвращаем результат выполнения функции
   return result
 }
+//задача 108-613
+function nouveau(Constructor, ...args) {
+  let instance = Object.create(Constructor.prototype)
+  let result = Constructor.call(instance, ...args)
+  console.log(result === null)
+  return Object.keys(instance).length === 0 &&
+    result !== null &&
+    (typeof result === 'object' || typeof result === 'function')
+    ? result
+    : instance
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function nouveau(Constructor, ...args) {
+  let instance = Object.create(Constructor.prototype)
+  let result = Constructor.call(instance, ...args)
+  return Object(result) === result ? result : instance
+}
