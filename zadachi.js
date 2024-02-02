@@ -1699,3 +1699,14 @@ Function.prototype.create = function (x, y) {
   this.call(obj, x, y)
   return obj
 }
+//задача 110-700
+function sumTheTreeValues(root) {
+  let value = root.value
+  if (root.left) {
+    value += sumTheTreeValues(root.left)
+  }
+  if (root.right) {
+    value += sumTheTreeValues(root.right)
+  }
+  return value
+}
