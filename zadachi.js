@@ -1710,3 +1710,17 @@ function sumTheTreeValues(root) {
   }
   return value
 }
+// задача 111 - 701
+function depth(obj) {
+  var d = 0
+  if (typeof obj === 'object' && obj !== null && !Array.isArray(obj)) {
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        let depthMax = 1 + depth(obj[key])
+        d = Math.max(depthMax, d)
+      }
+    }
+  }
+
+  return d
+}
