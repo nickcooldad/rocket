@@ -1724,3 +1724,15 @@ function depth(obj) {
 
   return d
 }
+//задача 112-702
+function recordDepth(tree, depth = 0) {
+  if (tree !== null && typeof tree === 'object' && !Array.isArray(tree)) {
+    tree.depth = depth
+    for (let key in tree) {
+      recordDepth(tree[key], depth + 1)
+    }
+  } else {
+    return null
+  }
+  return tree
+}
