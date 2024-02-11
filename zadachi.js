@@ -1750,3 +1750,9 @@ function maxSum(root) {
   }
   return value + Math.max(maxSum(left), maxSum(right))
 }
+//задача 114-704
+function smartSum(...args) {
+  if (Array.isArray(args)) {
+    return args.flat().reduce((acc, item) => (acc += smartSum(item)))
+  }
+}
