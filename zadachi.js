@@ -1756,3 +1756,25 @@ function smartSum(...args) {
     return args.flat().reduce((acc, item) => (acc += smartSum(item)))
   }
 }
+//задач 115-705
+function happyNumbersBolean(x, cache = new Set()) {
+  if (x === 1) {
+    return true
+  }
+  if (cache.has(x)) {
+    return false
+  }
+  cache.add(x)
+  let num = x.toString().split('').map(Number)
+  let sum = num.reduce((acc, item) => (acc += item * item), 0)
+  return happyNumbersBolean(sum, cache)
+}
+
+function happyNumbers(number, result = []) {
+  for (let i = 1; i <= number; i++) {
+    if (happyNumbersBolean(i)) {
+      result.push(i)
+    }
+  }
+  return result
+}
