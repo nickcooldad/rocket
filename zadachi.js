@@ -1736,3 +1736,17 @@ function recordDepth(tree, depth = 0) {
   }
   return tree
 }
+//задача 113-703
+function maxSum(root) {
+  if (!root) {
+    return 0
+  }
+  const {value, right, left} = root
+  if (!right) {
+    return value + maxSum(left)
+  }
+  if (!left) {
+    return value + maxSum(right)
+  }
+  return value + Math.max(maxSum(left), maxSum(right))
+}
