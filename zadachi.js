@@ -1778,3 +1778,39 @@ function happyNumbers(number, result = []) {
   }
   return result
 }
+//задача 115-706
+function sizeof(type, size = 0) {
+  if (type === 'char' || type === 'unsigned char') {
+    size += 1
+  }
+  if (
+    type === 'short' ||
+    type === 'int' ||
+    type === 'unsigned short' ||
+    type === 'unsigned int'
+  ) {
+    size += 2
+  }
+  if (type === 'long' || type === 'unsigned long' || type === 'float') {
+    size += 4
+  }
+  if (
+    type === 'long long' ||
+    type === 'unsigned long long' ||
+    type === 'double'
+  ) {
+    size += 8
+  }
+  if (typeof type === 'object') {
+    if (type.type === 'struct' && Array.isArray(type.members)) {
+      size += type.members.reduce((acc, item) => (acc += sizeof(item)), size)
+    }
+    if (type.type === 'union' && Array.isArray(type.members)) {
+      size += type.members.reduce(
+        (acc, item) => (acc = Math.max(sizeof(item), acc)),
+        size,
+      )
+    }
+  }
+  return size
+}
