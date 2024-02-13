@@ -1814,3 +1814,14 @@ function sizeof(type, size = 0) {
   }
   return size
 }
+//задача 106-707
+function countChange(money, coins) {
+  let result = new Array(money + 1).fill(0)
+  result[0] = 1
+  for (let num of coins) {
+    for (let i = num; i <= money; i++) {
+      result[i] += result[i - num]
+    }
+  }
+  return result[money]
+}
