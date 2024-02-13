@@ -1778,7 +1778,7 @@ function happyNumbers(number, result = []) {
   }
   return result
 }
-//задача 115-706
+//задача 116-706
 function sizeof(type, size = 0) {
   if (type === 'char' || type === 'unsigned char') {
     size += 1
@@ -1814,7 +1814,7 @@ function sizeof(type, size = 0) {
   }
   return size
 }
-//задача 106-707
+//задача 117-707
 function countChange(money, coins) {
   let result = new Array(money + 1).fill(0)
   result[0] = 1
@@ -1824,4 +1824,25 @@ function countChange(money, coins) {
     }
   }
   return result[money]
+}
+// /
+//
+//
+//
+// /
+//119-709
+function SumSquares(l) {
+  return l
+    .join(',')
+    .split(',')
+    .map(Number)
+    .reduce((acc, item) => (acc += item ** 2), 0)
+}
+
+///////////
+function SumSquares(l) {
+  return l.reduce(
+    (pre, val) => pre + (Array.isArray(val) ? SumSquares(val) : val ** 2),
+    0,
+  )
 }
