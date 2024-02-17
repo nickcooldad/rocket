@@ -522,37 +522,32 @@ function findEvenIndex(arr) {
 }
 // задача 40 (208)
 function balance(book) {
-  let result = book.replace(/[^a-zA-Z0-9.\s]/gi, '') // чистые строки
-  total = 0
-  ArRemains = []
-  first = result.split('\n').filter(it => it.length > 0) // отфильтрованный массив из чистых строк
-  first1 = +first[0] // баланс
-  first.shift() // удаленный первый элемент
-  remains = first1
-  num = first
-    .join('\n')
-    .match(/\d+\.\d{1,2}/gi)
-    .map(Number) // числа для вычисления остатка
-  text = first.join('\n').replace(/\b\d+\.\d+\b/g, '') // текст без контрольных значений
-  for (let i = 0; i < num.length; i++) {
-    total += +num[i]
-    ArRemains.push((remains -= num[i]).toFixed(2))
-  }
-  let check = text
+  const [firstLine, ...lines] = book
+    .replace(/[^a-zA-Z0-9.\s]/gi, '')
     .split('\n')
-    .filter(item => item.length > 0)
-    .map((element, index, array) => {
-      return `${array[index]}${num[index].toFixed(2)} Balance ${
-        ArRemains[index]
-      }`
-    })
-    .join('\r\n')
-  return `Original Balance: ${first1.toFixed(
-    2,
-  )}\r\n${check}\r\nTotal expense  ${total.toFixed(2)}\r\nAverage expense  ${(
-    total / num.length
-  ).toFixed(2)}`
-}
+    .filter(it => it.length > 0)
+
+  const originalBalance = +firstLine
+  const result = []
+  let balance = originalBalance
+
+  for (const line of lines) {
+    const [number, name, priceStr] = line.split(' ')
+    const price = +priceStr
+
+    balance -= price
+    result.push(
+      `${number} ${name} ${price.toFixed(2)} Balance ${balance.toFixed(2)}`,
+    )
+  }
+  const totalExpense = originalBalance - balance
+  const averageExpence = totalExpense / lines.length
+
+  result.unshift(`Original Balance: ${originalBalance.toFixed(2)}`)
+  result.push(`Total expense  ${totalExpense.toFixed(2)}`)
+  result.push(`Average expense  ${averageExpence.toFixed(2)}`)
+
+  return result.join('\r\n')
 //задача 41 (209)
 function indexEqualsValue(arr) {
   let start = 0
