@@ -476,6 +476,14 @@ function dataReverse(data) {
   }
   return result.reverse().flat()
 }
+// ДЗ
+function dataReverse(data) {
+  let result = []
+  for (let i = 0; i <= data.length; i = i + 8) {
+    { result.unshift(...data.slice(i, i + 8)) }
+  }
+  return result
+}
 //задача 36 (204)
 function proofread(str) {
   return str
@@ -503,6 +511,14 @@ function formatWords(words) {
       ? ar.join('')
       : ar.slice(0, ar.length - 1).join(', ') + ' and ' + ar.at(-1)
   }
+}
+//ДЗ
+function formatWords(words) {
+  if (!words || !words.join().length) { return '' }
+  let arrFilter = words.filter(item => item  && item.length)
+  return arrFilter.length === 1
+      ? arrFilter.join('')
+      : arrFilter.slice(0, arrFilter.length - 1).join(', ') + ' and ' + arrFilter.at(-1)
 }
 //задача 38 (206)
 function deleteDigit(n) {
@@ -550,7 +566,7 @@ function balance(book) {
   const result = []
   let balance = originalBalance
 
-  for (const line of lines) {
+  for (const line of lines) { 
     const [number, name, priceStr] = line.split(' ')
     const price = +priceStr
 
