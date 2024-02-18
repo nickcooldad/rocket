@@ -415,6 +415,14 @@ function rgb(r, g, b) {
     .join('')
     .toUpperCase()
 }
+
+////ДЗ 17.02.2024
+function rgb(r, g, b) {
+  return [r, g, b]
+    .map(item => Math.max(0, Math.min(255, item)).toString(16).padStart(2, '0'))
+    .join('')
+    .toUpperCase()
+}
 //задача 33 (201)
 function twoSum(numbers, target) {
   for (let i = 0; i < numbers.length; i++) {
@@ -447,6 +455,17 @@ function getLengthOfMissingArray(arrayOfArrays) {
     }
   }
 }
+
+//ДЗ
+function getLengthOfMissingArray(arrayOfArrays) {
+  if (arrayOfArrays == null || arrayOfArrays.length == 0) {return 0}
+  let lenghtArray = arrayOfArrays.map(item => (item ? item.length : 0)).sort((a, b) => a - b)
+  for (let i = 0; i < lenghtArray.length; i++) {
+    if (lenghtArray[i] === 0) {return 0}
+    if (lenghtArray[i] + 1 !== lenghtArray[i + 1]) { return lenghtArray[i] + 1 }
+  }
+}
+
 //задача 35 (203)
 function dataReverse(data) {
   let result = []
@@ -536,9 +555,7 @@ function balance(book) {
     const price = +priceStr
 
     balance -= price
-    result.push(
-      `${number} ${name} ${price.toFixed(2)} Balance ${balance.toFixed(2)}`,
-    )
+    result.push(`${number} ${name} ${price.toFixed(2)} Balance ${balance.toFixed(2)}`)
   }
   const totalExpense = originalBalance - balance
   const averageExpence = totalExpense / lines.length
@@ -548,6 +565,7 @@ function balance(book) {
   result.push(`Average expense  ${averageExpence.toFixed(2)}`)
 
   return result.join('\r\n')
+}
 //задача 41 (209)
 function indexEqualsValue(arr) {
   let start = 0
