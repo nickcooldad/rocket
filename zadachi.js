@@ -531,6 +531,14 @@ function deleteDigit(n) {
     }),
   )
 }
+//ДЗ
+function deleteDigit(n){
+  const numberArray = [...n.toString()]
+  return Math.max(...numberArray.map((_,index) => {
+    const copyArray = numberArray.slice()
+    copyArray.splice(index,1)
+    return +copyArray.join('')}))
+}
 //задача 39 (207) мое решение
 function findEvenIndex(arr) {
   let num1 = arr.map((item1, index1) => {
