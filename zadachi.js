@@ -11,11 +11,10 @@ function century(year) {
   return Math.ceil(year / 100)
 }
 //   4(3) задача
-function abbrevName(name) {
-  let arr = name.split(' ')
-  let name1 = arr[0][0].toUpperCase()
-  let surname = arr[1][0].toUpperCase()
-  return `${name1}.${surname}`
+function abbrevName(fullname) {
+  const [name, surname] = fullname.split(' ');
+
+  return `${name[0]}.${surname[0]}`.toUpperCase()
 }
 // 5(4) задача (1 решение)
 function solution(str) {
@@ -426,7 +425,7 @@ function rgb(r, g, b) {
 //задача 33 (201)
 function twoSum(numbers, target) {
   for (let i = 0; i < numbers.length; i++) {
-    for (let j = 0 + 1; j < numbers.length; j++) {
+    for (let j = i + 1; j < numbers.length; j++) {
       const sum = numbers[i] + numbers[j]
       if (target === sum) {
         return [i, j]
@@ -434,6 +433,20 @@ function twoSum(numbers, target) {
     }
   }
 }
+//
+function twoSum (numbers, target) {
+  const cache = {}
+  numbers.forEach((item, index) => cache[item] = index)
+
+  for (let i = 0; i < numbers.length; i++) {
+      const x = target - numbers[i]
+      if(x in cache && i !== cache[x]) {
+          return [i, cache[x]]
+      }
+  }
+}
+
+
 // задача 34 (202)
 function getLengthOfMissingArray(arrayOfArrays) {
   if (
@@ -455,42 +468,63 @@ function getLengthOfMissingArray(arrayOfArrays) {
     }
   }
 }
-
-//ДЗ
+//
 function getLengthOfMissingArray(arrayOfArrays) {
-  if (arrayOfArrays == null || arrayOfArrays.length == 0) {return 0}
-  let lenghtArray = arrayOfArrays.map(item => (item ? item.length : 0)).sort((a, b) => a - b)
-  for (let i = 0; i < lenghtArray.length; i++) {
-    if (lenghtArray[i] === 0) {return 0}
-    if (lenghtArray[i] + 1 !== lenghtArray[i + 1]) { return lenghtArray[i] + 1 }
+  if (isNullOrEmpty(arrayOfArrays) || arrayOfArrays.some(isNullOrEmpty)) {
+    return 0
+  }
+
+  const result = arrayOfArrays
+    .map(item => item.length)
+    .sort((a, b) => a - b)
+
+  for (let i = 0; i < result.length; i++) {
+    if (result[i] + 1 !== result[i + 1]) {
+      return result[i] + 1
+    }
   }
 }
+
+function isNullOrEmpty(array){
+  return array === null || array.length === 0
+}
+
+//ДЗ
+// function getLengthOfMissingArray(arrayOfArrays) {
+//   if (arrayOfArrays === null || arrayOfArrays.length === 0) {
+//     return 0
+//   }
+//   let lenghtArray = arrayOfArrays.map(item => (item ? item.length : 0)).sort((a, b) => a - b)
+//   for (let i = 0; i < lenghtArray.length; i++) {
+//     if (lenghtArray[i] === 0) {return 0}
+//     if (lenghtArray[i] + 1 !== lenghtArray[i + 1]) { return lenghtArray[i] + 1 }
+//   }
+// }
 
 //задача 35 (203)
 function dataReverse(data) {
   let result = []
   for (let i = 0; i <= data.length; i = i + 8) {
-    {
       result.push(data.slice(i, i + 8))
-    }
   }
   return result.reverse().flat()
 }
 // ДЗ
 function dataReverse(data) {
   let result = []
-  for (let i = 0; i <= data.length; i = i + 8) {
-    { result.unshift(...data.slice(i, i + 8)) }
+  for (let i = 0; i < data.length; i += 8) {
+    console.log(data.slice(i, i + 8));
+     result.unshift(...data.slice(i, i + 8)) 
   }
   return result
 }
 //задача 36 (204)
 function proofread(str) {
   return str
-    .replace(/ie/gi, 'ei')
     .toLowerCase()
+    .replaceAll('ie', 'ei')
     .split('. ')
-    .map(item => item[0].toUpperCase() + item.slice(1, item.length))
+    .map(item => item[0].toUpperCase() + item.slice(1))
     .join('. ')
 }
 //задача 37 (205)
@@ -514,11 +548,18 @@ function formatWords(words) {
 }
 //ДЗ
 function formatWords(words) {
-  if (!words || !words.join().length) { return '' }
-  let arrFilter = words.filter(item => item  && item.length)
-  return arrFilter.length === 1
-      ? arrFilter.join('')
-      : arrFilter.slice(0, arrFilter.length - 1).join(', ') + ' and ' + arrFilter.at(-1)
+  if (words === null) { 
+    return '' 
+  }
+  const arrFilter = words.filter(item => item !== '')
+  
+  if (arrFilter.length === 0) {
+    return ''
+  }
+  if (arrFilter.length === 1){
+    return arrFilter[0]
+  }
+  return arrFilter.slice(0, -1).join(', ') + ' and ' + arrFilter.at(-1)
 }
 //задача 38 (206)
 function deleteDigit(n) {
@@ -534,10 +575,13 @@ function deleteDigit(n) {
 //ДЗ
 function deleteDigit(n){
   const numberArray = [...n.toString()]
-  return Math.max(...numberArray.map((_,index) => {
-    const copyArray = numberArray.slice()
-    copyArray.splice(index,1)
-    return +copyArray.join('')}))
+  const numbers = numberArray.map((_, index) => {
+    // const copyArray = numberArray.slice()
+    // copyArray.splice(index, 1)
+    // return +copyArray.join('')
+    return copyArray.toSpliced(index, 1).join("");
+  })
+  return Math.max(...numbers)
 }
 //задача 39 (207) мое решение
 function findEvenIndex(arr) {
@@ -609,6 +653,12 @@ function indexEqualsValue(arr) {
 
   return result
 }
+
+// https://leetcode.com/problems/search-a-2d-matrix/description/
+// https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/description/
+// https://leetcode.com/problems/random-pick-with-weight/description/
+
+
 // задача 42 (210)
 function validParentheses(parenStr) {
   let curr = 0
@@ -625,41 +675,32 @@ function validParentheses(parenStr) {
   return curr === 0
 }
 //задача 43 (211)
-function calculate(expression) {
-  if (expression.split('').every(item => item != ' ' && +item != NaN)) {
-    return parseFloat(expression)
-  }
-  {
-    let token = expression.split(' '),
-      num = []
-
-    for (let i = token.length - 1; i >= 0; i--) {
-      if (!isNaN(parseFloat(token[i]))) {
-        num.push(+token[i])
-      } else {
-        let num1 = num.pop(),
-          num2 = num.pop()
-        if (token[i] === '+') {
-          num.push(num1 + num2)
-        }
-        if (token[i] === '-') {
-          num.push(num1 - num2)
-        }
-        if (token[i] === '*') {
-          num.push(num1 * num2)
-        }
-        if (token[i] === '/') {
-          num.push(num1 / num2)
-        }
-      }
-    }
-    return num[0]
-  }
+const symbolObject = {
+  '+': (num1, num2) => num1 + num2,
+  '-': (num1, num2) => num1 - num2,
+  '*': (num1, num2) => num1 * num2,
+  '/': (num1, num2) => num1 / num2,
 }
-//задача 44 (212)
+
+function calculate(expression) {
+  const tokens = expression.split(' ')
+  const nums = []
+
+  for (let i = tokens.length - 1; i >= 0; i--) {
+    if (!symbolObject.hasOwnProperty(tokens[i])) {
+      nums.push(+tokens[i])
+    } else {
+      const num1 = nums.pop()
+      const num2 = nums.pop()
+      nums.push(symbolObject[tokens[i]](num1, num2))
+    }
+  }
+  return nums[0]
+}
+//задача 44 (212)  ///////////////////////////////////////////////////////////////////////////////////
 var runLengthEncoding = function (str) {
-  let string = str.split(''),
-    result = [],
+  let string = str.split('')
+  let result = [],
     j = 1
   for (let i = 0; i < string.length; i++) {
     if (string[i] === string[i + 1]) {
@@ -686,8 +727,8 @@ function isPrime(num) {
 }
 //задача 46 (214)
 function zeroPlentiful(arr) {
-  let j = 1,
-    result = []
+  let j = 1
+  let result = []
   if (arr.length < 4) {
     return 0
   }
@@ -755,9 +796,9 @@ function isValidIP(str) {
 }
 //задача 50 (218)
 function incrementString(string) {
-  let text = [],
-    number = [],
-    lastindex = string
+  let text = []
+  let number = []
+  let lastindex = string
       .split('')
       .findLastIndex(item => item.replace(/[a-zA-Z]/g, '') === '') // крайний индекс где начинается текст
   string.split('').map((elem, index) => {
