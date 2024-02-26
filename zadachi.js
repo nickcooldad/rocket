@@ -1906,7 +1906,24 @@ function countChange(money, coins) {
 // /
 //
 //
-//
+//задача 708-120
+function solve(subStr, str, lenSubStr = subStr.length, lenStr = str.length) {
+
+  if ((lenSubStr === 0 && lenStr === 0) || lenSubStr === 0) {
+      return 1;
+  }
+  if (lenStr === 0) {
+      return 0;
+  }
+  if (subStr[lenSubStr - 1] === str[lenStr - 1]) {
+
+      return solve(subStr, str, lenSubStr - 1, lenStr - 1) +
+          solve(subStr, str, lenSubStr, lenStr - 1);
+  }ы
+
+  return solve(subStr, str, lenSubStr, lenStr - 1);
+}
+
 // /
 //119-709
 function SumSquares(l) {
