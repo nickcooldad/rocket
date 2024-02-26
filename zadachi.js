@@ -1919,7 +1919,7 @@ function solve(subStr, str, lenSubStr = subStr.length, lenStr = str.length) {
 
       return solve(subStr, str, lenSubStr - 1, lenStr - 1) +
           solve(subStr, str, lenSubStr, lenStr - 1);
-  }ы
+  }
 
   return solve(subStr, str, lenSubStr, lenStr - 1);
 }
