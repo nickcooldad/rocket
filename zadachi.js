@@ -698,17 +698,16 @@ function calculate(expression) {
   return nums[0]
 }
 //задача 44 (212)  ///////////////////////////////////////////////////////////////////////////////////
-var runLengthEncoding = function (str) {
-  let string = str.split('')
-  let result = [],
-    j = 1
-  for (let i = 0; i < string.length; i++) {
-    if (string[i] === string[i + 1]) {
-      j += 1
+function runLengthEncoding (str) {
+  let result = []
+  let count = 1
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === str[i + 1]) {
+      count += 1
     }
-    if (string[i] != string[i + 1]) {
-      result.push([j, string[i]])
-      j = 1
+    if (str[i] != str[i + 1]) {
+      result.push([count, str[i]])
+      count = 1
     }
   }
   return result
@@ -725,36 +724,51 @@ function isPrime(num) {
   }
   return true
 }
-//задача 46 (214)
-function zeroPlentiful(arr) {
-  let j = 1
-  let result = []
-  if (arr.length < 4) {
-    return 0
-  }
-  {
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i] === 0 && arr[i] === arr[i + 1]) {
-        j += 1
-      }
-      if (arr[i] === 0 && arr[i] != arr[i + 1]) {
-        result.push(j)
-      }
 
-      if (arr[i] != 0 && arr[i] != arr[i + 1]) {
-        result.push(0)
-        j = 1
-      }
-    }
+
+//задача 46 (214)
+// function zeroPlentiful(arr) {
+//   let j = 1
+//   let result = []
+//   if (arr.length < 4) {
+//     return 0
+//   }
+//   {
+//     for (let i = 0; i < arr.length; i++) {
+//       if (arr[i] === 0 && arr[i] === arr[i + 1]) {
+//         j += 1
+//       }
+//       if (arr[i] === 0 && arr[i] != arr[i + 1]) {
+//         result.push(j)
+//       }
+
+//       if (arr[i] != 0 && arr[i] != arr[i + 1]) {
+//         result.push(0)
+//         j = 1
+//       }
+//     }
+//   }
+//   return result.filter(item => item > 0).every(elem => elem >= 4)
+//     ? result
+//         .filter(el => el >= 4)
+//         .reduce(acc => {
+//           return (acc += 1)
+//         }, 0)
+//     : 0
+// }
+//ДЗ
+function zeroPlentiful(arr, countsArray = [], index = 0) {
+  for (let num of arr) {
+    if (num === 0){
+    countsArray[index] = countsArray[index] ? countsArray[index] + 1 : 1
+    } else {
+    index = countsArray.length
+    } 
   }
-  return result.filter(item => item > 0).every(elem => elem >= 4)
-    ? result
-        .filter(el => el >= 4)
-        .reduce(acc => {
-          return (acc += 1)
-        }, 0)
-    : 0
+  return countsArray.every(item => item >= 4) ? countsArray.length : 0
 }
+
+
 //задача 47 (215)
 function kebabize(str) {
   return str
@@ -763,84 +777,121 @@ function kebabize(str) {
     .map(item => item.toLowerCase())
     .join('-')
 }
+
+
+
 //задача 48 (216)
+// function abbreviate(string) {
+//   return string
+//     .split(/(?=\W)/g)
+//     .map(item => {
+//       if (item.replace(/\s/, '').length <= 3) {
+//         return item
+//       }
+//       if (item[0] != item.replace(/[a-zA-Z]/g, '')) {
+//         return `${item[0]}${item.length - 2}${item[item.length - 1]}`
+//       } else {
+//         return `${item[0]}${item[1]}${item.length - 3}${item[item.length - 1]}`
+//       }
+//     })
+//     .join('')
+// }
+
+//ДЗ
 function abbreviate(string) {
-  return string
-    .split(/(?=\W)/g)
-    .map(item => {
-      if (item.replace(/\s/, '').length <= 3) {
-        return item
-      }
-      if (item[0] != item.replace(/[a-zA-Z]/g, '')) {
-        return `${item[0]}${item.length - 2}${item[item.length - 1]}`
-      } else {
-        return `${item[0]}${item[1]}${item.length - 3}${item[item.length - 1]}`
-      }
-    })
-    .join('')
+  return string.replace(/[A-Za-z]{4,}/gi, function(token) {
+    return token[0] + (token.length - 2) + token.slice(-1);
+  })
 }
+
+
+
 //задача 49 (217)
-function isValidIP(str) {
-  return str.split('.').every((item, index, array) => {
-    if (item.length === 1 && array.length === 4 && item >= 0) {
-      return true
-    }
-    if (
-      item.length > 1 &&
-      array.length === 4 &&
-      item.replace(/\d/g, '') === ''
-    ) {
-      return item[0] != 0 && item >= 1 && item <= 255
-    }
-  })
+// function isValidIP(str) {
+//   return str.split('.').every((item, index, array) => {
+//     if (item.length === 1 && array.length === 4 && item >= 0) {
+//       return true
+//     }
+//     if (
+//       item.length > 1 &&
+//       array.length === 4 &&
+//       item.replace(/\d/g, '') === ''
+//     ) {
+//       return item[0] != 0 && item >= 1 && item <= 255
+//     }
+//   })
+// }
+
+
+///ДЗ
+function isValidIP(string) {
+  return string.split('.').filter( item => {
+    return item === Number(item).toString() && +item < 256 && +item >= 0}).length === 4;
 }
+
+
 //задача 50 (218)
-function incrementString(string) {
-  let text = []
-  let number = []
-  let lastindex = string
-      .split('')
-      .findLastIndex(item => item.replace(/[a-zA-Z]/g, '') === '') // крайний индекс где начинается текст
-  string.split('').map((elem, index) => {
-    index <= lastindex ? text.push(elem) : number.push(elem) // заполняем массивы текстои и числами
-  })
-  return `${text.join('')}${
-    number.length === 0
-      ? 1
-      : (+number.join('') + 1).toString().padStart(number.length, '0') // padStart заполняет нулями
-  }`
+// function incrementString(string) {
+//   let text = []
+//   let number = []
+//   let lastindex = string
+//       .split('')
+//       .findLastIndex(item => item.replace(/[a-zA-Z]/g, '') === '') // крайний индекс где начинается текст
+//   string.split('').map((elem, index) => {
+//     index <= lastindex ? text.push(elem) : number.push(elem) // заполняем массивы текстои и числами
+//   })
+//   return `${text.join('')}${
+//     number.length === 0
+//       ? 1
+//       : (+number.join('') + 1).toString().padStart(number.length, '0') // padStart заполняет нулями
+//   }`
+// }
+
+//ДЗ
+function incrementString (s) {
+  return s.replace(/[0-8]?9*$/, num => String(++num))
 }
+
 //задача 51 (219)
+// var format = function (str, obj) {
+//   Array.isArray(obj)
+//     ? (obj = obj.reduce((acc, item, index) => {
+//         acc[index] = item
+//         return acc
+//       }, {}))
+//     : obj
+//   return str
+//     .split(' ')
+//     .map(item => {
+//       for (let key in obj) {
+//         if (item.includes(`{${key}}`)) {
+//           return item.replace(`{${key}}`, obj[key])
+//         }
+//       }
+//       {
+//         return item
+//       }
+//     })
+//     .join(' ')
+// }
+
+//ДЗ
 var format = function (str, obj) {
-  Array.isArray(obj)
-    ? (obj = obj.reduce((acc, item, index) => {
-        acc[index] = item
-        return acc
-      }, {}))
-    : obj
-  return str
-    .split(' ')
-    .map(item => {
-      for (let key in obj) {
-        if (item.includes(`{${key}}`)) {
-          return item.replace(`{${key}}`, obj[key])
-        }
-      }
-      {
-        return item
-      }
-    })
-    .join(' ')
-}
+  return str.replace(/\{([^}]+)\}/g, (match, key) => obj.hasOwnProperty(key) ? obj[key] : match)}
+
+
 //задача 52 (300)
 function hexStringToRGB(hexString) {
-  let obj = {
+  return {
     r: parseInt(hexString.slice(1, 3), 16),
     g: parseInt(hexString.slice(3, 5), 16),
     b: parseInt(hexString.slice(5), 16),
   }
-  return obj
 }
+
+
+
+
 //задача 53 (301)
 function DNAStrand(dna) {
   let obj = {
@@ -856,6 +907,10 @@ function DNAStrand(dna) {
     })
     .join('')
 }
+
+
+
+
 //Задача 54 (302)
 function scoreboard(string) {
   let score = {
@@ -875,6 +930,10 @@ function scoreboard(string) {
     .map(item => score[item])
     .filter(elem => typeof elem === 'number')
 }
+
+
+
+
 //задача 55 (303)
 function outed(meet, boss) {
   let result = 0
@@ -885,6 +944,10 @@ function outed(meet, boss) {
     ? 'Get Out Now!'
     : 'Nice Work Champ!'
 }
+
+
+
+
 //задача 56 (304)
 const whosOnline = friends => {
   let obj = {
@@ -913,6 +976,10 @@ const whosOnline = friends => {
 
   return obj
 }
+
+
+
+
 //задача 57 (305)
 function duplicateEncode(word) {
   return word
@@ -923,6 +990,10 @@ function duplicateEncode(word) {
     })
     .join('')
 }
+
+
+
+
 //задача 58 (306)
 var isAnagram = function (test, original) {
   let obj = {}
@@ -943,6 +1014,10 @@ var isAnagram = function (test, original) {
   }
   return Object.keys(obj).length === 0 && test.length === original.length
 }
+
+
+
+
 //задача 59 (306)
 function arithmetic(a, b, operator) {
   let result = {add: a + b, subtract: a - b, multiply: a * b, divide: a / b}
@@ -964,6 +1039,11 @@ function pluck(objs, name) {
     return obj[name]
   })
 }
+
+
+
+
+
 //задача 61 (308)
 function objConcat(arr) {
   let result = {}
@@ -974,6 +1054,10 @@ function objConcat(arr) {
   })
   return result
 }
+
+
+
+
 //задача 62 (309)
 function removeDuplicateWords(s) {
   let result = {}
@@ -982,6 +1066,10 @@ function removeDuplicateWords(s) {
   })
   return Object.keys(result).join(' ')
 }
+
+
+
+
 //задача 63 (310)
 function findUnique(numbers) {
   let result = {}
@@ -998,6 +1086,11 @@ function findUnique(numbers) {
 function findUnique(numbers) {
   return numbers.reduce((a, b) => a ^ b)
 }
+
+
+
+
+
 //задача 64 (311)
 function greetDevelopers(list) {
   return list.map(item => {
@@ -1007,6 +1100,10 @@ function greetDevelopers(list) {
     return item
   })
 }
+
+
+
+
 //задача 65 (312)
 function myLanguages(results) {
   return Object.entries(results)
@@ -1014,6 +1111,10 @@ function myLanguages(results) {
     .sort((a, b) => b[1] - a[1])
     .map(elem => elem[0])
 }
+
+
+
+
 // задача 66 (313)
 function groupAnagrams(words) {
   let result = {}
@@ -1026,6 +1127,10 @@ function groupAnagrams(words) {
   })
   return Object.values(result)
 }
+
+
+
+
 //задача 67 (314)
 function findPair(arr1, arr2) {
   let obj = {},
@@ -1069,12 +1174,21 @@ function findPair(arr1, arr2) {
   }
   return sum
 }
+
+
+
+
+
 //задача 68 (400)
 function sortByLength(array) {
   return array.sort((a, b) => {
     return a.length - b.length
   })
 }
+
+
+
+
 //задача 69 (401)
 function dbSort(a) {
   console.log(a)
@@ -1097,6 +1211,19 @@ function dbSort(a) {
 }
 //задача 70 (402)
 
+function sort(students) {
+  students.sort(
+    (a, b) =>
+      b.gpa - a.gpa ||
+      (a.fullName.split(' ')[1][0]).localeCompare((b.fullName.split(' '))[1][0]) ||
+      a.age - b.age,
+  )
+  return Object.entries(students)
+    .map(item => item[1].fullName)
+    .join(',')
+}
+
+
 //задача 71(403)
 function sortArray(array) {
   let arr = array.filter(item => item % 2 != 0).sort((a, b) => a - b)
@@ -1104,6 +1231,10 @@ function sortArray(array) {
     return elem % 2 === 0 ? elem : arr.shift()
   })
 }
+
+
+
+
 //задача 72 (404)
 function sortByBit(array) {
   return array.sort((a, b) => sum(a) - sum(b) || a - b)
@@ -1117,6 +1248,11 @@ function sum(num) {
   }
   return j
 }
+
+
+
+
+
 //задача 73 (405)
 function alphabetized(s) {
   return s
@@ -1125,6 +1261,11 @@ function alphabetized(s) {
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .join('')
 }
+
+
+
+
+
 //задача 74 (406)
 function sortStringsByVowels(strings) {
   return strings
@@ -1146,6 +1287,11 @@ function sumLetterVowels(sum) {
   result.push(j)
   return Math.max(...result)
 }
+
+
+
+
+
 //задача 75 (407)
 function computeRanks(number, games) {
   let teams = Array.from({length: number}, (_, i) => i)
@@ -1198,6 +1344,11 @@ function computeRanks(number, games) {
 
   return positions
 }
+
+
+
+
+
 //задача 76 (408)
 function solve(arr) {
   let frequency = {}
@@ -1210,6 +1361,10 @@ function solve(arr) {
 function convertHashToArray(hash) {
   return Object.entries(hash).sort((a, b) => a[0].localeCompare(b[0]))
 }
+
+
+
+
 //задача 78 (500)
 function detectInt(...args) {
   if (args.length === 0) {
@@ -1224,24 +1379,45 @@ function detectInt(...args) {
     return i
   }
 }
+
+
+
+
 //задача 79 (501)
 const zipWith = (f, a, b) =>
   (a.length < b.length ? a : b).map((_, i) => f(a[i], b[i]))
 //задача 80 (502)
+
+
+
+
 const multiplyAll = arg1 => arg2 => arg1.map(item => item * arg2)
 //задача 81 (503)
+
+
+
+
 const chain = (input, fs) => fs.reduce((acc, item) => item(acc), input)
 //задача 82 (504)
+
+
+
 const dropWhile = (array, predicate) =>
   array.findIndex(item => !predicate(item)) === -1
     ? []
     : array.slice(array.findIndex(item => !predicate(item)))
 //задача 83 (505)
+
+
+
 const compose =
   (...args) =>
   x =>
     args.reduce((acc, item) => item(acc), x)
 //задача 84 (506)
+
+
+
 const makeLooper = str => {
   let count = 0
   return () => {
@@ -1252,6 +1428,9 @@ const makeLooper = str => {
     return str[count++]
   }
 }
+
+
+
 //задача 85 (507)
 function generator(sequencer) {
   return {
@@ -1331,11 +1510,13 @@ function partialSumSeq(args = [-1, 4, 2, 5]) {
         })()
   }
 }
+
+
+
 //задача 86(508)
-var multiFilter =
-  (...args) =>
-  el =>
-    args.every(item => item(el))
+var multiFilter = (...args) => el => args.every(item => item(el))
+
+
 //задача 87(509)
 function flip(fn) {
   return function (...args) {
