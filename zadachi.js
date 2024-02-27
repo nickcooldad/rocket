@@ -1894,35 +1894,36 @@ function sizeof(type, size = 0) {
 }
 //задача 117-707
 function countChange(money, coins) {
-  let result = new Array(money + 1).fill(0)
-  result[0] = 1
-  for (let num of coins) {
-    for (let i = num; i <= money; i++) {
-      result[i] += result[i - num]
-    }
+  if (money < 0 || coins.length === 0) {
+    return 0
   }
-  return result[money]
+
+  if (money === 0) {
+    return 1
+  }
+
+  return countChange(money - coins[0], coins) + countChange(money, coins.slice(1))
 }
 // /
 //
 //
 //задача 708-120
-function solve(subStr, str, lenSubStr = subStr.length, lenStr = str.length) {
-
-  if ((lenSubStr === 0 && lenStr === 0) || lenSubStr === 0) {
-      return 1;
-  }
-  if (lenStr === 0) {
-      return 0;
-  }
-  if (subStr[lenSubStr - 1] === str[lenStr - 1]) {
-
-      return solve(subStr, str, lenSubStr - 1, lenStr - 1) +
-          solve(subStr, str, lenSubStr, lenStr - 1);
+function solve(word, text, wordLength = word.length, textLength = text.length) {
+  if ((wordLength === 0 && textLength === 0) || wordLength === 0) {
+    return 1;
   }
 
-  return solve(subStr, str, lenSubStr, lenStr - 1);
+  if (textLength === 0){
+    return 0;
+  }
+
+  if (text[textLength - 1] === word[wordLength - 1]) {
+    return solve(word, text, wordLength - 1, textLength - 1) + solve(word, text, wordLength, textLength - 1)
+  }
+  
+  return solve(word, text, wordLength, textLength - 1)
 }
+
 
 // /
 //119-709
