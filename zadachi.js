@@ -2108,18 +2108,48 @@ function solve(word, text, wordLength = word.length, textLength = text.length) {
 
 // /
 //119-709
-function SumSquares(l) {
-  return l
-    .join(',')
-    .split(',')
-    .map(Number)
-    .reduce((acc, item) => (acc += item ** 2), 0)
-}
+// function SumSquares(l) {
+//   return l
+//     .join(',')
+//     .split(',')
+//     .map(Number)
+//     .reduce((acc, item) => (acc += item ** 2), 0)
+// }
 
 ///////////
 function SumSquares(l) {
-  return l.reduce(
-    (pre, val) => pre + (Array.isArray(val) ? SumSquares(val) : val ** 2),
-    0,
-  )
+  return l.reduce((pre, val) => pre + (Array.isArray(val) ? SumSquares(val) : val ** 2), 0)
 }
+
+//задача120-710
+function deepCompare(o1, o2) {
+  if(checkArgPrim(o1,o2)) {
+    return o1 === o2
+  }
+
+  if(checkArgArray(o1,o2)){
+    return o1.length === o2.length && o1.every((_,index) => deepCompare(o1[index],o2[index]))
+  }
+
+  if(checkArgObj(o1,o2)){
+    for(let key in o1) {
+        if(o2.hasOwnProperty(key) && Object.keys(o1).length === Object.keys(o2).length){
+          return deepCompare(o1[key], o2[key])
+        }
+        return false
+      }
+    }
+  }
+
+
+  function checkArgPrim(o1,o2){
+    return (typeof o1 !== 'object' && typeof o2 !== 'object') || (o1 === null && o2 === null) || !o1 && !o2
+  }
+
+  function checkArgArray (o1,o2) {
+    return Array.isArray(o1) && Array.isArray(o2)
+  }
+
+  function checkArgObj(o1,o2){
+    return (o1 && o1 !== null && typeof o1 === "object" && !Array.isArray(o1)) && (o2 && o2 !== null  && typeof o2 === "object" && !Array.isArray(o2)) 
+  }
