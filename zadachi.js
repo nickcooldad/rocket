@@ -702,10 +702,10 @@ function runLengthEncoding (str) {
   let result = []
   let count = 1
   for (let i = 0; i < str.length; i++) {
-    if (str[i] === str[i + 1]) {
+    if (i !== str.length - 1 && str[i] === str[i + 1]) {
       count += 1
     }
-    if (str[i] != str[i + 1]) {
+    if (str[i] !== str[i + 1]) {
       result.push([count, str[i]])
       count = 1
     }
@@ -757,7 +757,9 @@ function isPrime(num) {
 //     : 0
 // }
 //ДЗ
-function zeroPlentiful(arr, countsArray = [], index = 0) {
+function zeroPlentiful(arr) {
+  let countsArray = []
+  let index = 0
   for (let num of arr) {
     if (num === 0){
     countsArray[index] = countsArray[index] ? countsArray[index] + 1 : 1
@@ -768,6 +770,33 @@ function zeroPlentiful(arr, countsArray = [], index = 0) {
   return countsArray.every(item => item >= 4) ? countsArray.length : 0
 }
 
+function zeroPlentiful(arr) {
+  let consecutiveZerosCounter = 0;
+  let seriesCounter = 0;
+  let seriesAtLeastFour = 0;
+  for (const number of arr) {
+    if (number === 0) {
+      consecutiveZerosCounter++;
+    } else {
+      consecutiveZerosCounter = 0;
+    }
+
+    if (consecutiveZerosCounter === 1) {
+      seriesCounter++;
+    }
+    if (consecutiveZerosCounter === 4) {
+      seriesAtLeastFour++;
+    }
+  }
+
+  if (seriesCounter === seriesAtLeastFour) {
+    return seriesCounter;
+  }
+
+  return 0;
+}
+
+
 
 //задача 47 (215)
 function kebabize(str) {
@@ -776,6 +805,13 @@ function kebabize(str) {
     .split(/(?=[A-Z])/)
     .map(item => item.toLowerCase())
     .join('-')
+}
+//
+function kebabize(str) {
+  return str
+    .replace(/[^a-z]/gi, '')
+    .replace(/[A-Z]/g, (str) => '-' + str.toLowerCase())
+    .replace(/^-/, '')
 }
 
 
@@ -799,8 +835,8 @@ function kebabize(str) {
 
 //ДЗ
 function abbreviate(string) {
-  return string.replace(/[A-Za-z]{4,}/gi, function(token) {
-    return token[0] + (token.length - 2) + token.slice(-1);
+  return string.replace(/[a-z]{4,}/gi, function(token) {
+    return token[0] + (token.length - 2) + token.at(-1);
   })
 }
 
@@ -829,7 +865,15 @@ function isValidIP(string) {
     return item === Number(item).toString() && +item < 256 && +item >= 0}).length === 4;
 }
 
+///
+const isValidOctet = item => {
+  return item === Number(item).toString() && +item < 256 && +item >= 0
+ };
 
+function isValidIP(string) {
+  const octets = string.split('.')
+  return octets.length === 4 && octets.every(isValidOctet);
+}
 //задача 50 (218)
 // function incrementString(string) {
 //   let text = []
@@ -849,9 +893,15 @@ function isValidIP(string) {
 
 //ДЗ
 function incrementString (s) {
-  return s.replace(/[0-8]?9*$/, num => String(++num))
+  return s.replace(/[0-8]?9*$/, num => String(num + 1))
 }
-
+///////
+function incrementString (str) {
+  // if(!/[0-9]+$/.test(str)) {
+  //   return str + "1";
+  // }
+  return str.replace(/[0-9]*$/, (num) => (Number(num) + 1).toString().padStart(num.length, '0'))
+}
 //задача 51 (219)
 // var format = function (str, obj) {
 //   Array.isArray(obj)
@@ -877,7 +927,10 @@ function incrementString (s) {
 
 //ДЗ
 var format = function (str, obj) {
-  return str.replace(/\{([^}]+)\}/g, (match, key) => obj.hasOwnProperty(key) ? obj[key] : match)}
+  //return str.replace(/\{([^}]+)\}/g, (match, key) => obj.hasOwnProperty(key) ? obj[key] : match)
+  return str.replace(/{(.+?)}/g, (match, key) => obj.hasOwnProperty(key) ? obj[key] : match)
+}
+
 
 
 //задача 52 (300)
@@ -888,6 +941,10 @@ function hexStringToRGB(hexString) {
     b: parseInt(hexString.slice(5), 16),
   }
 }
+
+// ??=
+// ?.
+// Promise.any
 
 
 
@@ -2152,4 +2209,16 @@ function deepCompare(o1, o2) {
 
   function checkArgObj(o1,o2){
     return (o1 && o1 !== null && typeof o1 === "object" && !Array.isArray(o1)) && (o2 && o2 !== null  && typeof o2 === "object" && !Array.isArray(o2)) 
+  }
+
+  //задача 121-711
+  function flattenMap(map, str = '', flattObj = {}) {
+    for (let key in map) {
+      if (map[key] && typeof( map[key]) === 'object' && !Array.isArray(map[key])) {
+        flattenMap(map[key], str + key + '/', flattObj)
+      } else {
+        flattObj[str + key] =  map[key];
+      }
+    }
+    return flattObj;
   }
