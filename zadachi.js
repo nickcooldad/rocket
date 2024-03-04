@@ -950,19 +950,35 @@ function hexStringToRGB(hexString) {
 
 
 //задача 53 (301)
+// function DNAStrand(dna) {
+//   let obj = {
+//     A: 'T',
+//     T: 'A',
+//     C: 'G',
+//     G: 'C',
+//   }
+//   return dna
+//     .split('')
+//     .map(function (key) {
+//       return obj[key]
+//     })
+//     .join('')
+// }
+//ДЗ
 function DNAStrand(dna) {
+  let result = ''
   let obj = {
     A: 'T',
     T: 'A',
     C: 'G',
     G: 'C',
   }
-  return dna
-    .split('')
-    .map(function (key) {
-      return obj[key]
-    })
-    .join('')
+  for (str of dna){
+      if(str in obj){
+          result += obj[str]
+      }
+  }
+  return result
 }
 
 
@@ -993,13 +1009,12 @@ function scoreboard(string) {
 
 //задача 55 (303)
 function outed(meet, boss) {
-  let result = 0
+  let score = 0
   for (let key in meet) {
-    key === boss ? (result += meet[key] * 2) : (result += meet[key])
+    key === boss ? (score += meet[key] * 2) : (score += meet[key])
   }
-  return result / Object.keys(meet).length <= 5
-    ? 'Get Out Now!'
-    : 'Nice Work Champ!'
+  let result = score / Object.keys(meet).length 
+  return result <= 5 ? 'Get Out Now!': 'Nice Work Champ!'
 }
 
 
@@ -1038,16 +1053,20 @@ const whosOnline = friends => {
 
 
 //задача 57 (305)
+// function duplicateEncode(word) {
+//   return word
+//     .toLowerCase()
+//     .split('')
+//     .map((item,_, array) => {
+//       return array.indexOf(item) === array.lastIndexOf(item) ? '(' : ')'
+//     })
+//     .join('')
+// }
+//дз
 function duplicateEncode(word) {
-  return word
-    .toLowerCase()
-    .split('')
-    .map((item, index, array) => {
-      return array.indexOf(item) === array.lastIndexOf(item) ? '(' : ')'
-    })
-    .join('')
+  word = word.toLowerCase();
+  return word.toLowerCase().replace(/./g, m => word.indexOf(m) == word.lastIndexOf(m) ? '(' : ')');
 }
-
 
 
 
@@ -1075,12 +1094,12 @@ var isAnagram = function (test, original) {
 
 
 
-//задача 59 (306)
+//задача 59 (307)
 function arithmetic(a, b, operator) {
   let result = {add: a + b, subtract: a - b, multiply: a * b, divide: a / b}
   return result[operator]
 }
-//задача 60 (307)
+//задача 60 (308)
 function pluck(objs, name) {
   return objs.map(item => {
     for (let key in item) {
@@ -1091,17 +1110,17 @@ function pluck(objs, name) {
   })
 }
 
-function pluck(objs, name) {
-  return objs.map(function (obj) {
-    return obj[name]
-  })
-}
+// function pluck(objs, name) {
+//   return objs.map(function (obj) {
+//     return obj[name]
+//   })
+// }
 
 
 
 
 
-//задача 61 (308)
+//задача 61 (309)
 function objConcat(arr) {
   let result = {}
   arr.map(item => {
@@ -1115,7 +1134,7 @@ function objConcat(arr) {
 
 
 
-//задача 62 (309)
+//задача 62 (310)
 function removeDuplicateWords(s) {
   let result = {}
   s.split(' ').map(item => {
@@ -1127,7 +1146,7 @@ function removeDuplicateWords(s) {
 
 
 
-//задача 63 (310)
+//задача 63 (311)
 function findUnique(numbers) {
   let result = {}
   numbers.map(item => {
@@ -1148,7 +1167,7 @@ function findUnique(numbers) {
 
 
 
-//задача 64 (311)
+//задача 64 (312)
 function greetDevelopers(list) {
   return list.map(item => {
     for (key in item) {
@@ -1161,7 +1180,7 @@ function greetDevelopers(list) {
 
 
 
-//задача 65 (312)
+//задача 65 (313)
 function myLanguages(results) {
   return Object.entries(results)
     .filter(item => item[1] >= 60)
@@ -1172,7 +1191,7 @@ function myLanguages(results) {
 
 
 
-// задача 66 (313)
+// задача 66 (314)
 function groupAnagrams(words) {
   let result = {}
   words.forEach(word => {
@@ -1188,7 +1207,7 @@ function groupAnagrams(words) {
 
 
 
-//задача 67 (314)
+//задача 67 (315)
 function findPair(arr1, arr2) {
   let obj = {},
     result = {},
