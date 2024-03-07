@@ -2241,3 +2241,23 @@ function deepCompare(o1, o2) {
     }
     return flattObj;
   }
+
+  //задача 122-712
+  const sumArray = (array) => array.reduce((acc, item) => acc += item, 0);
+
+function combos(num, currentCombo = [], cache = []) {
+  if (sumArray(currentCombo) === num) {
+    cache.push(currentCombo);
+    return cache;
+  }
+
+  if (sumArray(currentCombo) > num) {
+    return cache;
+  }
+
+  for (let i = currentCombo[currentCombo.length - 1] || 1; i <= num; i++) {
+    combos(num, [...currentCombo, i], cache);
+  }
+
+  return cache;
+}
