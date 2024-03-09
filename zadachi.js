@@ -1219,38 +1219,63 @@ function objConcat(arr) {
 //   return Object.entries(strObj).sort((a, b) => a[1] - b[1]).map(([key,_]) => key).join(' ')
 // }
 
-const removeDuplicateWords = str => [...new Set(str.split(' '))].join(' ')
+//дз
+function removeDuplicateWords (str) {
+  return [...new Set(str.split(' '))].join(' ')}
+
+
+
 //задача 63 (311)
+// function findUnique(numbers) {
+//   let result = {}
+//   numbers.map(item => {
+//     result[item] = (result[item] || 0) + 1
+//   })
+//   for (let key in result) {
+//     if (result[key] === 1) {
+//       return +key
+//     }
+//   }
+// }
+
+
+//дз
 function findUnique(numbers) {
   let result = {}
-  numbers.map(item => {
-    result[item] = (result[item] || 0) + 1
-  })
+  for (let num of numbers){
+    result[num] ??= 0
+    result[num] += 1
+  }
+  
   for (let key in result) {
     if (result[key] === 1) {
-      return +key
+      return key
     }
   }
 }
 
-function findUnique(numbers) {
-  return numbers.reduce((a, b) => a ^ b)
-}
 
 
 
 
 
 //задача 64 (312)
-function greetDevelopers(list) {
-  return list.map(item => {
-    for (key in item) {
-      item.greeting = `Hi ${item.firstName}, what do you like the most about ${item.language}?`
-    }
-    return item
-  })
-}
+// function greetDevelopers(list) {
+//   return list.map(item => {
+//     for (key in item) {
+//       item.greeting = `Hi ${item.firstName}, what do you like the most about ${item.language}?`
+//     }
+//     return item
+//   })
+// }
 
+//дз
+function greetDevelopers(list) {
+  for(let obj of list){
+    obj.greeting = `Hi ${obj.firstName}, what do you like the most about ${obj.language}?`
+  }
+  return list
+}
 
 
 
