@@ -935,12 +935,25 @@ var format = function (str, obj) {
 
 //задача 52 (300)
 function hexStringToRGB(hexString) {
-  return {
-    r: parseInt(hexString.slice(1, 3), 16),
-    g: parseInt(hexString.slice(3, 5), 16),
-    b: parseInt(hexString.slice(5), 16),
-  }
+  
+  // return {
+  //   r: parseInt(hexString.slice(1, 3), 16),
+  //   g: parseInt(hexString.slice(3, 5), 16),
+  //   b: parseInt(hexString.slice(5), 16),
+  // }
+  // const [r, g, b] = [
+  //   hexString.slice(1, 3),
+  //   hexString.slice(3, 5),
+  //   hexString.slice(5),
+  // ].map(item => parseInt(item, 16))
+
+  const r = 1;
+  const g = 2;
+  const b = 3;
+
+  return {r, g, b}
 }
+
 
 // ??=
 // ?.
@@ -950,20 +963,20 @@ function hexStringToRGB(hexString) {
 
 
 //задача 53 (301)
-// function DNAStrand(dna) {
-//   let obj = {
-//     A: 'T',
-//     T: 'A',
-//     C: 'G',
-//     G: 'C',
-//   }
-//   return dna
-//     .split('')
-//     .map(function (key) {
-//       return obj[key]
-//     })
-//     .join('')
-// }
+function DNAStrand(dna) {
+  let obj = {
+    A: 'T',
+    T: 'A',
+    C: 'G',
+    G: 'C',
+  }
+  return dna
+    .split('')
+    .map(key => obj[key])
+    .join('')
+
+  return dna.replace(/./g, key => obj[key]);
+}
 //ДЗ
 function DNAStrand(dna) {
   let result = ''
@@ -1011,7 +1024,8 @@ function scoreboard(string) {
 function outed(meet, boss) {
   let score = 0
   for (let key in meet) {
-    key === boss ? (score += meet[key] * 2) : (score += meet[key])
+    // key === boss ? (score += meet[key] * 2) : (score += meet[key])
+    score += key === boss ? meet[key] * 2 : meet[key];
   }
   let result = score / Object.keys(meet).length 
   return result <= 5 ? 'Get Out Now!': 'Nice Work Champ!'
@@ -1028,52 +1042,69 @@ const whosOnline = friends => {
     away: [],
   }
 
-  for (let friend of friends) {
-    const {username, status, lastActivity} = friend
-
-    if (status === 'online' && lastActivity > 10) {
-      obj.away.push(username)
-    } else if (status === 'offline') {
+  for (const {username, status, lastActivity} of friends) {
+    if (status === 'offline') {
       obj.offline.push(username)
-    } else if (status === 'online' && lastActivity <= 10) {
+    } else if (lastActivity > 10) {
+      obj.away.push(username)
+    } else {
       obj.online.push(username)
     }
   }
 
-  for (let key in obj) {
-    if (obj[key].length === 0) {
-      delete obj[key]
-    }
-  }
+  // Object.entries → filter → Object.fromEntries
+ return Object.fromEntries(Object.entries(obj).filter(([_, user]) => item.length > 0))
 
-  return obj
+  // for (let key in obj) {
+  //   if (obj[key].length === 0) {
+  //     delete obj[key]
+  //   }
+  // }
+
+  // return obj
 }
 
 
 
 
 //задача 57 (305)
-// function duplicateEncode(word) {
-//   return word
-//     .toLowerCase()
-//     .split('')
-//     .map((item,_, array) => {
-//       return array.indexOf(item) === array.lastIndexOf(item) ? '(' : ')'
-//     })
-//     .join('')
-// }
+function duplicateEncode(word) {
+  return word
+    .toLowerCase()
+    .split('')
+    .map((item,_, array) => {
+      return array.indexOf(item) === array.lastIndexOf(item) ? '(' : ')'
+    })
+    .join('')
+}
 //дз
 function duplicateEncode(word) {
   word = word.toLowerCase();
-  return word.toLowerCase().replace(/./g, m => word.indexOf(m) == word.lastIndexOf(m) ? '(' : ')');
+  return word.toLowerCase().replace(/./g, letter => word.indexOf(letter) === word.lastIndexOf(letter) ? '(' : ')');
 }
-
+//
+function duplicateEncode(word) {
+  const wordLower = word.toLowerCase()
+  const cache = {}
+  for (const letter of wordLower) {
+    cache[letter] ??= 0
+    cache[letter] += 1
+  }
+  
+ return wordLower
+  .split('')
+  .map(item => cache[item] > 1 ? ')' : '(')
+  .join('')
+}
 
 
 //задача 58 (306)
 var isAnagram = function (test, original) {
-  let obj = {}
+  if (test.length !== original.length){
+    return false
+  }
 
+  let obj = {}
   for (let key of original.toLowerCase()) {
     obj[key] = (obj[key] || 0) + 1
   }
@@ -1088,10 +1119,29 @@ var isAnagram = function (test, original) {
       }
     }
   }
-  return Object.keys(obj).length === 0 && test.length === original.length
+  return Object.keys(obj).length === 0
+}
+//
+const isAnagram = function (test, original) {
+  const obj = {}
+
+  for (const letter of original.toLowerCase()) {
+    obj[letter] ??= 0
+    obj[letter] += 1
+  }
+
+  for (const letter of test.toLowerCase()) {
+    obj[letter] ??= 0
+    obj[letter] -= 1
+  }
+
+  return Object.values(obj).every(item => item === 0)
 }
 
-
+ //
+ function isAnagram (test, original) {
+	return test.toLowerCase().split("").sort().join("") === original.toLowerCase().split("").sort().join("");
+ }
 
 
 //задача 59 (307)
@@ -1099,53 +1149,77 @@ function arithmetic(a, b, operator) {
   let result = {add: a + b, subtract: a - b, multiply: a * b, divide: a / b}
   return result[operator]
 }
-//задача 60 (308)
-function pluck(objs, name) {
-  return objs.map(item => {
-    for (let key in item) {
-      if (key === name) {
-        return item[key]
-      }
-    }
-  })
-}
+//
+const result = {
+  'subtract': (a, b) => a - b,
+  'add': (a, b) => a + b,
+  'multiply': (a, b) => a * b,
+  'divide': (a, b) => a / b
+};
 
+function arithmetic(a, b, operator) {
+  // if(result.hasOwnProperty(operator)){
+    return result[operator](a, b)
+  // }
+}
+// https://www.youtube.com/watch?v=unL8Fu1o1kE
+
+
+//задача 60 (308)
 // function pluck(objs, name) {
-//   return objs.map(function (obj) {
-//     return obj[name]
+//   return objs.map(item => {
+//     for (let key in item) {
+//       if (key === name) {
+//         return item[key]
+//       }
+//     }
 //   })
 // }
-
-
+function pluck(objs, name) {
+  return objs.map(obj => obj[name]);
+}
 
 
 
 //задача 61 (309)
 function objConcat(arr) {
-  let result = {}
-  arr.map(item => {
-    for (key in item) {
-      result[key] = item[key]
-    }
+  const result = {}
+  arr.forEach(item => {
+    // for (const key in item) {
+    //   result[key] = item[key]
+    // }
+    Object.assign(result, item);
   })
   return result
 }
 
-
+/////////////////////////////////////////////
 
 
 //задача 62 (310)
-function removeDuplicateWords(s) {
-  let result = {}
-  s.split(' ').map(item => {
-    result[item] = item
-  })
-  return Object.keys(result).join(' ')
-}
+// function removeDuplicateWords(s) {
+//   let result = {}
+//   s.split(' ').map(item => {
+//     result[item] = item
+//   })
+//   return Object.keys(result).join(' ')
+// }
 
+// console.log(removeDuplicateWords("a b c d 4 3 "))
+// https://maxcode.dev/cheatsheets/javascript
 
+// function removeDuplicateWords(s) {
+//   const strArray = s.split(' ')
+//   const strObj = {}
+//   strArray.forEach((item,index) => {
+//     if(!strObj.hasOwnProperty(item)){
+//       strObj[item] = index
+//     }
+//   })
+//   return Object.entries(strObj).sort((a, b) => a[1] - b[1]).map(([key,_]) => key).join(' ')
+// }
 
-
+const removeDuplicateWords = str => [...new Set(str.split(' '))].join(' ')
 //задача 63 (311)
 function findUnique(numbers) {
   let result = {}
@@ -2243,7 +2317,7 @@ function deepCompare(o1, o2) {
   }
 
   //задача 122-712
-  const sumArray = (array) => array.reduce((acc, item) => acc += item, 0);
+const sumArray = (array) => array.reduce((acc, item) => acc += item, 0);
 
 function combos(num, currentCombo = [], cache = []) {
   if (sumArray(currentCombo) === num) {
@@ -2257,6 +2331,7 @@ function combos(num, currentCombo = [], cache = []) {
 
   for (let i = currentCombo[currentCombo.length - 1] || 1; i <= num; i++) {
     combos(num, [...currentCombo, i], cache);
+    console.log()
   }
 
   return cache;
