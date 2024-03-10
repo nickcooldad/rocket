@@ -1584,13 +1584,26 @@ function computeRanks(number, games) {
 
 
 //задача 76 (408)
+// function solve(arr) {
+//   let frequency = {}
+//   for (let num of arr) {
+//     frequency[num] = (frequency[num] || 0) + 1
+//   }
+//   return arr.sort((a, b) => frequency[b] - frequency[a] || a - b)
+// }
+
+//дз
 function solve(arr) {
   let frequency = {}
   for (let num of arr) {
-    frequency[num] = (frequency[num] || 0) + 1
+    frequency[num] ??= 0
+    frequency[num] += 1
   }
   return arr.sort((a, b) => frequency[b] - frequency[a] || a - b)
 }
+
+
+
 //задача 77 (409)
 function convertHashToArray(hash) {
   return Object.entries(hash).sort((a, b) => a[0].localeCompare(b[0]))
