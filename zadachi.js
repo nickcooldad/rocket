@@ -1355,66 +1355,70 @@ function groupAnagrams(words) {
 //   }
 //   return sum
 // }
+
 //дз
 function findPair(arr1, arr2) {
-  let sumObjArrays = {}
-  let sumArray = []
+  let sumAndRepeatObj = {}
+  let numMatchArray = []
 
   arr1.forEach((_, index) => {
-  sumObjArrays[arr1[index] + arr2[index]] ??= 0
-  sumObjArrays[arr1[index] + arr2[index]] += 1
+  sumAndRepeatObj[arr1[index] + arr2[index]] ??= 0
+  sumAndRepeatObj[arr1[index] + arr2[index]] += 1
    });
 
-  let numRepeatMax = Math.max(...Object.values(sumObjArrays))
-  let numSumArray = []
-   for(let key in sumObjArrays){
-    if(sumObjArrays[key] === numRepeatMax && sumObjArrays[key] !== 1){
-      numSumArray.push(+key)
+  let repeatMax = Math.max(...Object.values(sumAndRepeatObj))
+  let sumMatchArray = []
+   for(let key in sumAndRepeatObj){
+    if(sumAndRepeatObj[key] === repeatMax && sumAndRepeatObj[key] !== 1){
+      sumMatchArray.push(+key)
     }
    }
 
-   let numMax = Math.max(...numSumArray)
+   let numSumAndRepeatMax = Math.max(...sumMatchArray)
    arr1.forEach((_,index) => {
-    if(arr1[index] + arr2[index] === numMax) {
-      sumArray.push([arr1[index], arr2[index]])
+    if(arr1[index] + arr2[index] === numSumAndRepeatMax) {
+      numMatchArray.push([arr1[index], arr2[index]])
     }
   })
-  return sumArray
+  return numMatchArray
  }
 
 
 
 
 //задача 68 (400)
-function sortByLength(array) {
-  return array.sort((a, b) => {
-    return a.length - b.length
-  })
-}
-
+const  sortByLength = (array) => array.sort((a, b) =>  a.length - b.length)
 
 
 
 //задача 69 (401)
-function dbSort(a) {
-  console.log(a)
-  return a.sort(function (a, b) {
-    if (typeof a === 'number' && typeof b === 'number') {
-      return a - b
-    }
-    if (typeof a === 'string' && typeof b === 'string') {
-      return a.localeCompare(b)
-    }
-    if (typeof a === 'number') {
-      return -1
-    }
-    if (typeof b === 'number') {
-      return 1
-    } else {
-      return String(a).localeCompare(String(b))
-    }
-  })
-}
+// function dbSort(a) {
+//   console.log(a)
+//   return a.sort(function (a, b) {
+//     if (typeof a === 'number' && typeof b === 'number') {
+//       return a - b
+//     }
+//     if (typeof a === 'string' && typeof b === 'string') {
+//       return a.localeCompare(b)
+//     }
+//     if (typeof a === 'number') {
+//       return -1
+//     }
+//     if (typeof b === 'number') {
+//       return 1
+//     } else {
+//       return String(a).localeCompare(String(b))
+//     }
+//   })
+// }
+
+//дз
+function dbSort(a){
+  const str = [...a].filter(item => typeof item === 'string')
+  const num = [...a].filter(item => typeof item === 'number')
+  return [...num.sort((a, b) => a - b), ...str.sort()]
+  }
+
 //задача 70 (402)
 
 function sort(students) {
@@ -1428,17 +1432,32 @@ function sort(students) {
     .map(item => item[1].fullName)
     .join(',')
 }
-
-
-//задача 71(403)
-function sortArray(array) {
-  let arr = array.filter(item => item % 2 != 0).sort((a, b) => a - b)
-  return array.map(elem => {
-    return elem % 2 === 0 ? elem : arr.shift()
-  })
+//дз
+function sort(students) {
+  let sortStudent = [...students].sort((a, b) =>
+      b.gpa - a.gpa ||
+      (a.fullName.split(' ')[1].at(0)).localeCompare((b.fullName.split(' ')[1].at(0))) ||
+      a.age - b.age
+  )
+  return Object.values(sortStudent)
+    .map(item => item.fullName)
+    .join(',')
 }
 
+//задача 71(403)
 
+// function sortArray(array) {
+//   let arr = array.filter(item => item % 2 != 0).sort((a, b) => a - b)
+//   return array.map(elem => {
+//     return elem % 2 === 0 ? elem : arr.shift()
+//   })
+// }
+
+//дз
+function sortArray(array) {
+  const numOddArray = [...array].filter(item => item % 2 !== 0).sort((a, b) => a - b)
+  return array.map(elem => elem % 2 === 0 ? elem : numOddArray.shift())
+}
 
 
 //задача 72 (404)
@@ -1460,40 +1479,49 @@ function sum(num) {
 
 
 //задача 73 (405)
-function alphabetized(s) {
-  return s
-    .replace(/[^a-zA-Z]/gi, '')
-    .split('')
+// function alphabetized(s) {
+//   return s
+//     .replace(/[^a-zA-Z]/gi, '')
+//     .split('')
+//     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+//     .join('')
+// }
+//дз
+const alphabetized = (s) => [...s.replace(/[^a-z]/gi, '')]
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .join('')
-}
-
 
 
 
 
 //задача 74 (406)
+// function sortStringsByVowels(strings) {
+//   return strings
+//     .map(item => [sumLetterVowels(item), item])
+//     .sort((a, b) =>
+//       a[0] === b[0]
+//         ? strings.indexOf(a[1]) - strings.indexOf(b[1])
+//         : b[0] - a[0],
+//     )
+//     .map(elem => elem[1])
+// }
+
+// function sumLetterVowels(sum) {
+//   let j = 0,
+//     result = []
+//   for (let num = 0; num < sum.length; num++) {
+//     !sum[num].match(/[aeiouAEIOU]/g) ? (result.push(j), (j = 0)) : j++
+//   }
+//   result.push(j)
+//   return Math.max(...result)
+// }
+
+//дз
+const countMax = (str) => Math.max(...(str.match(/[aeiou]+/gi) ?? []).map(item => item.length))
+
 function sortStringsByVowels(strings) {
-  return strings
-    .map(item => [sumLetterVowels(item), item])
-    .sort((a, b) =>
-      a[0] === b[0]
-        ? strings.indexOf(a[1]) - strings.indexOf(b[1])
-        : b[0] - a[0],
-    )
-    .map(elem => elem[1])
+  return strings.sort((a, b) => countMax(b) - countMax(a))
 }
-
-function sumLetterVowels(sum) {
-  let j = 0,
-    result = []
-  for (let num = 0; num < sum.length; num++) {
-    !sum[num].match(/[aeiouAEIOU]/g) ? (result.push(j), (j = 0)) : j++
-  }
-  result.push(j)
-  return Math.max(...result)
-}
-
 
 
 
