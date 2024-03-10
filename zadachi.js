@@ -1280,13 +1280,19 @@ function greetDevelopers(list) {
 
 
 //задача 65 (313)
-function myLanguages(results) {
-  return Object.entries(results)
-    .filter(item => item[1] >= 60)
-    .sort((a, b) => b[1] - a[1])
-    .map(elem => elem[0])
-}
+// function myLanguages(results) {
+//   return Object.entries(results)
+//     .filter(item => item[1] >= 60)
+//     .sort((a, b) => b[1] - a[1])
+//     .map(elem => elem[0])
+// }
 
+//дз
+function myLanguages(results) {
+  return Object.keys(results)
+    .filter(item => results[item] >= 60)
+    .sort((a, b) => results[b] - results[a])
+}
 
 
 
@@ -1307,49 +1313,74 @@ function groupAnagrams(words) {
 
 
 //задача 67 (315)
+// function findPair(arr1, arr2) {
+//   let obj = {},
+//     result = {},
+//     res = {},
+//     sum = []
+//   arr1.forEach((item, index) => {
+//     obj[index] = arr1[index] + arr2[index]
+//   })
+//   for (let key1 in obj) {
+//     for (let key2 in obj) {
+//       if (key1 !== key2 && obj[key1] === obj[key2]) {
+//         result[key1] = obj[key1]
+//       }
+//     }
+//   }
+//   Object.values(result).map(item => {
+//     res[item] = (res[item] || 0) + 1
+//   }),
+//     (min = Math.max(...Object.values(res)))
+//   for (let max in res) {
+//     if (res[max] != min) {
+//       delete res[max]
+//     }
+//   }
+//   max1 = Math.max(...Object.keys(res))
+//   if (Object.values(res).length > 1) {
+//     for (let i in result) {
+//       if (result[i] === max1) {
+//         sum.push([arr1[i], arr2[i]])
+//       }
+//     }
+//   } else {
+//     for (let i in result) {
+//       for (let j in res) {
+//         if (result[i] === +j) {
+//           sum.push([arr1[i], arr2[i]])
+//         }
+//       }
+//     }
+//   }
+//   return sum
+// }
+//дз
 function findPair(arr1, arr2) {
-  let obj = {},
-    result = {},
-    res = {},
-    sum = []
-  arr1.forEach((item, index) => {
-    obj[index] = arr1[index] + arr2[index]
-  })
-  for (let key1 in obj) {
-    for (let key2 in obj) {
-      if (key1 !== key2 && obj[key1] === obj[key2]) {
-        result[key1] = obj[key1]
-      }
-    }
-  }
-  Object.values(result).map(item => {
-    res[item] = (res[item] || 0) + 1
-  }),
-    (min = Math.max(...Object.values(res)))
-  for (let max in res) {
-    if (res[max] != min) {
-      delete res[max]
-    }
-  }
-  max1 = Math.max(...Object.keys(res))
-  if (Object.values(res).length > 1) {
-    for (let i in result) {
-      if (result[i] === max1) {
-        sum.push([arr1[i], arr2[i]])
-      }
-    }
-  } else {
-    for (let i in result) {
-      for (let j in res) {
-        if (result[i] === +j) {
-          sum.push([arr1[i], arr2[i]])
-        }
-      }
-    }
-  }
-  return sum
-}
+  let sumObjArrays = {}
+  let sumArray = []
 
+  arr1.forEach((_, index) => {
+  sumObjArrays[arr1[index] + arr2[index]] ??= 0
+  sumObjArrays[arr1[index] + arr2[index]] += 1
+   });
+
+  let numRepeatMax = Math.max(...Object.values(sumObjArrays))
+  let numSumArray = []
+   for(let key in sumObjArrays){
+    if(sumObjArrays[key] === numRepeatMax && sumObjArrays[key] !== 1){
+      numSumArray.push(+key)
+    }
+   }
+
+   let numMax = Math.max(...numSumArray)
+   arr1.forEach((_,index) => {
+    if(arr1[index] + arr2[index] === numMax) {
+      sumArray.push([arr1[index], arr2[index]])
+    }
+  })
+  return sumArray
+ }
 
 
 
