@@ -1527,59 +1527,101 @@ function sortStringsByVowels(strings) {
 
 
 //задача 75 (407)
+// function computeRanks(number, games) {
+//   let teams = Array.from({length: number}, (_, i) => i)
+//   let points = Array(number).fill(0)
+//   let goalDiff = Array(number).fill(0)
+//   let goalsScored = Array(number).fill(0)
+//   for (const game of games) {
+//     const [teamA, teamB, goalA, goalB] = game
+//     if (goalA > goalB) {
+//       points[teamA] += 2
+//     } else if (goalA < goalB) {
+//       points[teamB] += 2
+//     } else {
+//       points[teamA] += 1
+//       points[teamB] += 1
+//     }
+
+//     goalDiff[teamA] += goalA - goalB
+//     goalDiff[teamB] += goalB - goalA
+
+//     goalsScored[teamA] += goalA
+//     goalsScored[teamB] += goalB
+//   }
+//   console.log(points, goalDiff, goalsScored)
+
+//   teams.sort((a, b) => {
+//     return (
+//       points[b] - points[a] ||
+//       goalDiff[b] - goalDiff[a] ||
+//       goalsScored[b] - goalsScored[a]
+//     )
+//   })
+
+//   let positions = Array(number).fill(0)
+//   let currentPosition = 1
+//   for (let i = 0; i < number; i++) {
+//     if (
+//       i === 0 ||
+//       (i > 0 &&
+//         (points[teams[i]] < points[teams[i - 1]] ||
+//           goalDiff[teams[i]] < goalDiff[teams[i - 1]] ||
+//           goalsScored[teams[i]] < goalsScored[teams[i - 1]]))
+//     ) {
+//       positions[teams[i]] = currentPosition
+//     } else {
+//       positions[teams[i]] = positions[teams[i - 1]]
+//     }
+//     currentPosition++
+//   }
+
+//   return positions
+// }
+
+//дз
 function computeRanks(number, games) {
-  let teams = Array.from({length: number}, (_, i) => i)
-  let points = Array(number).fill(0)
-  let goalDiff = Array(number).fill(0)
-  let goalsScored = Array(number).fill(0)
-  for (const game of games) {
-    const [teamA, teamB, goalA, goalB] = game
-    if (goalA > goalB) {
-      points[teamA] += 2
-    } else if (goalA < goalB) {
-      points[teamB] += 2
-    } else {
-      points[teamA] += 1
-      points[teamB] += 1
+  let teams = Array.from({ length: number} ,(_, i) => 
+    ({team: i, points: 0, goalDiff:0, goalsScored: 0}))
+
+  for (const [teamA, teamB, goalA, goalB] of games){
+    teams[teamA].goalsScored += goalA
+    teams[teamB].goalsScored += goalB
+    teams[teamA].goalDiff += goalA - goalB
+    teams[teamB].goalDiff += goalB - goalA
+
+      if (goalA > goalB) {
+       teams[teamA].points += 2
+      }
+      if (goalA < goalB) {
+         teams[teamB].points += 2
+      }
+      if (goalA === goalB) {
+        teams[teamA].points += 1
+       teams[teamB].points += 1
+      }
     }
 
-    goalDiff[teamA] += goalA - goalB
-    goalDiff[teamB] += goalB - goalA
+  const sortTeams = [...teams].sort((a, b) => b.points - a.points ||
+    b.goalDiff - a.goalDiff ||
+    b.goalsScored - a.goalsScored)
 
-    goalsScored[teamA] += goalA
-    goalsScored[teamB] += goalB
-  }
-  console.log(points, goalDiff, goalsScored)
-
-  teams.sort((a, b) => {
-    return (
-      points[b] - points[a] ||
-      goalDiff[b] - goalDiff[a] ||
-      goalsScored[b] - goalsScored[a]
-    )
-  })
-
-  let positions = Array(number).fill(0)
+  let rankingArray = Array(number).fill(0)
   let currentPosition = 1
   for (let i = 0; i < number; i++) {
-    if (
-      i === 0 ||
+    if (i === 0 ||
       (i > 0 &&
-        (points[teams[i]] < points[teams[i - 1]] ||
-          goalDiff[teams[i]] < goalDiff[teams[i - 1]] ||
-          goalsScored[teams[i]] < goalsScored[teams[i - 1]]))
+        (sortTeams[i].points < sortTeams[i - 1].points ||
+          sortTeams[i].goalDiff < sortTeams[i - 1].goalDiff ||
+          sortTeams[i].goalsScored < sortTeams[i - 1].goalsScored))[ 4, 4, 6, 3, 1, 2 ]
     ) {
-      positions[teams[i]] = currentPosition
-    } else {
-      positions[teams[i]] = positions[teams[i - 1]]
+      currentPosition = i++
     }
-    currentPosition++
+    rankingArray[sortTeams[i].team] = currentPosition
   }
 
-  return positions
+  return rankingArray
 }
-
-
 
 
 
