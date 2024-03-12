@@ -1613,7 +1613,7 @@ function computeRanks(number, games) {
       (i > 0 &&
         (sortTeams[i].points < sortTeams[i - 1].points ||
           sortTeams[i].goalDiff < sortTeams[i - 1].goalDiff ||
-          sortTeams[i].goalsScored < sortTeams[i - 1].goalsScored))[ 4, 4, 6, 3, 1, 2 ]
+          sortTeams[i].goalsScored < sortTeams[i - 1].goalsScored))
     ) {
       currentPosition = i++
     }
