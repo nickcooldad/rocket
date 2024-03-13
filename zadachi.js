@@ -1609,12 +1609,11 @@ function computeRanks(number, games) {
   let rankingArray = Array(number).fill(0)
   let currentPosition = 1
   for (let i = 0; i < number; i++) {
-    if (i === 0 ||
-      (i > 0 &&
+    if (i > 0 &&
         (sortTeams[i].points < sortTeams[i - 1].points ||
           sortTeams[i].goalDiff < sortTeams[i - 1].goalDiff ||
-          sortTeams[i].goalsScored < sortTeams[i - 1].goalsScored))[ 4, 4, 6, 3, 1, 2 ]
-    ) {
+          sortTeams[i].goalsScored < sortTeams[i - 1].goalsScored))
+     {
       currentPosition = i++
     }
     rankingArray[sortTeams[i].team] = currentPosition
