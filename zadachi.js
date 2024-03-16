@@ -970,10 +970,10 @@ function DNAStrand(dna) {
     C: 'G',
     G: 'C',
   }
-  return dna
-    .split('')
-    .map(key => obj[key])
-    .join('')
+  // return dna
+  //   .split('')
+  //   .map(key => obj[key])
+  //   .join('')
 
   return dna.replace(/./g, key => obj[key]);
 }
@@ -1270,13 +1270,19 @@ function findUnique(numbers) {
 // }
 
 //дз
+// function greetDevelopers(list) {
+//   for(let obj of list){
+//     obj.greeting = `Hi ${obj.firstName}, what do you like the most about ${obj.language}?`
+//   }
+//   return list
+// }
+//
 function greetDevelopers(list) {
-  for(let obj of list){
-    obj.greeting = `Hi ${obj.firstName}, what do you like the most about ${obj.language}?`
-  }
-  return list
-}
-
+  return list.map(item => ({
+   ...item,
+   greeting : `Hi ${obj.firstName}, what do you like the most about ${obj.language}?`,
+ }))
+ }
 
 
 //задача 65 (313)
@@ -1298,14 +1304,16 @@ function myLanguages(results) {
 
 // задача 66 (314)
 function groupAnagrams(words) {
-  let result = {}
-  words.forEach(word => {
-    let item = word.split('').sort().join('')
-    if (!result[item]) {
-      result[item] = []
-    }
-    result[item].push(word)
-  })
+  // let result = {}
+  // words.forEach(word => {
+  //   let item = word.split('').sort().join('')
+  //   // if (!result[item]) {
+  //   //   result[item] = []
+  //   // }
+  //   result[item] ??= []
+  //   result[item].push(word)
+  // })
+  let result = Object.groupBy(words,word => word.split('').sort().join(''))
   return Object.values(result)
 }
 
@@ -1357,33 +1365,52 @@ function groupAnagrams(words) {
 // }
 
 //дз
+// function findPair(arr1, arr2) {
+//   let sumAndRepeatObj = {}
+//   let numMatchArray = []
+
+//   arr1.forEach((_, index) => {
+//   sumAndRepeatObj[arr1[index] + arr2[index]] ??= 0
+//   sumAndRepeatObj[arr1[index] + arr2[index]] += 1
+//    });
+
+//   let repeatMax = Math.max(...Object.values(sumAndRepeatObj))
+//   let sumMatchArray = []
+//    for(let key in sumAndRepeatObj){
+//     if(sumAndRepeatObj[key] === repeatMax && sumAndRepeatObj[key] !== 1){
+//       sumMatchArray.push(+key)
+//     }
+//    }
+
+//    let numSumAndRepeatMax = Math.max(...sumMatchArray)
+//    arr1.forEach((_,index) => {
+//     if(arr1[index] + arr2[index] === numSumAndRepeatMax) {
+//       numMatchArray.push([arr1[index], arr2[index]])
+//     }
+//   })
+//   return numMatchArray
+//  }
+
+//
 function findPair(arr1, arr2) {
-  let sumAndRepeatObj = {}
-  let numMatchArray = []
+  const pairs = arr1.map((_, index) => [arr1[index], arr2[index]])
+  
+  const sumAndRepeatObj = {}
 
-  arr1.forEach((_, index) => {
-  sumAndRepeatObj[arr1[index] + arr2[index]] ??= 0
-  sumAndRepeatObj[arr1[index] + arr2[index]] += 1
-   });
-
-  let repeatMax = Math.max(...Object.values(sumAndRepeatObj))
-  let sumMatchArray = []
-   for(let key in sumAndRepeatObj){
-    if(sumAndRepeatObj[key] === repeatMax && sumAndRepeatObj[key] !== 1){
-      sumMatchArray.push(+key)
-    }
-   }
-
-   let numSumAndRepeatMax = Math.max(...sumMatchArray)
-   arr1.forEach((_,index) => {
-    if(arr1[index] + arr2[index] === numSumAndRepeatMax) {
-      numMatchArray.push([arr1[index], arr2[index]])
-    }
-  })
-  return numMatchArray
- }
+  pairs.forEach(([a, b]) => {
+    sumAndRepeatObj[a + b] ??= 0
+    sumAndRepeatObj[a + b] += 1
+  });
 
 
+  const repeatMax = Math.max(...Object.values(sumAndRepeatObj))
+  const sumMatchArray = Object.keys(sumAndRepeatObj)
+    .filter(item => sumAndRepeatObj[item] === repeatMax && sumAndRepeatObj[item] !== 1)
+  const numSumAndRepeatMax = Math.max(...sumMatchArray)
+
+  
+  return pairs.filter(([a, b]) => a + b === numSumAndRepeatMax)
+}
 
 
 //задача 68 (400)
@@ -1437,9 +1464,10 @@ function sort(students) {
   let sortStudent = [...students].sort((a, b) =>
       b.gpa - a.gpa ||
       (a.fullName.split(' ')[1].at(0)).localeCompare((b.fullName.split(' ')[1].at(0))) ||
+      a.fullName.charCodeAt(a.fullName.indexOf(" ") + 1) - b.fullName.charCodeAt(b.fullName.indexOf(" ") + 1) ||
       a.age - b.age
   )
-  return Object.values(sortStudent)
+  return sortStudent
     .map(item => item.fullName)
     .join(',')
 }
@@ -1455,23 +1483,32 @@ function sort(students) {
 
 //дз
 function sortArray(array) {
-  const numOddArray = [...array].filter(item => item % 2 !== 0).sort((a, b) => a - b)
-  return array.map(elem => elem % 2 === 0 ? elem : numOddArray.shift())
-}
+  const numOddArray = array.filter(item => item % 2 !== 0).sort((a, b) => a - b)
+  //return array.map(elem => elem % 2 === 0 ? elem : numOddArray.shift())
+  const result = []
 
+  for (let i = 0, count = 0; i < array.length; i++){
+    if(array[i] % 2 === 0){
+      result.push(array[i])
+    } else {
+      result.push(numOddArray[count])
+      count++
+    }
+  }
+}
 
 //задача 72 (404)
 function sortByBit(array) {
   return array.sort((a, b) => sum(a) - sum(b) || a - b)
 }
 function sum(num) {
-  let j = 0
-  for (let i of num.toString(2)) {
-    if (i === '1') {
-      j++
+  let bitsCount = 0
+  for (const bit of num.toString(2)) {
+    if (bit === '1') {
+      bitsCount++
     }
   }
-  return j
+  return bitsCount
 }
 
 
@@ -1488,7 +1525,9 @@ function sum(num) {
 // }
 //дз
 const alphabetized = (s) => [...s.replace(/[^a-z]/gi, '')]
-    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+    // .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+    .sort((a, b) => a.localeCompare(b, { sensitivity: 'base' }))
+    .sort(Intl.Collator().compare)
     .join('')
 
 
@@ -1580,48 +1619,84 @@ function sortStringsByVowels(strings) {
 // }
 
 //дз
-function computeRanks(number, games) {
-  let teams = Array.from({ length: number} ,(_, i) => 
-    ({team: i, points: 0, goalDiff:0, goalsScored: 0}))
+// function computeRanks(number, games) {
+//   let teams = Array.from({ length: number} ,(_, i) => 
+//     ({team: i, points: 0, goalDiff:0, goalsScored: 0}))
 
-  for (const [teamA, teamB, goalA, goalB] of games){
+//   for (const [teamA, teamB, goalA, goalB] of games){
+//     teams[teamA].goalsScored += goalA
+//     teams[teamB].goalsScored += goalB
+//     teams[teamA].goalDiff += goalA - goalB
+//     teams[teamB].goalDiff += goalB - goalA
+
+//       if (goalA > goalB) {
+//        teams[teamA].points += 2
+//       }
+//       if (goalA < goalB) {
+//          teams[teamB].points += 2
+//       }
+//       if (goalA === goalB) {
+//         teams[teamA].points += 1
+//        teams[teamB].points += 1
+//       }
+//     }
+
+//   const sortTeams = [...teams].sort((a, b) => b.points - a.points ||
+//     b.goalDiff - a.goalDiff ||
+//     b.goalsScored - a.goalsScored)
+
+//   let rankingArray = Array(number).fill(0)
+//   for (let i = 0; i < number; i++) {
+//     if (i > 0 &&
+//         (sortTeams[i].points === sortTeams[i - 1].points ||
+//           sortTeams[i].goalDiff === sortTeams[i - 1].goalDiff ||
+//           sortTeams[i].goalsScored === sortTeams[i - 1].goalsScored))
+//      {
+//       rankingArray[sortTeams[i].team] = rankingArray[sortTeams[i-1].team]
+//     } else {rankingArray[sortTeams[i].team] = rankingArray[sortTeams[i].team]}
+//   }
+
+//   return rankingArray
+// }
+
+function computeRanks(number, games) {
+  const teams = Array.from({ length: number }, (_, i) =>
+    ({ team: i, points: 0, goalDiff: 0, goalsScored: 0 }))
+
+  for (const [teamA, teamB, goalA, goalB] of games) {
     teams[teamA].goalsScored += goalA
     teams[teamB].goalsScored += goalB
     teams[teamA].goalDiff += goalA - goalB
     teams[teamB].goalDiff += goalB - goalA
 
-      if (goalA > goalB) {
-       teams[teamA].points += 2
-      }
-      if (goalA < goalB) {
-         teams[teamB].points += 2
-      }
-      if (goalA === goalB) {
-        teams[teamA].points += 1
-       teams[teamB].points += 1
-      }
+    if (goalA > goalB) {
+      teams[teamA].points += 2
     }
+    if (goalA < goalB) {
+      teams[teamB].points += 2
+    }
+    if (goalA === goalB) {
+      teams[teamA].points += 1
+      teams[teamB].points += 1
+    }
+  }
 
-  const sortTeams = [...teams].sort((a, b) => b.points - a.points ||
-    b.goalDiff - a.goalDiff ||
-    b.goalsScored - a.goalsScored)
+  const sorting = (a, b) => b.points - a.points || b.goalDiff - a.goalDiff || b.goalsScored - a.goalsScored
 
-  let rankingArray = Array(number).fill(0)
-  let currentPosition = 1
+  const sortTeams = [...teams].sort(sorting)
+
+  const rankingArray = Array(number).fill(0)
+
   for (let i = 0; i < number; i++) {
-    if (i > 0 &&
-        (sortTeams[i].points < sortTeams[i - 1].points ||
-          sortTeams[i].goalDiff < sortTeams[i - 1].goalDiff ||
-          sortTeams[i].goalsScored < sortTeams[i - 1].goalsScored))
-     {
-      currentPosition = i++
+    if (i > 0 && sorting(sortTeams[i], sortTeams[i - 1]) === 0) {
+      rankingArray[sortTeams[i].team] = rankingArray[sortTeams[i - 1].team]
+    } else {
+      rankingArray[sortTeams[i].team] = i + 1
     }
-    rankingArray[sortTeams[i].team] = currentPosition
   }
 
   return rankingArray
 }
-
 
 
 //задача 76 (408)
@@ -1654,17 +1729,18 @@ function convertHashToArray(hash) {
 
 
 //задача 78 (500)
-function detectInt(...args) {
-  if (args.length === 0) {
-    return 1
-  }
+function sortArray(array) {
+  const numOddArray = array.filter(item => item % 2 !== 0).sort((a, b) => a - b)
+  //return array.map(elem => elem % 2 === 0 ? elem : numOddArray.shift())
+  const result = []
 
-  let i = 1
-  while (!args.every(item => item(i))) {
-    i++
-  }
-  {
-    return i
+  for (let i = 0, count = 0; i < array.length; i++){
+    if(array[i] % 2 === 0){
+      result.push(array[i])
+    } else {
+      result.push(numOddArray[count])
+      count++
+    }
   }
 }
 
