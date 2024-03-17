@@ -44,5 +44,19 @@ function zip(a, b, callback) {
   }
 
 
-  //функциональное программирование - 5
+  //функциональное программирование - 6
+  function reduce(array, callback, initialValue) {
+
+    if (array.length === 0 && initialValue === undefined) {
+      throw new TypeError('Reduce of empty array with no initial value');
+    }
   
+    let accumulator = initialValue !== undefined ? initialValue : array[0];
+    let startIndex = initialValue !== undefined ? 0 : 1;
+  
+    for (let i = startIndex; i < array.length; i++) {
+      accumulator = callback(accumulator, array[i], i, array);
+    }
+  
+    return accumulator;
+  }
