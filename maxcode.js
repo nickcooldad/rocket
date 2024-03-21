@@ -60,3 +60,25 @@ function zip(a, b, callback) {
   
     return accumulator;
   }
+
+    //функциональное программирование - 7
+
+    function sort(arr, compareFn) {
+      for (let i = 0; i < arr.length; i++){
+          for (let j = i; j < arr.length; j++){
+            let cache = arr[i]
+              if(!compareFn){
+                  let a = arr[i].toString().charCodeAt()
+                  let b = arr[j].toString().charCodeAt()
+                  if (a - b > 0 || (a - b === 0 && arr[i].toString().length > arr[j].toString().length)) {
+                      arr[i] = arr[j]
+                      arr[j] = cache
+                  }
+              }
+              if(compareFn !== undefined && compareFn(arr[i], arr[j]) > 0){
+                arr[i] = arr[j]
+                arr[j] = cache
+                }
+          }
+        }
+      }
