@@ -1,4 +1,4 @@
-//функциональное программирование - 1
+//функциональное программирование - 1 (Array Methods)
 function filter(array, callback) {
   let filterArray = []
   for(let i = 0; i < array.length; i++){
@@ -9,14 +9,14 @@ function filter(array, callback) {
   return filterArray
 }
 
-//функциональное программирование - 2
+//функциональное программирование - 2 (Array Methods)
 function forEach(array, callback) {
   for (let i = 0; i < array.length; i++){
     array[i] = callback(array[i], i, array)
     }
   }
 
-//функциональное программирование - 3
+//функциональное программирование - 3 (Array Methods)
 function map(array, callback) {
   let newArray = []
   for (let i = 0; i < array.length; i++){
@@ -25,7 +25,7 @@ function map(array, callback) {
       return newArray
   }
 
-  //функциональное программирование - 4
+//функциональное программирование - 4 (Array Methods)
 function zip(a, b, callback) {
   let array = []
   for (let i = 0; i < a.length; i++){
@@ -34,7 +34,7 @@ function zip(a, b, callback) {
        return array
   }
 
-//функциональное программирование - 5
+//функциональное программирование - 5 (Array Methods)
 function zip(a, b, callback) {
   let array = []
   for (let i = 0; i < a.length; i++){
@@ -44,7 +44,7 @@ function zip(a, b, callback) {
   }
 
 
-  //функциональное программирование - 6
+//функциональное программирование - 6 (Array Methods)
   function reduce(array, callback, initialValue) {
 
     if (array.length === 0 && initialValue === undefined) {
@@ -61,7 +61,7 @@ function zip(a, b, callback) {
     return accumulator;
   }
 
-    //функциональное программирование - 7
+//функциональное программирование - 7 (Array Methods)
 
     function sort(arr, compareFn) {
       for (let i = 0; i < arr.length; i++){
@@ -82,3 +82,28 @@ function zip(a, b, callback) {
           }
         }
       }
+
+
+//функциональное программирование - 8 (First-class Citizens)
+   function findInteger(...args) {
+    let count = 1
+      while(!args.every(condition => condition(count))){
+       count++
+         }
+      return count
+    }
+
+//функциональное программирование - 9 (First-class Citizens)
+function plural(declensionArray) {
+  let declensionObj = {0 : 2, 1 : 0, 2 : 1, 3 : 1, 4 : 1}
+  return function(quantity) {
+    let lastNum = quantity.toString().at(-1)
+    if (quantity > 4 && quantity < 21){
+      return declensionArray[2]
+    }
+    if(lastNum in declensionObj){
+      return declensionArray[declensionObj[lastNum]]
+      }
+    return declensionArray[2]
+    }
+  }
