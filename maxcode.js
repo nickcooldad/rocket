@@ -131,7 +131,7 @@ function plural(declensionArray) {
   }
   
   function sort(option){
-    return (arr) => arr.slice().sort((a, b) => {
+    return (arr) => arr.toSorted((a, b) => {
       if(a[option] > b[option]){
         return 1
       }
