@@ -142,3 +142,34 @@ function plural(declensionArray) {
      }
     })
   }
+
+    //функциональное программирование - 11 (First-class Citizens)
+
+    function group(arr, isEqual) {
+      const cache = []
+    
+      arr.forEach(element => {
+        const group = cache.find(item => isEqual(element, item[0]))
+    
+        if(group){
+          group.push(element)
+        } else {
+          cache.push([element])
+        }
+      });
+      console.log(cache)
+      return cache
+    }
+    
+        //функциональное программирование - 11 (First-class Citizens)
+
+    function groupBy(items, cb) {
+     return [...items].reduce((acc, item, index) =>{
+      
+       if(!acc.has(cb(item, index))){
+          acc.set(cb(item, index), [])
+       }
+        acc.get(cb(item, index)).push(item)
+       return acc
+      }, new Map())
+      }

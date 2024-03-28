@@ -1,5 +1,1 @@
-memort = []
-memort.push(1)
-console.log(memort)
-memort = []
-console.log(memort)
+console.log([1,2,2,4,2,1,4].toSorted())
