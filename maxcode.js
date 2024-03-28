@@ -116,7 +116,7 @@ function plural(declensionArray) {
     }
   }
 
-  //функциональное программирование - 10 (First-class Citizens)
+//функциональное программирование - 10 (First-class Citizens)
 
   function query(...funct) {
     return (array) => funct.reduce(
@@ -143,7 +143,7 @@ function plural(declensionArray) {
     })
   }
 
-    //функциональное программирование - 11 (First-class Citizens)
+//функциональное программирование - 11 (First-class Citizens)
 
     function group(arr, isEqual) {
       const cache = []
@@ -161,11 +161,10 @@ function plural(declensionArray) {
       return cache
     }
     
-        //функциональное программирование - 11 (First-class Citizens)
+//функциональное программирование - 12 (First-class Citizens)
 
     function groupBy(items, cb) {
      return [...items].reduce((acc, item, index) =>{
-      
        if(!acc.has(cb(item, index))){
           acc.set(cb(item, index), [])
        }
@@ -173,3 +172,28 @@ function plural(declensionArray) {
        return acc
       }, new Map())
       }
+
+      //
+      function groupBy(iterable, cb) {
+        const cache = new Map();
+        [...iterable].forEach((element, index) => {
+          if(!cache.has(cb(element, index))){
+            cache.set(cb(element, index), [])
+          }
+          cache.get(cb(element, index)).push(element)
+        });
+        return cache
+      }
+
+//функциональное программирование - 13 (First-class Citizens)
+
+function groupBy(array, classifier, downstream, accumulatorSupplier) {
+  const cache = new Map();
+    [...array].forEach((item,index) => {
+      if(!cache.has(classifier(item, index))){
+        cache.set(classifier(item, index), accumulatorSupplier())
+         } 
+    cache.set(classifier(item, index), downstream(cache.get(classifier(item, index)), item))
+    })
+  return cache
+}
