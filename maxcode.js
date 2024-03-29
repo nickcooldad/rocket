@@ -289,3 +289,8 @@ function frequency(arr, options = defoltCompare) {
   
     return true;
   }
+
+  //функциональное программирование - 17 (First-class Citizens)
+  function multiPredicate(...args) {
+    return (arg) => args.every(funct => funct(arg))
+    }
