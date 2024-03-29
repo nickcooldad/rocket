@@ -77,7 +77,7 @@ function sort(arr, compareFn = search){
     }
 }
 
-//функциональное программирование - 8 (First-class Citizens)
+//функциональное программирование - 7 (First-class Citizens)
    function findInteger(...args) {
     let count = 1
       while(!args.every(condition => condition(count))){
@@ -86,7 +86,7 @@ function sort(arr, compareFn = search){
       return count
     }
 
-//функциональное программирование - 9 (First-class Citizens)
+//функциональное программирование - 8 (First-class Citizens)
 function plural(declensionArray) {
   let declensionObj = {0 : 2, 1 : 0, 2 : 1, 3 : 1, 4 : 1}
   return function(quantity) {
@@ -116,7 +116,7 @@ function plural(declensionArray) {
     }
   }
 
-//функциональное программирование - 10 (First-class Citizens)
+//функциональное программирование - 9 (First-class Citizens)
 
   function query(...funct) {
     return (array) => funct.reduce(
@@ -143,7 +143,7 @@ function plural(declensionArray) {
     })
   }
 
-//функциональное программирование - 11 (First-class Citizens)
+//функциональное программирование - 10 (First-class Citizens)
 
     function group(arr, isEqual) {
       const cache = []
@@ -161,7 +161,7 @@ function plural(declensionArray) {
       return cache
     }
     
-//функциональное программирование - 12 (First-class Citizens)
+//функциональное программирование - 11 (First-class Citizens)
 
     function groupBy(items, cb) {
      return [...items].reduce((acc, item, index) =>{
@@ -185,7 +185,7 @@ function plural(declensionArray) {
         return cache
       }
 
-//функциональное программирование - 13 (First-class Citizens)
+//функциональное программирование - 12 (First-class Citizens)
 
 function groupBy(array, classifier, downstream, accumulatorSupplier) {
   const cache = new Map();
@@ -198,7 +198,7 @@ function groupBy(array, classifier, downstream, accumulatorSupplier) {
   return cache
 }
 
-//функциональное программирование - 14 (First-class Citizens)
+//функциональное программирование - 13 (First-class Citizens)
 
 const defoltCompare = (array) => {
   if(array.every(item => typeof item[0] === 'string')){
@@ -240,4 +240,27 @@ function frequency(arr, options = defoltCompare) {
     return defoltFrequency([...cache])
   }
   return defoltCompare([...cache])
+  }
+
+  //функциональное программирование - 14 (First-class Citizens)
+  function repeatGenerator(str) {
+    let count = 0
+    return () => {
+      if (count >= str.length){
+        count = 0
+      }
+      return str[count++]
+    }
+  }
+
+  //функциональное программирование - 15 (First-class Citizens)
+  function fibonacciGenerator() {
+    let count = 0
+    let fibonacciArr = [0, 1]
+    return () => {
+      if(count > 1) {
+        fibonacciArr.push(fibonacciArr[count - 1] + fibonacciArr[count - 2])
+      }
+      return fibonacciArr[count++]
+    }
   }
