@@ -197,3 +197,47 @@ function groupBy(array, classifier, downstream, accumulatorSupplier) {
     })
   return cache
 }
+
+//функциональное программирование - 14 (First-class Citizens)
+
+const defoltCompare = (array) => {
+  if(array.every(item => typeof item[0] === 'string')){
+   return array.toSorted()
+  } else {
+   return array.toSorted((a, b) => a[0] - b[0])
+  }
+ }
+
+function frequency(arr, options = defoltCompare) {
+  const cache = new Map
+
+  const defoltFrequency = (arr) => {
+    return arr.toSorted((a, b) => options.compareTo(a[0], b[0], a[1], b[1]))
+   }
+
+  if(options.criteria !== undefined){
+    arr.forEach((item, index) => {
+      if(!cache.has(options.criteria(item, index))){
+        cache.set(options.criteria(item, index), 0)
+      }
+      cache.set(options.criteria(item, index), cache.get(options.criteria(item)) +1)
+    })
+    if(options.compareTo !== undefined){
+      return defoltFrequency([...cache])
+    }
+    return defoltCompare([...cache])
+  }
+
+  arr.forEach((item) => {
+    if(!cache.has(item)){
+      cache.set(item, 0)
+    }
+    cache.set(item, cache.get(item) + 1)
+     
+  })
+
+  if(options.compareTo !== undefined){
+    return defoltFrequency([...cache])
+  }
+  return defoltCompare([...cache])
+  }
