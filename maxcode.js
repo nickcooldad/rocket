@@ -151,7 +151,7 @@ function plural(declensionArray) {
       arr.forEach(element => {
         const group = cache.find(item => isEqual(element, item[0]))
     
-        if(group){
+        if(group !== undefined){
           group.push(element)
         } else {
           cache.push([element])
@@ -190,10 +190,11 @@ function plural(declensionArray) {
 function groupBy(array, classifier, downstream, accumulatorSupplier) {
   const cache = new Map();
     [...array].forEach((item,index) => {
-      if(!cache.has(classifier(item, index))){
-        cache.set(classifier(item, index), accumulatorSupplier())
+      const key = classifier(item, index)
+      if(!cache.has(key)){
+        cache.set(key, accumulatorSupplier())
          } 
-    cache.set(classifier(item, index), downstream(cache.get(classifier(item, index)), item))
+    cache.set(key, downstream(cache.get(key), item))
     })
   return cache
 }
@@ -241,15 +242,42 @@ function frequency(arr, options = defoltCompare) {
   }
   return defoltCompare([...cache])
   }
+//
+function frequency(arr, options = {}) {
+  const cache = new Map
+  const {
+    criteria = x => x,
+    compareTo = (val1, val2) => val1 > val2 ? 1 : -1,
+  } = options
+
+  arr.forEach((item) => {
+    const key = criteria(item)
+    if(!cache.has(key)){
+      cache.set((key), 0)
+    }
+    cache.set(key, cache.get(key) + 1)
+  })
+
+  return [...cache].toSorted((a, b) => compareTo(a[0], b[0], a[1], b[1]))
+}
+
+function frequencyCompare(value1, value2, freq1, freq2) {
+  return freq2 - freq1;
+}
+
 
   //функциональное программирование - 14 (First-class Citizens)
   function repeatGenerator(str) {
     let count = 0
     return () => {
+      const result = str[count];
+      
+      count++
       if (count >= str.length){
         count = 0
       }
-      return str[count++]
+      
+      return result
     }
   }
 
@@ -264,7 +292,20 @@ function frequency(arr, options = defoltCompare) {
       return fibonacciArr[count++]
     }
   }
+//
+function fibonacciGenerator() {
+  let firstCount = 0 // 5 → 8
+  let lastCount = 1  // 8 → 13
+  return () => {
+    const result = firstCount;
 
+    [firstCount, lastCount] = [lastCount, firstCount + lastCount];
+    // const sum = firstCount + lastCount
+    // firstCount = lastCount
+    // lastCount = sum
+    return result
+  }
+}
 
   //функциональное программирование - 16 (First-class Citizens)
   function primeGenerator() {
@@ -289,8 +330,69 @@ function frequency(arr, options = defoltCompare) {
   
     return true;
   }
+//
+function primeGenerator() {
+  let num = 2
+  return () => {
+    const result = num
 
-  //функциональное программирование - 17 (First-class Citizens)
+    // while(true){
+    //  num++
+    //  if (isPrime(num)) {
+    //   break;
+    //  }
+    // }
+
+    do {
+      num++;
+    } while (!isPrime(num))
+
+    return result
+  }
+}
+
+
+function isPrime(num) {
+  if (num <= 1) return false;
+  if (num === 2) return true;
+  if (num % 2 === 0) return false;
+
+  for (let i = 3; i <= Math.sqrt(num); i += 2) {
+    if (num % i === 0) return false;
+  }
+
+  return true;
+}
+//функциональное программирование - 17 (First-class Citizens)
   function multiPredicate(...args) {
     return (arg) => args.every(funct => funct(arg))
     }
+
+//функциональное программирование - 18 (First-class Citizens)
+
+function compose(...args) {
+  return (variable) => args.reduceRight((acc, item) => item(acc), variable)
+  }
+  //функциональное программирование - 18 (First-class Citizens)
+
+  function compose(...args) {
+    return (variable) => {
+      let result = variable
+      for (let i = args.length - 1; i >= 0; i--){
+         result = args[i](result)
+      }
+      return result
+    }
+  }
+  
+  //функциональное программирование - 18 (First-class Citizens)
+  function once(funct) {
+    let count = 0
+   return (...args) => {
+    if(count > 0){
+      return undefined
+    }
+    count++
+    return funct(...args)
+   }
+  }
