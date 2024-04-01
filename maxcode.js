@@ -373,7 +373,9 @@ function isPrime(num) {
 function compose(...args) {
   return (variable) => args.reduceRight((acc, item) => item(acc), variable)
   }
-  //функциональное программирование - 18 (First-class Citizens)
+
+
+  //функциональное программирование - 19 (First-class Citizens)
 
   function compose(...args) {
     return (variable) => {
@@ -385,7 +387,7 @@ function compose(...args) {
     }
   }
   
-  //функциональное программирование - 18 (First-class Citizens)
+  //функциональное программирование - 20 (First-class Citizens)
   function once(funct) {
     let count = 0
    return (...args) => {
@@ -396,3 +398,43 @@ function compose(...args) {
     return funct(...args)
    }
   }
+
+//функциональное программирование - 21 (First-class Citizens)
+function memo(fn) {
+  const cache = new Map()
+  return (args) => {
+    if (cache.has(args)){
+      return cache.get(args)
+    }
+    cache.set(args, fn(args))
+    return cache.get(args)
+  }
+}
+
+//функциональное программирование - 22 (First-class Citizens)
+function memo(fn) {
+  const cache = new Map();
+  return function(...arg) {
+      const key = collecting(arg)
+    if (!cache.has(key)) {
+      cache.set(key, fn(...arg));
+    }
+    return cache.get(key);
+  };
+}
+
+const collecting = (args) => {
+  if (Array.isArray(...args)){
+      return args.join(';')
+  }
+  if ( typeof args[0] === 'number'){
+      return +args.join('')
+  }
+  if(args !== null && typeof args[0] !== 'function' && typeof args[0] === 'object'){
+      for (let key in args){
+        return args[key]
+      }
+  } else {
+      return args.join('')
+  }
+}
