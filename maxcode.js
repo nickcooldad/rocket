@@ -438,3 +438,32 @@ const collecting = (args) => {
       return args.join('')
   }
 }
+
+//функциональное программирование - 23 (First-class Citizens)
+
+function spy(fn) {
+  let argsArr = []
+  let resultFn = []
+  let counter = 0
+  function spyOn(...args) {
+    let result = fn(...args)
+    counter++
+    argsArr.push(args)
+    resultFn.push(result)
+    return result
+  }
+  
+  spyOn.callCount = () => {
+    return counter
+  }
+
+  spyOn.wasCalledWith = (str) => {
+     return argsArr.some(item => item.includes(str))
+  }
+
+  spyOn.returned = (str) => {
+    return resultFn.includes(str)
+  }
+
+  return spyOn
+}
