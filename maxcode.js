@@ -450,7 +450,7 @@ function spy(fn) {
   function spyOn(...args) {
     const result = fn(...args)
     counter++
-    argsArr.push(args)
+    argsArr.push(...args)
     resultFn.push(result)
     return result
   }
@@ -459,12 +459,12 @@ function spy(fn) {
     return counter
   }
 
-  spyOn.wasCalledWith = (str) => {
-     return argsArr.some(item => item.includes(str))
+  spyOn.wasCalledWith = (arg) => {
+     return argsArr.includes(arg)
   }
 
-  spyOn.returned = (str) => {
-    return resultFn.includes(str)
+  spyOn.returned = (arg) => {
+    return resultFn.includes(arg)
   }
 
   return spyOn
