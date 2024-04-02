@@ -469,3 +469,15 @@ function spy(fn) {
 
   return spyOn
 }
+
+//функциональное программирование - 24 (First-class Citizens)
+
+function join(...str) {
+  return function (arg) {
+    if(arg !== undefined) {
+     return join(...str, arg)
+    } else {
+     return str.join(' ')
+    }
+  }
+}
