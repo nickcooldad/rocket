@@ -465,11 +465,19 @@ function spy(fn) {
 //функциональное программирование - 24 (First-class Citizens)
 
 function join(...str) {
-  return function (arg) {
-    if(arg !== undefined) {
-     return join(...str, arg)
+  return (innerStr) => {
+    if(innerStr !== undefined) {
+     return join(...str, innerStr)
     } else {
      return str.join(' ')
     }
   }
 }
+
+//функциональное программирование - 24 (First-class Citizens)
+
+const sum = (a) => {
+  const innerSum = (b) => sum(a + b) 
+  innerSum.toString = () => a
+  return innerSum;
+};
