@@ -454,18 +454,10 @@ function spy(fn) {
     resultFn.push(result)
     return result
   }
-  
-  spyOn.callCount = () => {
-    return counter
-  }
 
-  spyOn.wasCalledWith = (arg) => {
-     return argsArr.includes(arg)
-  }
-
-  spyOn.returned = (arg) => {
-    return resultFn.includes(arg)
-  }
+  spyOn.callCount = () => counter
+  spyOn.wasCalledWith = (arg) => argsArr.includes(arg)
+  spyOn.returned = (arg) => resultFn.includes(arg)
 
   return spyOn
 }
