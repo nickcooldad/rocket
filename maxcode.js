@@ -442,11 +442,13 @@ const collecting = (args) => {
 //функциональное программирование - 23 (First-class Citizens)
 
 function spy(fn) {
-  let argsArr = []
-  let resultFn = []
+  
+  const argsArr = []
+  const resultFn = []
   let counter = 0
+
   function spyOn(...args) {
-    let result = fn(...args)
+    const result = fn(...args)
     counter++
     argsArr.push(args)
     resultFn.push(result)
