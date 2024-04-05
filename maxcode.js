@@ -476,8 +476,12 @@ function join(...str) {
 
 //функциональное программирование - 24 (First-class Citizens)
 
-const sum = (a) => {
-  const innerSum = (b) => sum(a + b) 
+function sum(a) {
+  function innerSum(b) {
+    if(b !== undefined){
+      return sum(a + b)
+    }
+  }
   innerSum.toString = () => a
-  return innerSum;
-};
+  return innerSum
+}
