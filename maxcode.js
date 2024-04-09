@@ -412,55 +412,74 @@ function memo(fn) {
 }
 
 //функциональное программирование - 22 (First-class Citizens)
+// function memo(fn) {
+//   const cache = new Map();
+//   return function(...arg) {
+//       const key = collecting(arg)
+//     if (!cache.has(key)) {
+//       cache.set(key, fn(...arg));
+//     }
+//     return cache.get(key);
+//   };
+// }
+
+// const collecting = (args) => {
+//   if (Array.isArray(...args)){
+//       return args.join(';')
+//   }
+//   if ( typeof args[0] === 'number'){
+//       return +args.join('')
+//   }
+//   if(args !== null && typeof args[0] !== 'function' && typeof args[0] === 'object'){
+//       for (let key in args){
+//         return args[key]
+//       }
+//   } else {
+//       return args.join('')
+//   }
+//}
+//
+
+const search1 = (array1, array2) =>  array1.length === array2.length && array1.every((_, index) => array1[index] === array2[index])
+
+
 function memo(fn) {
-  const cache = new Map();
-  return function(...arg) {
-      const key = collecting(arg)
-    if (!cache.has(key)) {
-      cache.set(key, fn(...arg));
+  const cache = []
+  return function(...args) {
+    const objRes = cache.find((item) => search1(item.args, args))
+    if(objRes === undefined){
+      const result = fn(...args)
+      cache.push({ args, result })
+      return result;
+    } 
+    return objRes.result
     }
-    return cache.get(key);
-  };
-}
-
-const collecting = (args) => {
-  if (Array.isArray(...args)){
-      return args.join(';')
   }
-  if ( typeof args[0] === 'number'){
-      return +args.join('')
-  }
-  if(args !== null && typeof args[0] !== 'function' && typeof args[0] === 'object'){
-      for (let key in args){
-        return args[key]
-      }
-  } else {
-      return args.join('')
-  }
-}
-
 //функциональное программирование - 23 (First-class Citizens)
 
 function spy(fn) {
   
-  const argsArr = []
-  const resultFn = []
+  const argsArr = new Set()
+  const resultFn = new Set()
   let counter = 0
 
   function spyOn(...args) {
     const result = fn(...args)
     counter++
-    argsArr.push(...args)
-    resultFn.push(result)
+    for (let key of args){
+      argsArr.add(key)
+    }
+    resultFn.add(result)
     return result
   }
 
   spyOn.callCount = () => counter
-  spyOn.wasCalledWith = (arg) => argsArr.includes(arg)
-  spyOn.returned = (arg) => resultFn.includes(arg)
+  spyOn.wasCalledWith = (arg) => argsArr.has(arg)
+  spyOn.returned = (arg) => resultFn.has(arg)
 
   return spyOn
 }
+
 
 //функциональное программирование - 24 (First-class Citizens)
 
@@ -482,6 +501,25 @@ function sum(a) {
       return sum(a + b)
     }
   }
-  innerSum.toString = () => a
+  innerSum["toString"] = () => "qwerty"
+  innerSum["valueOf"] = () => a
+  // innerSum[Symbol.toPrimitive] = () => a
   return innerSum
 }
+
+//функциональное программирование - 25 (First-class Citizens)
+function partial(fn, ...args1) {
+  return (...args2) => {
+    const cache = []
+    const innerArgs = args2
+    for (let key of args1){
+      if(key === partial.placeholder){
+        cache.push(innerArgs.shift())
+      } else {
+        cache.push(key)
+      }
+    }
+   return fn(...cache, ...innerArgs)
+  }
+}
+partial.placeholder = Symbol('placeholder');
