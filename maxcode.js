@@ -532,3 +532,16 @@ function curry(fn, ...arg) {
     return (...args) => curry(fn, ...arg, ...args)
      }
   }
+
+  //функциональное программирование - 28 (First-class Citizens)
+  function uncurry(fn) {
+    return (...args) => { 
+     let result = fn
+     let count = 0
+     while(typeof result() === 'function'){
+      result = result(args[count])
+      count++
+     }
+     return result(args[count])
+     }
+   }
