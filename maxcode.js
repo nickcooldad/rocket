@@ -493,7 +493,7 @@ function join(...str) {
   }
 }
 
-//функциональное программирование - 24 (First-class Citizens)
+//функциональное программирование - 25 (First-class Citizens)
 
 function sum(a) {
   function innerSum(b) {
@@ -507,7 +507,7 @@ function sum(a) {
   return innerSum
 }
 
-//функциональное программирование - 25 (First-class Citizens)
+//функциональное программирование - 26 (First-class Citizens)
 function partial(fn, ...args1) {
   return (...args2) => {
     const cache = []
@@ -523,3 +523,12 @@ function partial(fn, ...args1) {
   }
 }
 partial.placeholder = Symbol('placeholder');
+
+//функциональное программирование - 27 (First-class Citizens)
+function curry(fn, ...arg) {
+  if(arg.length >= fn.length){
+     return fn(...arg)
+  } else {
+    return (...args) => curry(fn, ...arg, ...args)
+     }
+  }
