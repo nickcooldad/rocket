@@ -545,3 +545,32 @@ function curry(fn, ...arg) {
      return result(args[count])
      }
    }
+
+//рекурсия - 1 (First-class Citizens)
+
+const objCheking = (obj) => typeof obj === 'object' &&  !Array.isArray(obj) && obj !== null
+
+function depth(obj) {
+  let depthCount = 0
+  let depthMax = 0
+  if(objCheking(obj)){
+  for (let key in obj){
+    if(obj[key] !== undefined){
+      depthCount = 1 + depth(obj[key])
+    }
+    depthMax = Math.max(depthCount, depthMax)
+  }}
+  return depthMax
+}
+
+//рекурсия - 2 (First-class Citizens)
+function sumTheTreeValues(root) {
+  let result = root.value
+    if(root.left !==  null){
+      result += sumTheTreeValues(root.left)
+    }
+    if(root.right !== null){
+      result += sumTheTreeValues(root.right)
+    }
+  return result
+}
