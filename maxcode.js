@@ -523,6 +523,30 @@ function partial(fn, ...args1) {
   }
 }
 partial.placeholder = Symbol('placeholder');
+//
+function partial(fn, ...args1) {
+  return (...args2) => {
+    const cache = []
+    const memory = []
+    let j = 0
+    for (let i = 0; i < args1.length; i++) {
+      if (args1[i] === partial.placeholder) {
+        cache.push(args2[j])
+        j++
+      }
+      else {
+        cache.push(args1[i])
+      }
+    }
+    for (let i = j; i < args2.length; i++) {
+      memory.push(args2[i])
+    }
+    return fn(...cache, ...memory)
+  }
+}
+partial.placeholder = Symbol('placeholder');
+
+
 
 //функциональное программирование - 27 (First-class Citizens)
 function curry(fn, ...arg) {
@@ -545,6 +569,18 @@ function curry(fn, ...arg) {
      return result(args[count])
      }
    }
+   //
+   function uncurry(fn) {
+    return (...args) => {
+      let result = fn
+      let count = 0
+      while (typeof result === 'function') {
+        result = result(args[count])
+        count++
+      }
+      return result
+    }
+  }
 
 //рекурсия - 1 (First-class Citizens)
 
@@ -562,6 +598,26 @@ function depth(obj) {
   }}
   return depthMax
 }
+//
+
+function depth(obj) {
+  if(!objCheking(obj)){
+    return 0
+  }
+  // let depthMax = 0
+  // for (let key in obj){
+  //   depthMax = Math.max(depthCount, depth(obj[key]))
+  // }
+  // return depthMax + 1
+
+  const values = Object.values(obj);
+  const depths = values.map(depth);
+  const maxDepth = Math.max(...depths);
+
+  return maxDepth + 1
+}
+
+// ["12", "5"].map(Number);
 
 //рекурсия - 2 (First-class Citizens)
 function sumTheTreeValues(root) {
@@ -572,5 +628,74 @@ function sumTheTreeValues(root) {
     if(root.right !== null){
       result += sumTheTreeValues(root.right)
     }
+  return result
+}
+//
+function sumTheTreeValues(root) {
+  if(root === null){
+    return 0
+  }
+  return root.value + sumTheTreeValues(root.left) + sumTheTreeValues(root.right)
+}
+
+
+ //рекурсия - 3 (First-class Citizens)
+function maxSum(root) {
+  if (!root) return 0;
+  if(root.left === null){
+    return root.value + maxSum(root.right)
+  }
+  if(root.right === null){
+    return root.value + maxSum(root.left)
+  }
+
+  const leftSum = root.value + maxSum(root.left);
+  const rightSum = root.value + maxSum(root.right);
+
+  return Math.max(leftSum, rightSum)
+}
+//
+
+//рекурсия 4
+function deepCompare(o1, o2) {
+  if (isObject(o1) && !isObject(o2)) {
+    return false
+  }
+  if (!isObject(o1) && isObject(o2)) {
+    return false
+  }
+  if (!isObject(o1) && !isObject(o2)) {
+    return o1 === o2
+  }
+  if(Object.keys(o1).length !== Object.keys(o2).length){
+    return false
+  }
+
+  return Object.keys(o1).every(key => deepCompare(o1[key], o2[key]))
+}
+
+function isObject(o1) {
+  return o1 !== null && typeof o1 === "object" && !Array.isArray(o1);
+}
+
+//рекурсия 5
+function smartSum(arr) {
+  return arr.reduce((acc, item) => 
+  acc + (Array.isArray(item) ? smartSum(item) : item), 0)
+ }
+
+ //рекурсия 6
+ function flattenArr(arr, depth = 1) {
+  if(depth <= 0){
+    return arr
+  }
+  let result = []
+  for (let item of arr){
+    if(Array.isArray(item)){
+      result.push(...flattenArr(item, depth - 1))
+    } else{
+      result.push(item)
+    }
+  }
   return result
 }
