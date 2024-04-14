@@ -699,3 +699,16 @@ function smartSum(arr) {
   }
   return result
 }
+
+//рекурсия 7
+const isObj = (obj) => obj !== null && !Array.isArray(obj) && typeof obj === 'object'
+
+function recordDepth(obj, depth = 0) {
+  obj.depth = depth
+  for(let key in obj){
+    if(isObj(obj[key])){
+     recordDepth(obj[key], depth + 1)
+    }
+  }
+  return obj
+}
