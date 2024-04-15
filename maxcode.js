@@ -712,3 +712,21 @@ function recordDepth(obj, depth = 0) {
   }
   return obj
 }
+
+//рекурсия 8
+//const isObj = (obj) => obj !== null && !Array.isArray(obj) && typeof obj === 'object'
+
+function flattenObj(obj, keysArray = []) { 
+ const flattObj = {}
+ for (const key in obj){
+  if(isObj(obj[key])){
+    const innerFlatt = flattenObj(obj[key], [...keysArray, key])
+      for(const keys in innerFlatt){
+        flattObj[keys] = innerFlatt[keys]
+      }
+  } else {
+    flattObj[[...keysArray, key].join('/')] = obj[key]
+  }
+ }
+ return flattObj
+}
