@@ -677,6 +677,32 @@ function deepCompare(o1, o2) {
 function isObject(o1) {
   return o1 !== null && typeof o1 === "object" && !Array.isArray(o1);
 }
+//
+function deepCompare(o1, o2) {
+  // if (isObject(o1) && !isObject(o2)) {
+  //   return false
+  // }
+  // if (!isObject(o1) && isObject(o2)) {
+  //   return false
+  // }
+  // if (!isObject(o1) && !isObject(o2)) {
+  //   return o1 === o2
+  // }
+
+  if (!isObject(o1) || !isObject(o2)) {
+      return o1 === o2
+  } 
+
+  if(Object.keys(o1).length !== Object.keys(o2).length){
+    return false
+  }
+
+  return Object.keys(o1).every(key => deepCompare(o1[key], o2[key]))
+}
+
+function isObject(o1) {
+  return o1 !== null && typeof o1 === "object" && !Array.isArray(o1);
+}
 
 //рекурсия 5
 function smartSum(arr) {
@@ -699,9 +725,25 @@ function smartSum(arr) {
   }
   return result
 }
+//
+ //рекурсия 6
+ function flattenArr(arr, depth = 1) {
+  if(depth <= 0){
+    return arr.slice()
+  }
+  let result = []
+  for (let item of arr){
+    if(Array.isArray(item)){
+      result.push(...flattenArr(item, depth - 1))
+    } else{
+      result.push(item)
+    }
+  }
+  return result
+}
 
 //рекурсия 7
-const isObj = (obj) => obj !== null && !Array.isArray(obj) && typeof obj === 'object'
+//const isObj = (obj) => obj !== null && !Array.isArray(obj) && typeof obj === 'object'
 
 function recordDepth(obj, depth = 0) {
   obj.depth = depth
@@ -712,7 +754,20 @@ function recordDepth(obj, depth = 0) {
   }
   return obj
 }
+//
+//рекурсия 7
+const isObj = (obj) => obj !== null && !Array.isArray(obj) && typeof obj === 'object'
 
+function recordDepth(obj, depth = 0) {
+  if(!isObj(obj)){
+     return obj;
+  }
+  obj.depth = depth
+  for(let key in obj){
+    recordDepth(obj[key], depth + 1)
+  }
+  return obj
+}
 //рекурсия 8
 //const isObj = (obj) => obj !== null && !Array.isArray(obj) && typeof obj === 'object'
 
@@ -729,4 +784,65 @@ function flattenObj(obj, keysArray = []) {
   }
  }
  return flattObj
+}
+//const isObj = (obj) => obj !== null && !Array.isArray(obj) && typeof obj === 'object'
+
+function flattenObj(obj, keysArray = []) { 
+  const flattObj = {}
+  for (const key in obj){
+   if(isObj(obj[key])){
+      const innerFlatt = flattenObj(obj[key], [...keysArray, key])
+      //  for(const keys in innerFlatt){
+      //    flattObj[keys] = innerFlatt[keys]
+      //  }
+     Object.assign(flattObj, innerFlatt)
+      
+   } else {
+     flattObj[[...keysArray, key].join('/')] = obj[key]
+   }
+  }
+  return flattObj
+ }
+
+//
+//рекурсия 9
+
+function isBST(root, min = -Infinity, max = Infinity) {
+  if(root === null){
+    return true
+  }
+
+  return root.value > min && root.value < max
+    && isBST(root.left, min, root.value)
+    && isBST(root.right, root.value, max)
+}
+
+//рекурсия 10
+function clone(obj, link = new Map()) {
+  if(!isObj(obj)){
+    return obj
+  }
+  if(link.has(obj)){
+    return link.get(obj)
+  }
+  
+  const newObj = {}
+  for(let key in obj){
+    newObj[key] = clone(obj[key])
+    link.set(key, clone(obj[key]))
+  }
+  return newObj
+}
+//рекурсия 11
+//const isObj = (obj) => obj !== null && !Array.isArray(obj) && typeof obj === 'object'
+
+function clone(obj, link = new Map()) {
+  if(!isObj(obj)){
+    return obj
+  }
+  const newObj = {}
+  for(let key in obj){
+    newObj[key] = link.has(key) ? link.get(key) : clone(obj[key], link.set(key, obj[key]))
+  }
+  return newObj
 }
