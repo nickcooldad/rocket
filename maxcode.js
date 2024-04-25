@@ -818,22 +818,6 @@ function isBST(root, min = -Infinity, max = Infinity) {
 }
 
 //рекурсия 10
-function clone(obj, link = new Map()) {
-  if(!isObj(obj)){
-    return obj
-  }
-  if(link.has(obj)){
-    return link.get(obj)
-  }
-  
-  const newObj = {}
-  for(let key in obj){
-    newObj[key] = clone(obj[key])
-    link.set(key, clone(obj[key]))
-  }
-  return newObj
-}
-//рекурсия 11
 //const isObj = (obj) => obj !== null && !Array.isArray(obj) && typeof obj === 'object'
 
 function clone(obj, link = new Map()) {
@@ -853,9 +837,19 @@ function countChange(money, coins) {
   if (money === 0){
     return 1
   }
-  if(money <= 0 || coins.length === 0) {
+  if(money < 0 || coins.length === 0) {
     return 0
   }
   
   return countChange(money - coins[0], coins) + countChange(money, coins.slice(1))
   }
+//рекурсия 13
+  function countChange(money, coins, memory = []) {
+    if (money === 0){
+      return memory.join('+')
+    }
+    if(money < 0 || coins.length === 0) {
+      return []
+    }
+    return [countChange(money - coins[0], coins, [...memory, coins[0]]), ...countChange(money, coins.slice(1), [...memory])].flat()
+    }
