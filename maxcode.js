@@ -843,7 +843,9 @@ function countChange(money, coins) {
   
   return countChange(money - coins[0], coins) + countChange(money, coins.slice(1))
   }
+
 //рекурсия 13
+
 function countChange(money, coins, counts = [], sum = 0) {
   if (sum === money){
     return [counts.join('+')]
@@ -853,3 +855,20 @@ function countChange(money, coins, counts = [], sum = 0) {
   }
   return [...countChange(money, coins.slice(1), counts, sum), ...countChange(money, coins, [...counts, coins[0]], sum + coins[0])]
   }
+
+//рекурсия 14
+  const sum = (arr) => arr.reduce((acc, item) => acc + item, 0)
+  function combos(num, comboArr = [], result = []) {
+  if(sum(comboArr) === num){
+    result.push(comboArr)
+    return result
+  }
+  if(sum(comboArr) > num){
+    return result
+  }
+  
+  for (let i = comboArr[comboArr.length - 1] || 1; i <= num; i++){
+    combos(num, [...comboArr, i], result)
+  }
+  return result
+}
