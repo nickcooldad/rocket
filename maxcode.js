@@ -844,12 +844,12 @@ function countChange(money, coins) {
   return countChange(money - coins[0], coins) + countChange(money, coins.slice(1))
   }
 //рекурсия 13
-  function countChange(money, coins, memory = []) {
-    if (money === 0){
-      return memory.join('+')
-    }
-    if(money < 0 || coins.length === 0) {
-      return []
-    }
-    return [countChange(money - coins[0], coins, [...memory, coins[0]]), ...countChange(money, coins.slice(1), [...memory])].flat()
-    }
+function countChange(money, coins, counts = [], sum = 0) {
+  if (sum === money){
+    return [counts.join('+')]
+  }
+  if(sum > money || coins.length === 0) {
+    return []
+  }
+  return [...countChange(money, coins.slice(1), counts, sum), ...countChange(money, coins, [...counts, coins[0]], sum + coins[0])]
+  }
