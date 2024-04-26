@@ -867,7 +867,7 @@ function countChange(money, coins, counts = [], sum = 0) {
     return result
   }
   
-  for (let i = comboArr[comboArr.length - 1] || 1; i <= num; i++){
+  for (let i = comboArr[comboArr.length - 1] ??= 1; i <= num; i++){
     combos(num, [...comboArr, i], result)
   }
   return result
