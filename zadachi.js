@@ -2551,4 +2551,21 @@ function combos(num, currentCombo = [], cache = []) {
   return cache;
 }
 
+// рекурсия 
+const isObj = (arr) => arr !== undefined && arr.length !== 0
+
+function id2children(catalog) {
+  let result = {}
+  if (isObj(catalog.children)){
+    result[catalog.id] = catalog.children.map(item => item.id)
+    for (key of catalog.children){
+      const id = id2children(key)
+      Object.assign(result, id)
+    }
+  } else {
+      result[catalog.id] = []
+    }
+  return result
+}
+
 
