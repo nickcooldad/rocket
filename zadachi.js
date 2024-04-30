@@ -2531,7 +2531,7 @@ function deepCompare(o1, o2) {
   }
 
   //задача 122-712
-const sumArray = (array) => array.reduce((acc, item) => acc += item, 0);
+const sumArray = (array) => array.reduce((acc, item) => acc + item, 0);
 
 function combos(num, currentCombo = [], cache = []) {
   if (sumArray(currentCombo) === num) {
