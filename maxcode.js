@@ -874,11 +874,11 @@ function countChange(money, coins, counts = [], sum = 0) {
 }
 
 //рекурсия 15
-//const isObj = (arr) => arr !== undefined && arr.length !== 0
+const isArr = (arr) => arr !== undefined && arr.length !== 0
 
 function id2children(catalog) {
   let result = {}
-  if (isObj(catalog.children)){
+  if (isArr(catalog.children)){
     result[catalog.id] = catalog.children.map(item => item.id)
     for (key of catalog.children){
       const id = id2children(key)
@@ -890,4 +890,17 @@ function id2children(catalog) {
   return result
 }
   
+//рекурсия 16
+//const isArr = (arr) => arr !== undefined && arr.length !== 0
 
+function id2parent(catalog, parent = null) {
+let result = {}
+result[catalog.id] = parent
+if(isArr(catalog.children)){
+  for (key of catalog.children){
+    result[key.id] = parent
+    Object.assign(result, id2parent(key, catalog.id))
+  }
+}
+return result
+}
