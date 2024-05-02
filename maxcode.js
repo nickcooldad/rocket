@@ -947,7 +947,7 @@ function id2parent(catalog, parent = null) {
 
 //const isArr = (arr) => arr !== undefined && arr.length !== 0
 
-function breadcrumbs(catalog, id, prev = [catalog.name]) {
+function descendants(catalog, id, prev = [catalog.name]) {
   let result = []
 if (catalog.id === id){
   return prev
@@ -955,7 +955,7 @@ if (catalog.id === id){
 
 if(isArr(catalog.children)){
   for (key of catalog.children){
-     result.push(...breadcrumbs(key, id, [...prev, key.name]))
+     result.push(...descendants(key, id, [...prev, key.name]))
       }
   } 
 
@@ -963,12 +963,12 @@ if(isArr(catalog.children)){
 }
 /////
 
-function breadcrumbs(catalog, id, prev = [catalog.name]) {
+function descendants(catalog, id, prev = [catalog.name]) {
   if (catalog.id === id) {
     return prev
   }
   for (key of catalog.children) {
-    const crumbs = breadcrumbs(key, id, [...prev, key.name])
+    const crumbs = descendants(key, id, [...prev, key.name])
     if (crumbs !== null) {
       return crumbs
     }
@@ -979,3 +979,14 @@ function breadcrumbs(catalog, id, prev = [catalog.name]) {
 // https://www.youtube.com/watch?v=pV2kpPD66nE
 
 
+//рекурсия 18
+function descendants(catalog, id, prev = []) {
+  for(const child of catalog.children){
+    if(catalog.id === id){
+      prev.push(child.id)
+      descendants(child, child.id , prev)
+    }
+    descendants(child, id, prev)
+  }
+  return prev
+}
