@@ -993,7 +993,7 @@ function descendants(catalog, id, prev = []) {
 
 //рекурсия 19
 
-function countIslands(grid){
+function maxArea(grid){
   let count = 0
   for(let i = 0; i < grid.length; i++){
     for(let j = 0; j < grid[i].length; j++){
@@ -1022,4 +1022,38 @@ function countIslands(grid){
     return 1
   }
 return count
+}
+
+//рекурсия 20
+function maxArea(grid){
+  let count = 0
+  let maxCount = 0
+  for(let i = 0; i < grid.length; i++){
+    for(let j = 0; j < grid[i].length; j++){
+      if (grid[i][j] === 1){
+        dfs(grid, i, j)
+        maxCount = Math.max(maxCount, count)
+        count = 0
+      }
+    }
+  }
+
+  function dfs(grid,row,col){
+    if(row < 0 || row > grid.length -1 || col < 0 || col > grid[row].length -1 || grid[row][col] === 0){
+      return;
+    }
+   
+    grid[row][col] = 0
+    count++
+
+    dfs(grid, row + 1, col)
+    dfs(grid, row - 1, col)
+    dfs(grid, row, col + 1)
+    dfs(grid, row, col - 1)
+    dfs(grid, row + 1, col + 1)
+    dfs(grid, row + 1, col - 1)
+    dfs(grid, row - 1, col + 1)
+    dfs(grid, row - 1, col - 1)
+  }
+  return maxCount
 }
