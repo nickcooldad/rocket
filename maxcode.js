@@ -1019,7 +1019,7 @@ function maxArea(grid){
     dfs(grid, row - 1, col + 1)
     dfs(grid, row - 1, col - 1)
 
-    return 1
+    return true
   }
 return count
 }
@@ -1057,3 +1057,40 @@ function maxArea(grid){
   }
   return maxCount
 }
+
+//рекурсия 21
+function checkWord(board, word) {
+  let checkWords = false
+    for(let i = 0; i < board.length; i++){
+      for(let j = 0; j < board[i].length; j++){
+        if(word[0] === board[i][j]){
+          if(dfs(board, i, j, 0, new Set())){
+            checkWords = true
+          }
+         
+         }
+      }
+    }
+    function dfs(board, row, col, index, cache){
+      if (index === word.length){
+        return true
+      }
+      if(row < 0 || row > board.length - 1 || col < 0 || col > board[row].length - 1 || word[index] !== board[row][col] || cache.has([row, col].join(','))){
+        return false;
+      }
+      cache.add([row, col].join(','))
+      let result = dfs(board, row + 1, col , index + 1, cache) ||
+      dfs(board, row - 1, col, index + 1, cache) ||
+      dfs(board, row, col + 1, index + 1, cache) ||
+      dfs(board, row, col - 1, index + 1, cache) ||
+      dfs(board, row + 1, col + 1, index + 1, cache) ||
+      dfs(board, row + 1, col - 1, index + 1, cache) ||
+      dfs(board, row - 1, col + 1, index + 1, cache) ||
+      dfs(board, row - 1, col - 1, index + 1, cache)
+      cache.delete([row, col].join(','))
+       
+      return result
+      }
+    
+    return checkWords
+  }
