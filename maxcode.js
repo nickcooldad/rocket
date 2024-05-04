@@ -947,7 +947,7 @@ function id2parent(catalog, parent = null) {
 
 //const isArr = (arr) => arr !== undefined && arr.length !== 0
 
-function descendants(catalog, id, prev = [catalog.name]) {
+function findNote(catalog, id, prev = [catalog.name]) {
   let result = []
 if (catalog.id === id){
   return prev
@@ -955,7 +955,7 @@ if (catalog.id === id){
 
 if(isArr(catalog.children)){
   for (key of catalog.children){
-     result.push(...descendants(key, id, [...prev, key.name]))
+     result.push(...findNote(key, id, [...prev, key.name]))
       }
   } 
 
@@ -963,12 +963,12 @@ if(isArr(catalog.children)){
 }
 /////
 
-function descendants(catalog, id, prev = [catalog.name]) {
+function findNote(catalog, id, prev = [catalog.name]) {
   if (catalog.id === id) {
     return prev
   }
   for (key of catalog.children) {
-    const crumbs = descendants(key, id, [...prev, key.name])
+    const crumbs = findNote(key, id, [...prev, key.name])
     if (crumbs !== null) {
       return crumbs
     }
@@ -980,16 +980,42 @@ function descendants(catalog, id, prev = [catalog.name]) {
 
 
 //рекурсия 18
-function descendants(catalog, id, prev = []) {
+function findNote(catalog, id, prev = []) {
   for(const child of catalog.children){
     if(catalog.id === id){
       prev.push(child.id)
-      descendants(child, child.id , prev)
+      findNote(child, child.id , prev)
     }
-    descendants(child, id, prev)
+    findNote(child, id, prev)
   }
   return prev
 }
+////
+function descendants(catalog, id) {
+  return searchParent(findNote(catalog, id))
+  }
+
+function findNote(catalog, id){
+  if(catalog.id === id){
+     return catalog
+  }
+  for(const child of catalog.children){
+  const childResult = findNote(child, id)
+    if(childResult !== undefined){
+     return childResult
+    }
+  }
+}
+
+function searchParent(obj){
+  const cache = []
+  for(const child of obj.children){
+    cache.push(child.id)
+    const resultChild = searchParent(child)
+    cache.push(...resultChild)
+  }
+  return cache
+ }
 
 //рекурсия 19
 
@@ -1023,6 +1049,38 @@ function maxArea(grid){
   }
 return count
 }
+///
+function dfs(grid,row,col){
+  if(row < 0 || row > grid.length -1 || col < 0 || col > grid[row].length -1 || grid[row][col] === 0){
+    return;
+  }
+
+  grid[row][col] = 0
+
+  dfs(grid, row + 1, col)
+  dfs(grid, row - 1, col)
+  dfs(grid, row, col + 1)
+  dfs(grid, row, col - 1)
+  dfs(grid, row + 1, col + 1)
+  dfs(grid, row + 1, col - 1)
+  dfs(grid, row - 1, col + 1)
+  dfs(grid, row - 1, col - 1)
+
+  return 1
+}
+
+function countIslands(grid){
+    let count = 0
+    for(let i = 0; i < grid.length; i++){
+      for(let j = 0; j < grid[i].length; j++){
+        if (grid[i][j] === 1){
+          count += dfs(grid, i, j)
+        }
+      }
+    }
+  
+  return count
+  }
 
 //рекурсия 20
 function maxArea(grid){
@@ -1056,6 +1114,36 @@ function maxArea(grid){
     dfs(grid, row - 1, col - 1)
   }
   return maxCount
+}
+////
+function maxArea(grid){
+  let maxCount = 0
+  for(let i = 0; i < grid.length; i++){
+    for(let j = 0; j < grid[i].length; j++){
+      if (grid[i][j] === 1){
+       maxCount = Math.max(maxCount, dfs(grid, i, j))
+      }
+     }
+   }
+  return maxCount
+}
+
+function dfs(grid,row,col){
+   if(row < 0 || row > grid.length -1 || col < 0 || col > grid[row].length -1 || grid[row][col] === 0){
+    return 0;
+  }
+
+  grid[row][col] = 0
+
+  return 1 +
+  dfs(grid, row + 1, col) +
+  dfs(grid, row - 1, col) +
+  dfs(grid, row, col + 1) +
+  dfs(grid, row, col - 1) +
+  dfs(grid, row + 1, col + 1) +
+  dfs(grid, row + 1, col - 1) +
+  dfs(grid, row - 1, col + 1) +
+  dfs(grid, row - 1, col - 1)
 }
 
 //рекурсия 21
