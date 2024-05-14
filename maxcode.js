@@ -1209,3 +1209,88 @@ function checkWord(board, word) {
     }
     return false
   }
+
+  //рекурсия 21
+function minPath(grid) {
+  const rowLength = grid.length;
+  const colLength = grid[0].length;
+  
+  const dp = Array.from({length : rowLength}, () => Array.from({length : colLength}))
+  dp[0][0] = grid[0][0];
+  
+  for (let col = 1; col < colLength; col++) {
+    dp[0][col] = dp[0][col - 1] + grid[0][col];
+  }
+  
+  for (let row = 1; row < rowLength; row++) {
+    dp[row][0] = dp[row - 1][0] + grid[row][0];
+    for (let col = 1; col < colLength; col++) {
+      dp[row][col] = grid[row][col] + Math.min(dp[row - 1][col], dp[row][col - 1]);
+    }
+  }
+  return dp[rowLength - 1][colLength - 1];
+}
+/////
+function minPath(grid, row = grid.length - 1, col = grid[0].length - 1, dp = Array.from({length: grid.length}, () => Array.from({length: grid[0].length}))) {
+  if (row < 0 || col < 0){
+    return Infinity;
+  }
+  if (row === 0 && col === 0){
+   return grid[row][col];
+  }
+  if(dp[row][col] !== undefined){
+    return dp[row][col]
+  }
+  dp[row][col] = grid[row][col] + Math.min(
+    minPath(grid, row - 1, col, dp),
+    minPath(grid, row, col - 1, dp),
+  );
+  return dp[row][col]
+}
+
+//рекурсия 22
+function permutations(str) {
+  if (str.length === 1) {
+    return [str];
+  }
+  const results = [];
+
+  for (let i = 0; i < str.length; i++) {
+    const remainingChars = str.slice(0, i) + str.slice(i + 1);
+
+    const perms = permutations(remainingChars);
+
+    for (let j = 0; j < perms.length; j++) {
+      results.push(str[i] + perms[j]);
+    }
+  }
+  return results;
+}
+
+//////
+function permutations(s) {
+  if (s.length === 0) {
+    return [""];
+  }
+
+  return s
+    .split("")
+    .flatMap((_, i) => permutations(s.slice(0, i) + s.slice(i + 1)).map(x => x + s[i]))
+}
+
+//ООП - 1
+class HttpRouter {
+  memory = new Map()
+
+  addHandler(api, get, funct){
+    this.memory.set(`${api},${get}`, funct)
+  }
+
+runRequest(api, get){
+  if(this.memory.has(`${api},${get}`)){
+    return this.memory.get(`${api},${get}`)()
+   } else{
+    return "Error 404: Not Found"
+  }
+  }
+}

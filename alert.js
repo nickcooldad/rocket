@@ -1,53 +1,90 @@
-function minPath(grid, cache = new Map()) {
-  let rowLength = grid.length;
-  let colLength = grid[0].length;
+class QueryParams {
+  memory = {}
 
-  for (let i = 0; i < rowLength; i++) {
-    for (let j = 0; j < colLength; j++) {
-      if(i === 0 && j === 0){
-      cache.set(`${i}-${j}`, dfs(grid, i, j, cache))
-      }
+  append(key, value){
+    //console.log(key,value)
+    if(this.memory.hasOwnProperty(key)){
+      this.memory[key].push(value)
+    } else{
+    this.memory[key] = [value]}
+  }
+  toString(){
+    console.log(this.memory)
+    let str = []
+    for(let key in this.memory){
+      str.push(`${key}=${this.memory[key]}`)
+    }
+    return str.join("&")
+  }
+  get(key){
+    console.log('+')
+    if(this.memory.hasOwnProperty(key)){
+      return this.memory[key][0]
     }
   }
-  return cache.get(`${rowLength - 1}-${colLength - 1}`);
-}
-
-function dfs(grid, row, col, cache) {
-  if (row < 0 || row > grid.length - 1 || col < 0 || col > grid[0].length - 1 || cache.has(`${row}-${col}`)) {
-    return ;
+  getAll(key){
+    if(this.memory.hasOwnProperty(key)){
+      return this.memory[key]
+    }
   }
-
-  if (row === 0 && col === 0) {
-    return grid[row][col];
+  set(key, value){
+    if(this.memory.hasOwnProperty(key)){
+      delete this.memory.key
+    }
+    this.memory[key] = value
   }
-
-  let result = grid[row][col];
-
-  result += Math.min(
-    dfs(grid, row - 1, col, cache),
-    dfs(grid, row + 1, col, cache),
-    dfs(grid, row, col - 1, cache),
-    dfs(grid, row, col + 1, cache)
-  );
-
-  cache.set(`${row}-${col}`, result);
-  return result;
+  delete(key){
+    if(this.memory.hasOwnProperty(key)){
+      delete this.memory.key
+    }
+  }
 }
 
 
+const u = new QueryParams();
 
-const grid = [
-    [1, 2, 3, 9, 7, 2],
-    [7, 2, 8, 4, 6, 6],
-    [8, 1, 3, 2, 5, 3],
-    [3, 3, 3, 4, 5, 1],
-  ];
-  
-  console.log(minPath(grid))// === 20
-  // [
-  //   [1, 2, ×, ×, ×, ×],
-  //   [×, 2, ×, ×, ×, ×],
-  //   [×, 1, 3, 2, 5, 3],
-  //   [×, ×, ×, ×, ×, 1],
-  // ];
-  
+u.append("genre", "comedy");
+u.append("year", "2023");
+
+console.log(u.toString());
+// "genre=comedy&year=2023"
+
+const u1 = new QueryParams("genre=comedy&year=2023");
+console.log(u1.get("genre")); // "comedy"
+
+const u2 = new QueryParams({ genre: "comedy", year: "2023" });
+console.log(u2.get("year")); // "2023"
+
+const u3 = new QueryParams("genre=comedy&year=2023");
+u3.append("year", "2024");
+u3.append("year", "2025");
+
+console.log(u3.toString());
+// "genre=comedy&year=2023&year=2024&year=2025"
+
+u3.set("year", "1999");
+
+console.log(u3.toString());
+// "genre=comedy&year=1999"
+
+const u4 = new QueryParams("genre=comedy&year=2023");
+u4.delete("year");
+
+console.log(u4.toString()); // "genre=comedy"
+
+const u5 = new QueryParams(
+  "genre=comedy&year=2023&year=2024&year=2025"
+);
+
+console.log(u5.get("genre")); // "comedy"
+console.log(u5.get("year")); // "2023"
+console.log(u5.getAll("genre")); // ["comedy"]
+console.log(u5.getAll("year")); // ["2023", "2024", "2025"]
+
+const u6 = new QueryParams(
+  "genre=comedy&year=2023&year=2024&year=2025"
+);
+
+console.log(u6.has("year")); // true
+console.log(u6.has("year", "2023")); // true
+console.log(u6.has("year", "1999")); // false
