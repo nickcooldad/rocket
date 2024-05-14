@@ -1,31 +1,51 @@
-function dfs(grid,row,col){
-  if(row < 0 || row > grid.length -1 || col < 0 || col > grid[row].length -1 || grid[row][col] === 0){
-    return;
+function permutations(str) {
+  if (str.length === 1) {
+    return [str];
+  }
+  const results = [];
+
+  for (let i = 0; i < str.length; i++) {
+    const remainingChars = str.slice(0, i) + str.slice(i + 1);
+
+    const perms = permutations(remainingChars);
+
+    for (let j = 0; j < perms.length; j++) {
+      results.push(str[i] + perms[j]);
+    }
+  }
+  return results;
+}
+function permutations(s) {
+  if (s.length === 0) {
+    return [""];
   }
 
-  grid[row][col] = 0
+  return s
+    .split("")
+    .flatMap((_, i) => permutations(s.slice(0, i) + s.slice(i + 1)).map(x => x + s[i]))
 
-  dfs(grid, row + 1, col)
-  dfs(grid, row - 1, col)
-  dfs(grid, row, col + 1)
-  dfs(grid, row, col - 1)
-  dfs(grid, row + 1, col + 1)
-  dfs(grid, row + 1, col - 1)
-  dfs(grid, row - 1, col + 1)
-  dfs(grid, row - 1, col - 1)
+  // const results = [];
 
-  return 1
+  // for (let i = 0; i < str.length; i++) {
+  //   const remainingChars = str.slice(0, i) + str.slice(i + 1);
+
+  //   const perms = permutations(remainingChars);
+
+  //   for (let j = 0; j < perms.length; j++) {
+  //     results.push(str[i] + perms[j]);
+  //   }
+  // }
+  // return results;
 }
 
-function countIslands(grid){
-    let count = 0
-    for(let i = 0; i < grid.length; i++){
-      for(let j = 0; j < grid[i].length; j++){
-        if (grid[i][j] === 1){
-          count += dfs(grid, i, j)
-        }
-      }
-    }
-  
-  return count
-  }
+
+
+
+
+// O(n!)
+console.log(permutations("0123456789A").length);
+// 11! = 39916800
+// 11! × 11 = 439_084_800 byte ≈ 440 MB
+
+// console.log(permutations("ABC"));
+// // ["ABC", "ACB", "BAC", "BCA", "CAB", "CBA"]

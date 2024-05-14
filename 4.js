@@ -1,38 +1,89 @@
-function dfs(board, row, col, index, word){
-  if (index === word.length){
-    return true
-  }
-  if(row < 0 || row > board.length - 1 || col < 0 || col > board[row].length - 1 || word[index] !== board[row][col] || board[row][col] === ''){
-    return false;
-  }
+class QueryParams {
+  memory = {}
 
-  let memory = board[row][col]
-  board[row][col] = ''
-  let result = [[row - 1,col], [row + 1, col], [row,col + 1], [row,col - 1], [row - 1,col - 1], [row - 1,col + 1], [row + 1,col - 1], [row + 1,col + 1]]
-    .some(([row, col]) => dfs(board, row, col, index +1, word))
-  board[row][col] = memory
-   
-  return result
+  append(key, value){
+    //console.log(key,value)
+    if(this.memory.hasOwnProperty(key)){
+      this.memory[key].push(value)
+    } else{
+    this.memory[key] = [value]}
   }
-
-function checkWord(board, word) {
-  for(let i = 0; i < board.length; i++){
-     for(let j = 0; j < board[i].length; j++){
-      if(dfs(board, i, j, 0, word)){
-        return true
-      }
+  toString(){
+    console.log(this.memory)
+    let str = []
+    for(let key in this.memory){
+      str.push(`${key}=${this.memory[key]}`)
+    }
+    return str.join("&")
+  }
+  get(key){
+    if(this.memory.hasOwnProperty(key)){
+      return this.memory[key][0]
     }
   }
-  return false
+  getAll(key){
+    if(this.memory.hasOwnProperty(key)){
+      return this.memory[key]
+    }
+  }
+  set(key, value){
+    if(this.memory.hasOwnProperty(key)){
+      delete this.memory.key
+    }
+    this.memory[key] = value
+  }
+  delete(key){
+    if(this.memory.hasOwnProperty(key)){
+      delete this.memory.key
+    }
+  }
 }
 
-  const board = [ 
-    ["I","L","A","W"],
-    ["B","N","G","E"],
-    ["I","U","A","O"],
-    ["A","S","R","L"],
-  ];
-    
-    console.log(checkWord(board, 'BINGO'))
-    console.log(checkWord(board, 'ILNBIA'))
-    console.log(checkWord(board, 'BUNGIE'))
+
+const u = new QueryParams();
+
+u.append("genre", "comedy");
+u.append("year", "2023");
+
+console.log(u.toString());
+// "genre=comedy&year=2023"
+
+const u1 = new QueryParams("genre=comedy&year=2023");
+console.log(u1.get("genre")); // "comedy"
+
+const u2 = new QueryParams({ genre: "comedy", year: "2023" });
+console.log(u2.get("year")); // "2023"
+
+const u3 = new QueryParams("genre=comedy&year=2023");
+u3.append("year", "2024");
+u3.append("year", "2025");
+
+console.log(u3.toString());
+// "genre=comedy&year=2023&year=2024&year=2025"
+
+u3.set("year", "1999");
+
+console.log(u3.toString());
+// "genre=comedy&year=1999"
+
+const u4 = new QueryParams("genre=comedy&year=2023");
+u4.delete("year");
+
+console.log(u4.toString()); // "genre=comedy"
+
+const u5 = new QueryParams(
+  "genre=comedy&year=2023&year=2024&year=2025"
+);
+
+console.log(u5.get("genre")); // "comedy"
+console.log(u5.get("year")); // "2023"
+console.log(u5.getAll("genre")); // ["comedy"]
+console.log(u5.getAll("year")); // ["2023", "2024", "2025"]
+
+const u6 = new QueryParams(
+  "genre=comedy&year=2023&year=2024&year=2025"
+);
+
+console.log(u6.has("year")); // true
+console.log(u6.has("year", "2023")); // true
+console.log(u6.has("year", "1999")); // false

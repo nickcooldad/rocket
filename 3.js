@@ -1,40 +1,61 @@
-function maxArea(grid){
-  let maxCount = 0
-  for(let i = 0; i < grid.length; i++){
-    for(let j = 0; j < grid[i].length; j++){
-      if (grid[i][j] === 1){
-       maxCount = Math.max(maxCount, dfs(grid, i, j))
-      }
-     }
-   }
-  return maxCount
-}
-
-function dfs(grid,row,col){
-   if(row < 0 || row > grid.length -1 || col < 0 || col > grid[row].length -1 || grid[row][col] === 0){
-    return 0;
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
   }
 
-  grid[row][col] = 0
-
-  return 1 +
-  dfs(grid, row + 1, col) +
-  dfs(grid, row - 1, col) +
-  dfs(grid, row, col + 1) +
-  dfs(grid, row, col - 1) +
-  dfs(grid, row + 1, col + 1) +
-  dfs(grid, row + 1, col - 1) +
-  dfs(grid, row - 1, col + 1) +
-  dfs(grid, row - 1, col - 1)
+  calcArea() {
+    return this.height * this.width;
+  }
 }
 
-const grid = [
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,0,1,1,0,0,0,0,0,0],
-  [0,0,1,1,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,1,0],
-  [0,0,0,0,0,1,1,1,0,0],
-  [1,1,0,0,0,0,0,0,0,0],
-];
+const square = new Rectangle(10, 10);
 
-console.log(maxArea(grid)); // 4
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
+class HttpRouter {
+  memory = new Map()
+
+  addHandler(api, get, funct){
+    this.memory.set(`${api},${get}`, funct)
+  }
+
+  runRequest(api, get){
+    if(this.memory.has(`${api},${get}`)){
+      return this.memory.get(`${api},${get}`)()
+    } else{
+      return "Error 404: Not Found"
+    }
+  }
+}
+
+
+
+
+const router = new HttpRouter();
+
+router.addHandler("/api/users", "GET", () => {
+  return ["user1", "user2"];
+});
+
+router.addHandler("/api/users", "POST", () => {
+  return "User added";
+});
+
+router.addHandler("/api/login", "POST", () => {
+  return "OK";
+});
+
+
+console.log(router.runRequest("/api/users", "GET"));
+// ["user1", "user2"]
+
+console.log(router.runRequest("/api/login", "POST"));
+// "OK"
+
+
+console.log(router.runRequest("/api/login", "PUT"));
+// "Error 404: Not Found"
+
+console.log(router.runRequest("/api/send", "POST"));
+// "Error 404: Not Found"
