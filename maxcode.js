@@ -1294,3 +1294,68 @@ runRequest(api, get){
   }
   }
 }
+
+//ООП - 2
+
+class QueryParams {
+  
+  constructor(data){
+    this.data = {}
+    if(typeof data === 'string'){
+      let str = data.split('&')
+      for(let key of str){
+        let letter = key.split('=')
+        this.data.hasOwnProperty(letter[0]) ? this.data[letter[0]].push(letter[1]) : this.data[letter[0]] = [letter[1]]
+      }
+    } else {
+        for(let key in data){
+          let value = data[key]
+          this.data[key] = [value]
+        }
+      }
+  }
+
+  append(key, value){
+    this.data.hasOwnProperty(key) ? this.data[key].push(value) : this.data[key] = [value]
+  }
+
+  toString(){
+    let str = []
+    for(let key in this.data){
+      if(this.data[key].length > 1){
+        for(let value of this.data[key]){
+          str.push(`${key}=${value}`)
+        }
+      } else {
+      str.push(`${key}=${this.data[key]}`)
+      }
+    }
+    return str.join("&")
+  }
+
+  get(key){
+    if(this.data.hasOwnProperty(key)){
+    return this.data[key][0]
+  }
+  }
+  getAll(key){
+    return this.data.hasOwnProperty(key) ? this.data[key] : []
+  }
+  set(key, value){
+    if(this.data.hasOwnProperty(key)){
+      delete this.data[key]
+    }
+    this.data[key] = [value]
+  }
+
+  delete(key){
+      delete this.data[key]
+  }
+
+  has(key, value){
+    if(!value){
+      return this.data.hasOwnProperty(key)
+    }
+    return this.data[key].some(item => item === value)
+  }
+}
