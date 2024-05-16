@@ -1359,3 +1359,50 @@ class QueryParams {
     return this.data[key].some(item => item === value)
   }
 }
+
+
+//ООП - 3
+class Randomizer {
+  constructor(...args){
+    let count = 0
+    let lengthArray = 0
+    if(args.length > 2){
+      throw new Error('Много аргументов')
+    }
+
+    if(args.length === 0){
+      throw new Error('Мало аргументов')
+    }
+
+    if(args.some(item => typeof item !== 'number')){
+      throw new Error('Аргумент не число')
+    }
+
+    if(args.some(item => !Number.isInteger(item))){
+      throw new Error('Число не целое')
+    }
+
+    if(args[0] > args[1]){
+      throw new Error('Левая граница больше правой')
+    }
+
+    if(args.length === 1){
+      lengthArray = args[0] + 1
+    } else {
+      count = args[0]
+      lengthArray = args[1] - args[0] + 1
+      }
+
+      this.memory = Array(lengthArray).fill(count).map(item => item = count++)
+  }
+
+  next(){    
+    if(this.memory.length === 0){
+      throw new Error('Error')
+    }
+    let random = Math.floor(Math.random() * this.memory.length)
+    let result = this.memory[random]
+    this.memory.splice(random, 1)
+    return result
+    }
+  }
