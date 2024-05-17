@@ -1406,3 +1406,30 @@ class Randomizer {
     return result
     }
   }
+
+  //ООП-4
+  function Tuple(...items) {
+    if (!(this instanceof Tuple)) {
+      return new Tuple(...items);
+    }
+  
+    this.items = items;
+  }
+  
+  Tuple.prototype.equals = function(other) {
+    if (!(other instanceof Tuple)) {
+      return false;
+    }
+  
+    if (this.items.length !== other.items.length) {
+      return false;
+    }
+  
+    for (let i = 0; i < this.items.length; i++) {
+      if (this.items[i] !== other.items[i]) {
+        return false;
+      }
+    }
+  
+    return true;
+  };
