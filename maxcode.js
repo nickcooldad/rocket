@@ -1298,74 +1298,74 @@ runRequest(api, get){
 //ООП - 2
 
 class QueryParams {
-  
-  constructor(data){
-    this.data = {}
-    if(typeof data === 'string'){
-      let str = data.split('&')
-      for(let key of str){
-        let letter = key.split('=')
-        this.data.hasOwnProperty(letter[0]) ? this.data[letter[0]].push(letter[1]) : this.data[letter[0]] = [letter[1]]
+  #data = {}
+  qwe = {}
+
+  constructor(data) {
+    if (typeof data === 'string') {
+      const str = data.split('&')
+      for (const key of str) {
+        const [keyObj, value] = key.split('=')
+        this.#data[keyObj] ??= []
+        this.#data[keyObj].push(value)
       }
     } else {
-        for(let key in data){
-          let value = data[key]
-          this.data[key] = [value]
-        }
-      }
-  }
-
-  append(key, value){
-    this.data.hasOwnProperty(key) ? this.data[key].push(value) : this.data[key] = [value]
-  }
-
-  toString(){
-    let str = []
-    for(let key in this.data){
-      if(this.data[key].length > 1){
-        for(let value of this.data[key]){
-          str.push(`${key}=${value}`)
-        }
-      } else {
-      str.push(`${key}=${this.data[key]}`)
+      for (const key in data) {
+        const value = data[key]
+        this.#data[key] = [value]
       }
     }
-    return str.join("&")
   }
 
-  get(key){
-    if(this.data.hasOwnProperty(key)){
-    return this.data[key][0]
+  append(key, value) {
+    this.#data[key] ??= []
+    this.#data[key].push(value)
   }
+
+  toString() {
+    return Object.entries(this.#data)
+      .flatMap(([key, value]) => value.map(item => `${key}=${item}`))
+      .join('&')
   }
-  getAll(key){
-    return this.data.hasOwnProperty(key) ? this.data[key] : []
-  }
-  set(key, value){
-    if(this.data.hasOwnProperty(key)){
-      delete this.data[key]
+
+
+  get(key) {
+    if (this.#data.hasOwnProperty(key)) {
+      return this.#data[key][0]
     }
-    this.data[key] = [value]
+    return null;
+  }
+  getAll(key) {
+    // return this.#data.hasOwnProperty(key) ? this.#data[key] : []
+    return this.#data[key] ?? []
+  }
+  set(key, value) {
+    // if (this.#data.hasOwnProperty(key)) {
+    //   delete this.#data[key]
+    // }
+    this.#data[key] = [value]
   }
 
-  delete(key){
-      delete this.data[key]
+  delete(key) {
+    delete this.#data[key]
   }
 
-  has(key, value){
-    if(!value){
-      return this.data.hasOwnProperty(key)
+  has(key, value) {
+    if(value === undefined){
+     return this.#data.hasOwnProperty(key)
     }
-    return this.data[key].some(item => item === value)
+    if(this.#data.hasOwnProperty(key)){
+      return this.#data[key].includes(value)
+    }
+    return false
   }
 }
 
 
 //ООП - 3
 class Randomizer {
+  #memory;
   constructor(...args){
-    let count = 0
-    let lengthArray = 0
     if(args.length > 2){
       throw new Error('Много аргументов')
     }
@@ -1386,36 +1386,39 @@ class Randomizer {
       throw new Error('Левая граница больше правой')
     }
 
-    if(args.length === 1){
-      lengthArray = args[0] + 1
-    } else {
-      count = args[0]
-      lengthArray = args[1] - args[0] + 1
-      }
 
-      this.memory = Array(lengthArray).fill(count).map(item => item = count++)
+    const [min, max] = args.length === 1 ? [0, args[0]] : args;
+
+    // const minLength = args.length === 1 ? args[0] + 1 : args[1] - args[0] + 1;
+    // const min = args.length === 1 ? 0 : args[0];
+
+    this.#memory = Array(max - min + 1).fill(0).map((_, i) => min + i)
+    this.#memory.sort(() => Math.random() - 0.5);
+
+    // shuffle array
   }
 
   next(){    
-    if(this.memory.length === 0){
+    if(this.#memory.length === 0){
       throw new Error('Error')
     }
-    let random = Math.floor(Math.random() * this.memory.length)
-    let result = this.memory[random]
-    this.memory.splice(random, 1)
-    return result
+    //let random = Math.floor(Math.random() * this.#memory.length)
+    //let result = this.#memory[random]
+    return this.#memory.pop()
     }
   }
 
   //ООП-4
   function Tuple(...items) {
-    if (!(this instanceof Tuple)) {
+    // if (!(this instanceof Tuple)) {
+    //   return new Tuple(...items);
+    // }
+    if(new.target === undefined){
       return new Tuple(...items);
     }
-  
     this.items = items;
   }
-  
+
   Tuple.prototype.equals = function(other) {
     if (!(other instanceof Tuple)) {
       return false;
@@ -1430,6 +1433,43 @@ class Randomizer {
         return false;
       }
     }
-  
     return true;
   };
+
+  // ООП - 5
+  class VersionManager {
+    constructor(arg = "0.1.0"){
+        this.arg = [arg.split('.').map(Number)]
+      }
+    
+    major(){
+      let [major1, minor1, patch1] = this.arg.at(-1)
+      this.arg.push([major1 += 1, minor1 = 0, patch1 = 0])
+      return this
+    }
+  
+    minor(){
+      let [major1, minor1, patch1] = this.arg.at(-1)
+      this.arg.push([major1, minor1 += 1, patch1 = 0])
+      return this
+    }
+  
+    patch(){
+      let [major1, minor1, patch1] = this.arg.at(-1)
+      this.arg.push([major1, minor1, patch1 += 1])
+      return this
+    }
+  
+    rollback(){
+      if(this.arg.length <= 1){
+        throw new Error('Cannot rollback!');
+      }
+        this.arg.pop()
+        return this
+    }
+  
+    release(){
+      let [major1, minor1, patch1] = this.arg.at(-1)
+      return `${major1}.${minor1}.${patch1}`
+    }
+  }
