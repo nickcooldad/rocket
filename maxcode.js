@@ -1473,3 +1473,35 @@ class Randomizer {
       return `${major1}.${minor1}.${patch1}`
     }
   }
+
+
+  //ООП - 6
+  class BrowserHistory {
+    constructor(url) {
+      this.history = [url];
+      this.currentIndex = 0
+    }
+  
+    visit(url) {
+      this.history = this.history.slice(0, this.currentIndex + 1)
+      this.history.push(url);
+      this.currentIndex++
+      return url;
+    }
+  
+    back() {
+      if (this.currentIndex > 0) {
+        this.currentIndex--;
+        return this.history[this.currentIndex];
+      }
+      return null;
+    }
+  
+    forward() {
+      if (this.currentIndex < this.history.length - 1) {
+        this.currentIndex++;
+        return this.history[this.currentIndex];
+      }
+      return null;
+    }
+  }
