@@ -1505,3 +1505,21 @@ class Randomizer {
       return null;
     }
   }
+
+  //ООП - 7
+  
+function createCounter() {
+  let obj = {}
+  curent = 0
+  Object.defineProperty(obj, 'count', {
+    get(){
+      return curent++
+    },
+    set(newValue){
+      console.log('it cannot be altered')
+    },
+    enumerable: true,
+    configurable: true,
+    })
+  return obj
+}

@@ -1,48 +1,22 @@
-class BrowserHistory {
-  constructor(url) {
-    this.history = [url];
-    this.currentIndex = 0
-  }
-
-  visit(url) {
-    this.history = this.history.slice(0, this.currentIndex + 1)
-    this.history.push(url);
-    this.currentIndex++
-    return url;
-  }
-
-  back() {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-      return this.history[this.currentIndex];
-    }
-    return null;
-  }
-
-  forward() {
-    if (this.currentIndex < this.history.length - 1) {
-      this.currentIndex++;
-      return this.history[this.currentIndex];
-    }
-    return null;
-  }
+function Person(firstName, lastName) {
+  this.firstName = firstName
+  this.lastName = lastName
+  obj = {firstName : firstName, lastName : lastName, fullName : firstName + "" + lastName}
+  return obj
 }
 
-const history = new BrowserHistory("urlA");
 
-console.log(history.visit("urlB")); // "urlB"
-history.visit("urlC");
-history.visit("urlD");
 
-console.log(history.back()); // "urlC"
-console.log(history.back()); // "urlB"
-console.log(history.forward()); // "urlC"
 
-history.visit("urlX");
-history.visit("urlY");
+const namedOne = new NamedOne("Naomi", "Wang")
 
-console.log(history.back()); // "urlX"
-console.log(history.back()); // "urlC"
-console.log(history.back()); // "urlB"
-console.log(history.back()); // "urlA"
-console.log(history.back()); // null
+console.log(namedOne.firstName) //  "Naomi"
+console.log(namedOne.lastName)  //  "Wang"
+console.log(namedOne.fullName)  //  "Naomi Wang"
+
+namedOne.firstName = "John"
+console.log(namedOne.fullName)  //  "John Wang"
+
+p.fullName = "Jane Smith";
+console.log(namedOne.lastName)  //  "Jane"
+console.log(namedOne.fullName)  //  "Smith"
