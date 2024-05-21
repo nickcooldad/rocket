@@ -1523,3 +1523,46 @@ function createCounter() {
     })
   return obj
 }
+
+//ООП - 8
+
+function Person(firstName, lastName) {
+  this.firstName = firstName
+  this.lastName = lastName
+  let obj = {firstName : this.firstName, lastName : this.lastName, fullName : this.firstName + " " + this.lastName}
+   Object.defineProperty(this, 'firstName', {
+    set(first){
+      obj.firstName = first
+      obj.fullName = first + ' ' + this.lastName
+    },
+    get(){
+      return obj.firstName
+    },
+    enumerable: true,
+    configurable: true
+   })
+   Object.defineProperty(this, 'lastName', {
+    set(last){
+      obj.lastName = last
+      obj.fullName = this.firstName + ' ' + last
+    }, 
+    get(){
+      return obj.lastName
+    },
+    enumerable: true,
+    configurable: true
+   })
+   Object.defineProperty(this, 'fullName', {
+    set(full){
+      let [name, family] = full.split(' ')
+      obj.firstName = name
+      obj.lastName = family
+      obj.fullName = name + " " + family
+    },
+    get(){
+      return obj.fullName
+    },
+    enumerable: true,
+    configurable: true
+   })
+}
