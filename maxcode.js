@@ -1597,3 +1597,13 @@ function objectCreate(prototype) {
   Object.setPrototypeOf(obj, prototype);
   return obj;
 }
+// ООП - 12
+Object.prototype.get = function(link) {
+  return link.split('.').reduce((acc, item) => {
+    if(acc === undefined || acc[item] === undefined){
+     return undefined
+    }
+    return acc[item]
+    } , this)
+  };
+  

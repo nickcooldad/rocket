@@ -1,24 +1,28 @@
-const isObjadnNull = (obj) => typeof obj === 'object' && !Array.isArray(obj)
+Object.prototype.get = function(link) {
+return link.split('.').reduce((acc, item) => {
+  if(acc === undefined || acc[item] === undefined){
+   return undefined
+  }
+  return acc[item]
+  } , this)
+};
 
-function objectCreate(prototype) {
-if(isObjadnNull(prototype)){
-  throw TypeError('Object prototype may only be an Object or null')
-}
-let obj = {}
-Object.getOwnPropertyNames(prototype).forEach(proto => {
-  let descriptor = Object.getOwnPropertyDescriptor(prototype, proto)
-  Object.defineProperty(obj, proto, descriptor)
-})
-return obj
-}
 
-const obj1 = Object.create(null);
-const obj2 = Object.create(null);
-
-console.log("constructor" in obj1); // true
-console.log("constructor" in obj2); // false
-
-const obj3 = { a: 1 };
-const obj4 = Object.create(obj3);
-
-console.log(obj4.a === 1);
+const obj = {
+    b: {
+      x: 1,
+    },
+    a: {
+      m: {
+        n: {
+          y: 8,
+        },
+      },
+    },
+  };
+  
+  console.log(obj.get("b"));   // { x: 1 }
+  console.log(obj.get("b.x")); // 1
+  console.log(obj.get("b.m")); // undefined
+  console.log(obj.get("b.q.w.e")); // undefined
+  
