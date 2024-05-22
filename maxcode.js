@@ -1577,3 +1577,13 @@ function objectAssign(target, ...sources) {
   Object.defineProperties(target, obj)
   })
 }
+
+//ООП - 10
+function groupBy(iterable, cb) {
+  let obj = Object.create(null)
+  iterable.forEach((element, index) => {
+   obj[cb(element, index)] ??= []
+    obj[cb(element, index)].push(element)
+  });
+  return obj
+}
