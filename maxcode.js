@@ -1566,3 +1566,14 @@ function Person(firstName, lastName) {
     configurable: true
    })
 }
+
+// ООП - 9
+function objectAssign(target, ...sources) {
+  sources.forEach(source => {
+    let obj = {}
+    Object.keys(source).forEach(element => {
+      obj[element] = Object.getOwnPropertyDescriptor(source, element)
+    });
+  Object.defineProperties(target, obj)
+  })
+}
