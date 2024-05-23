@@ -1607,3 +1607,16 @@ Object.prototype.get = function(link) {
     } , this)
   };
   
+  //ООП - 13
+  Object.prototype.set = function(link, target) {
+    let patchObj = this
+    link.split('.').forEach((key,index, array) => {
+      if(index === array.length - 1){
+        patchObj[key] = target
+      }
+      if(!(key in patchObj)){
+        patchObj[key] = {}
+      }
+      patchObj = patchObj[key]
+    });
+  }
