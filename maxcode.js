@@ -1443,20 +1443,20 @@ class Randomizer {
       }
     
     major(){
-      let [major1, minor1, patch1] = this.arg.at(-1)
-      this.arg.push([major1 += 1, minor1 = 0, patch1 = 0])
+     const [major] = this.arg.at(-1)
+      this.arg.push([major + 1, 0, 0])
       return this
     }
   
     minor(){
-      let [major1, minor1, patch1] = this.arg.at(-1)
-      this.arg.push([major1, minor1 += 1, patch1 = 0])
-      return this
+      const [major, minor] = this.arg.at(-1)
+      this.arg.push([major, minor + 1, 0])
+      return thisv
     }
   
     patch(){
-      let [major1, minor1, patch1] = this.arg.at(-1)
-      this.arg.push([major1, minor1, patch1 += 1])
+      const [major, minor, patch] = this.arg.at(-1)
+      this.arg.push([major, minor, patch + 1])
       return this
     }
   
@@ -1469,8 +1469,7 @@ class Randomizer {
     }
   
     release(){
-      let [major1, minor1, patch1] = this.arg.at(-1)
-      return `${major1}.${minor1}.${patch1}`
+      return this.arg.at(-1).join('.')
     }
   }
 
@@ -1481,110 +1480,84 @@ class Randomizer {
       this.history = [url];
       this.currentIndex = 0
     }
-  
+    
     visit(url) {
-      this.history = this.history.slice(0, this.currentIndex + 1)
+      // this.history = this.history.slice(0, this.currentIndex + 1)
+      this.history.length = this.currentIndex + 1;
       this.history.push(url);
       this.currentIndex++
       return url;
     }
-  
+    
     back() {
-      if (this.currentIndex > 0) {
-        this.currentIndex--;
-        return this.history[this.currentIndex];
+      if (this.currentIndex === 0) {
+        return null;
       }
-      return null;
+      this.currentIndex--;
+      return this.history[this.currentIndex];
     }
-  
+    
     forward() {
-      if (this.currentIndex < this.history.length - 1) {
-        this.currentIndex++;
-        return this.history[this.currentIndex];
+      if (this.currentIndex === this.history.length - 1) {
+        return null
       }
-      return null;
+      this.currentIndex++;
+      return this.history[this.currentIndex];
     }
   }
 
   //ООП - 7
   
-function createCounter() {
-  let obj = {}
-  curent = 0
-  Object.defineProperty(obj, 'count', {
-    get(){
-      return curent++
-    },
-    set(newValue){
-      console.log('it cannot be altered')
-    },
-    enumerable: true,
-    configurable: true,
-    })
-  return obj
-}
+  function createCounter() {
+    let curent = 0
+    return {
+      get count (){s
+        return curent++
+      },
+    }
+  }
 
 //ООП - 8
 
 function Person(firstName, lastName) {
+  // this = { __proto__: Person.prototype }
   this.firstName = firstName
   this.lastName = lastName
-  let obj = {firstName : this.firstName, lastName : this.lastName, fullName : this.firstName + " " + this.lastName}
-   Object.defineProperty(this, 'firstName', {
-    set(first){
-      obj.firstName = first
-      obj.fullName = first + ' ' + this.lastName
-    },
-    get(){
-      return obj.firstName
-    },
-    enumerable: true,
-    configurable: true
-   })
-   Object.defineProperty(this, 'lastName', {
-    set(last){
-      obj.lastName = last
-      obj.fullName = this.firstName + ' ' + last
-    }, 
-    get(){
-      return obj.lastName
-    },
-    enumerable: true,
-    configurable: true
-   })
-   Object.defineProperty(this, 'fullName', {
-    set(full){
-      let [name, family] = full.split(' ')
-      obj.firstName = name
-      obj.lastName = family
-      obj.fullName = name + " " + family
-    },
-    get(){
-      return obj.fullName
-    },
-    enumerable: true,
-    configurable: true
-   })
+  // return this
 }
+
+Object.defineProperty(Person.prototype, 'fullName', {
+  set(full) {
+    let [name, family] = full.split(' ')
+    this.firstName = name
+    this.lastName = family
+  },
+  get() {
+    return `${this.firstName} ${this.lastName}`
+  },
+})
 
 // ООП - 9
 function objectAssign(target, ...sources) {
   sources.forEach(source => {
-    let obj = {}
+    let properties = {}
     Object.keys(source).forEach(element => {
-      obj[element] = Object.getOwnPropertyDescriptor(source, element)
+      properties[element] = Object.getOwnPropertyDescriptor(source, element)
     });
-  Object.defineProperties(target, obj)
+    Object.defineProperties(target, properties)
   })
 }
 
 //ООП - 10
 function groupBy(iterable, cb) {
   let obj = Object.create(null)
-  iterable.forEach((element, index) => {
-   obj[cb(element, index)] ??= []
-    obj[cb(element, index)].push(element)
-  });
+  let index = 0
+  for(let item of iterable){
+    const groupKey = cb(item, index)
+    obj[groupKey] ??= []
+    obj[groupKey].push(item)
+    index++
+  }
   return obj
 }
 
@@ -1594,32 +1567,31 @@ function objectCreate(prototype) {
     throw new TypeError('Object prototype may only be an Object or null');
   }
   let obj = {};
-  Object.setPrototypeOf(obj, prototype);
+  // Object.setPrototypeOf(obj, prototype);
+  obj.__proto__ = prototype;
   return obj;
 }
 // ООП - 12
-Object.prototype.get = function(link) {
-  return link.split('.').reduce((acc, item) => {
-    if(acc === undefined || acc[item] === undefined){
-     return undefined
-    }
-    return acc[item]
-    } , this)
-  };
-  
-  //ООП - 13
-  Object.prototype.set = function(link, target) {
-    let patchObj = this
-    link.split('.').forEach((key,index, array) => {
-      if(index === array.length - 1){
-        patchObj[key] = target
+Object.prototype.get = function (link) {
+  let prev = this
+  for(let item of link.split('.')){
+      if(prev[item] === undefined){
+          return undefined
       }
-      if(!(key in patchObj)){
-        patchObj[key] = {}
-      }
-      patchObj = patchObj[key]
-    });
+      prev = prev[item]
   }
+  return prev
+};
+  //ООП - 13
+Object.prototype.set = function (link, target) {
+  let patchObj = this
+  let linksArray = link.split('.')
+  for (let i = 0; i < linksArray.length - 1; i++) {
+    patchObj[linksArray[i]] ??= {}
+    patchObj = patchObj[linksArray[i]]
+  }
+  patchObj[linksArray.at(-1)] = target
+}
   //ООП - 14
   Array.prototype.map2 = function (callback, thisArg) {
     const arr = Array(this.length)
