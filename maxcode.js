@@ -1583,15 +1583,40 @@ Object.prototype.get = function (link) {
   return prev
 };
   //ООП - 13
-Object.prototype.set = function (link, target) {
-  let patchObj = this
-  let linksArray = link.split('.')
-  for (let i = 0; i < linksArray.length - 1; i++) {
-    patchObj[linksArray[i]] ??= {}
-    patchObj = patchObj[linksArray[i]]
+  Object.prototype.set = function (link, target) {
+    let patchObj = this
+    link.split('.').forEach((key, index, array) => {
+      if (index === array.length - 1) {
+        patchObj[key] = target
+      }
+      if (!(key in patchObj)) {
+        patchObj[key] = {}
+      }
+      patchObj = patchObj[key]
+    });
   }
-  patchObj[linksArray.at(-1)] = target
-}
+  
+  Object.prototype.set = function (link, target) {
+    let patchObj = this
+    let linksArray = link.split('.')
+    for (let i = 0; i < linksArray.length - 1; i++) {
+      patchObj[linksArray[i]] ??= {}
+      patchObj = patchObj[linksArray[i]]
+    }
+    patchObj[linksArray.at(-1)] = target
+  }
+  
+  Object.prototype.set = function (patch, value, patchObj = this, index = 0) {
+    const patchLink = patch.split('.')
+    if(index === patchLink.length - 1){
+      patchObj[patchLink[index]] = value
+      return
+     }
+  
+    patchObj[patchLink[index]] ??= {}
+    patchObj = patchObj[patchLink[index]]
+    set(patch, value, patchObj , index + 1)
+  }
   //ООП - 14
   Array.prototype.map2 = function (callback, thisArg) {
     const arr = Array(this.length)
