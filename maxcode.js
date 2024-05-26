@@ -1606,7 +1606,7 @@ Object.prototype.get = function (link) {
     patchObj[linksArray.at(-1)] = target
   }
   
-  Object.prototype.set = function (patch, value, patchObj = this, index = 0) {
+  Object.prototype.set = function (patch = patch.split('.'), value, patchObj = this, index = 0) {
     const patchLink = patch.split('.')
     if(index === patchLink.length - 1){
       patchObj[patchLink[index]] = value
@@ -1631,3 +1631,8 @@ Object.prototype.get = function (link) {
     }
     return arr
   }
+
+  //ООП - 15
+  Function.prototype.pipe = function (fn) {
+    return (arg) => fn(this(arg))
+    }
