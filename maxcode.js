@@ -1647,3 +1647,15 @@ function nouveau(thisArg, ...arg) {
   }
   return newIstance
 }
+//ООП - 17
+Function.prototype.call2 = function(thisArg, ...arg) {
+  if(thisArg === undefined || thisArg === null){
+  thisArg = globalThis
+} else {
+  thisArg = Object(thisArg)
+}
+  thisArg.launch = this
+  const result = thisArg.launch(...arg)
+  delete thisArg.launch
+  return result
+};
