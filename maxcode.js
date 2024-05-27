@@ -1636,3 +1636,14 @@ Object.prototype.get = function (link) {
   Function.prototype.pipe = function (fn) {
     return (arg) => fn(this(arg))
     }
+
+// ООП - 16
+function nouveau(thisArg, ...arg) {
+  let newIstance = {}
+  newIstance.__proto__= thisArg.prototype
+  let result = thisArg.apply(newIstance, arg)
+  if((typeof result === 'object' || typeof result === 'function') && result !== null){
+    return result
+  }
+  return newIstance
+}
