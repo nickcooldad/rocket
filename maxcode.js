@@ -1659,3 +1659,15 @@ Function.prototype.call2 = function(thisArg, ...arg) {
   delete thisArg.launch
   return result
 };
+
+//ООП - 18
+Function.prototype.bind2 = function(thisArg, ...args) {
+  return  (...restArgs) => {
+  if(thisArg === undefined){
+    thisArg = globalThis
+  } else {
+   thisArg = Object(thisArg)
+  }
+  return this.call(thisArg, ...args, ...restArgs)
+  }
+}
