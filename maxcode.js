@@ -1671,3 +1671,22 @@ Function.prototype.bind2 = function(thisArg, ...args) {
   return this.call(thisArg, ...args, ...restArgs)
   }
 }
+
+//ООП - 19
+function isInstanceOf(obj, clazz) {
+  if(typeof clazz !== 'function' ){
+    throw new Error("Right-hand side of 'instanceof' is not an object!")
+  }
+  if( typeof obj !== 'object' || obj === null){
+    return false
+  }
+  
+  let proto = Object.getPrototypeOf(obj)
+  while(proto !== null){
+    if(proto === clazz.prototype){
+      return true
+    }
+    proto = Object.getPrototypeOf(proto)
+  }
+  return false
+  }
