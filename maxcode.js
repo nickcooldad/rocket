@@ -1671,3 +1671,68 @@ Function.prototype.bind2 = function(thisArg, ...args) {
   return this.call(thisArg, ...args, ...restArgs)
   }
 }
+
+//ООП - 19
+
+function isInstanceOf(obj, clazz) {
+  if(typeof clazz !== 'function' ){
+    throw new Error("Right-hand side of 'instanceof' is not an object!")
+  }
+  if( typeof obj !== 'object' || obj === null){
+    return false
+  }
+  
+  let proto = Object.getPrototypeOf(obj)
+  while(proto !== null){
+    if(proto === clazz.prototype){
+      return true
+    }
+    proto = Object.getPrototypeOf(proto)
+  }
+  return false
+  }
+
+//ООП - 20
+
+class ObservableSet {
+  constructor(cb, iterable){
+    this.cb = cb
+    this.cache = new Set()
+    if(iterable !== undefined){
+      for(let key of iterable){
+        this.cache.add(key)
+      }
+    }
+  }
+
+
+  add(arg){
+    this.cache.add(arg);
+    this.cb('add', [arg]);
+    return this
+  }
+
+  has(arg){
+  return this.cache.has(arg)
+  }
+
+  size(){
+  return this.cache.size
+  }
+
+  delete(arg){
+    const result = this.cache.delete(arg)
+    this.cb('delete', [arg])
+    return result
+  }
+
+  clear(){
+  this.cache.clear()
+  this.cb('clear', [])
+  return this
+  }
+
+  [Symbol.iterator](){
+    return this.cache[Symbol.iterator]()
+  }
+}
