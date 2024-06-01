@@ -1,33 +1,20 @@
-function groupBy(iterable, cb) {
-  let obj = Object.create(null)
-  let index = 0
-  for(let item of iterable){
-    const groupKey = cb(item, index)
-    obj[groupKey] ??= []
-    obj[groupKey].push(item)
-    index++
+Function.prototype.bind2 = function (thisArg, ...args) {
+  const thisLink = this
+  return function (...restArgs) {
+    if (thisArg === undefined) {
+      return thisLink(...args, ...restArgs)
+    } 
+    const newThisArg = Object(thisArg)
+    return thisLink.call(newThisArg, ...args, ...restArgs)
   }
-  return obj
 }
 
-console.log(Object.groupBy(
-  "AaaBbbCcc",
-  x => x.toLowerCase(),
-));
+function f(a, b, c) {
+  return this.x + a + b + c;
+}
 
-// const result = {
-//   "1": [1, 4],
-//   "3": [123],
-//   "5": [44444, 88888, 12345],
-// };
+const obj = { x: 1 };
+const foo = f.bind2(obj, 10, 100);
 
-// console.log(groupBy(
-//   [1, 4, 123, 44444, 88888, 12345].values(),
-//   x => x.toString().length,
-// ));
-
-// const result = {
-//   "1": [1, 4],
-//   "3": [123],
-//   "5": [44444, 88888, 12345],
-// };
+console.log(foo(2000)); // 2111
+console.log(foo(3000)); // 3111

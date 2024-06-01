@@ -1,60 +1,72 @@
-class VersionManager {
-    constructor(arg = "0.1.0"){
-        this.arg = [arg.split('.').map(Number)]
-      }
-    
-    major(){
-     const [major] = this.arg.at(-1)
-      this.arg.push([major + 1, 0, 0])
-      return this
-    }
-  
-    minor(){
-      const [major, minor] = this.arg.at(-1)
-      this.arg.push([major, minor + 1, 0])
-      return this
-    }
-  
-    patch(){
-      const [major, minor, patch] = this.arg.at(-1)
-      this.arg.push([major, minor, patch + 1])
-      return this
-    }
-  
-    rollback(){
-      if(this.arg.length <= 1){
-        throw new Error('Cannot rollback!');
-      }
-        this.arg.pop()
-        return this
-    }
-  
-    release(){
-      return this.arg.at(-1).join('.')
-    }
+"use strict"
+
+Object.prototype.set = function (patch, value) {
+  const [key, ...restKeys] = patch.split('.')
+
+  if(restKeys === 0){
+    this[key] = value
+    return
   }
 
-//  const vm = new VersionManager("2.0.3");
-
-// console.log(
-//   vm
-//     .major()     // "3.0.0"
-//     .minor()     // "3.1.0"
-//     .minor()     // "3.2.0"
-//     .minor()     // "3.3.0"
-//     .patch()     // "3.3.1"
-//     .release()
-// );
+  this[key] ??= {}
+  this[key].set(restKeys.join("."), value);
+}
 
 
-const vm = new VersionManager("1.2.3");
+const obj1 = {
+  a: {
+    b: {
+      x: 1,
+    },
+  },
+};
 
-console.log(
-  vm
-    .minor()     // "1.3.0"
-    .major()     // "2.0.0"
-    .patch()     // "2.0.1"
-    .rollback()  // "2.0.0"
-    .rollback()  // "1.3.0"
-    .release()
-);
+obj1.set("a.b.y", 6);
+console.log(obj1)
+// obj1 === {
+//   a: {
+//     b: {
+//       x: 1,
+//       y: 6,
+//     },
+//   },
+// };
+
+const obj2 = {
+  a: {
+    b: {
+      x: 1,
+    },
+  },
+};
+
+obj2.set("a.b", 7);
+console.log(obj2)
+// obj2 === {
+//   a: {
+//     b: 7,
+//   },
+// };
+
+const obj3 = {
+  a: {
+    b: {
+      x: 1,
+    },
+  },
+};
+
+obj3.set("a.m.n.y", 8);
+console.log(obj3)
+// obj3 === {
+//   b: {
+//     x: 1,
+//   },
+//   a: {
+//     m: {
+//       n: {
+//         y: 8,
+//       },
+//     },
+//   },
+// };

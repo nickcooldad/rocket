@@ -1,30 +1,22 @@
-class BrowserHistory {
-  constructor(url) {
-    this.history = [url];
-    this.currentIndex = 0
-  }
-  
-  visit(url) {
-    // this.history = this.history.slice(0, this.currentIndex + 1)
-    this.history.length = this.currentIndex + 1;
-    this.history.push(url);
-    this.currentIndex++
-    return url;
-  }
-  
-  back() {
-  	if (this.currentIndex === 0) {
-    	return null;
+Array.prototype.map2 = function (callback, thisArg) {
+  const arr = Array(this.length)
+  for(let i = 0; i < this.length; i++){
+    if(i in this){
+      arr[i] = callback.call(thisArg, this[i], i, this)
     }
-    this.currentIndex--;
-    return this.history[this.currentIndex];
   }
-  
-  forward() {
-    if (this.currentIndex === this.history.length - 1) {
-			return null
-    }
-		this.currentIndex++;
-		return this.history[this.currentIndex];
-  }
+  return arr
 }
+
+const multiplicator = {
+  x: 5,
+  multiply(num) {
+    return num * this.x;    
+  },
+};
+
+console.log([1, 2, 3].map2(multiplicator.multiply));
+// [NaN, NaN, NaN]
+
+console.log([1, 2, 3].map2(multiplicator.multiply, multiplicator));
+// [5, 10, 15]
