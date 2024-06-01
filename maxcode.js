@@ -1606,27 +1606,23 @@ Object.prototype.get = function (link) {
     patchObj[linksArray.at(-1)] = target
   }
   
-  Object.prototype.set = function (patch = patch.split('.'), value, patchObj = this, index = 0) {
-    const patchLink = patch.split('.')
-    if(index === patchLink.length - 1){
-      patchObj[patchLink[index]] = value
-      return
-     }
+  Object.prototype.set = function (patch, value) {
+    const [key, ...restKeys] = patch.split('.')
   
-    patchObj[patchLink[index]] ??= {}
-    patchObj = patchObj[patchLink[index]]
-    set(patch, value, patchObj , index + 1)
+    if(restKeys === 0){
+      this[key] = value
+      return
+    }
+  
+    this[key] ??= {}
+    this[key].set(restKeys.join("."), value);
   }
   //ООП - 14
   Array.prototype.map2 = function (callback, thisArg) {
     const arr = Array(this.length)
     for(let i = 0; i < this.length; i++){
       if(i in this){
-        if(thisArg !== undefined){
-          arr[i] = callback.call(thisArg, this[i], i, this)
-        } else{
-          arr[i] = callback(this[i], i, this)
-        }
+        arr[i] = callback.call(thisArg, this[i], i, this)
       }
     }
     return arr
@@ -1637,11 +1633,32 @@ Object.prototype.get = function (link) {
     return (arg) => fn(this(arg))
     }
 
+
+    Function.prototype.pipe = function (fn) {
+  const thisArg = this
+  return function inner(arg) {
+    return  fn(thisArg(arg))
+  }
+}
+ 
+Function.prototype.pipe = function (fn) {
+  function inner(arg) {
+    return fn(this(arg))
+  }
+  return inner.bind(this);
+}
+ 
+Function.prototype.pipe = function (fn) {
+  return function(arg) {
+    return fn(this(arg))
+  }.bind(this);
+}
+
 // ООП - 16
-function nouveau(thisArg, ...arg) {
+function nouveau(constructor, ...arg) {
   let newIstance = {}
-  newIstance.__proto__= thisArg.prototype
-  let result = thisArg.apply(newIstance, arg)
+  newIstance.__proto__= constructor.prototype
+  let result = constructor.apply(newIstance, arg)
   if((typeof result === 'object' || typeof result === 'function') && result !== null){
     return result
   }
@@ -1661,14 +1678,14 @@ Function.prototype.call2 = function(thisArg, ...arg) {
 };
 
 //ООП - 18
-Function.prototype.bind2 = function(thisArg, ...args) {
-  return  (...restArgs) => {
-  if(thisArg === undefined){
-    thisArg = globalThis
-  } else {
-   thisArg = Object(thisArg)
-  }
-  return this.call(thisArg, ...args, ...restArgs)
+Function.prototype.bind2 = function (thisArg, ...args) {
+  const thisLink = this
+  return function (...restArgs) {
+    if (thisArg === undefined) {
+      return thisLink(...args, ...restArgs)
+    } 
+    const newThisArg = Object(thisArg)
+    return thisLink.call(newThisArg, ...args, ...restArgs)
   }
 }
 
@@ -1676,7 +1693,7 @@ Function.prototype.bind2 = function(thisArg, ...args) {
 
 function isInstanceOf(obj, clazz) {
   if(typeof clazz !== 'function' ){
-    throw new Error("Right-hand side of 'instanceof' is not an object!")
+    throw Error("Right-hand side of 'instanceof' is not an object!")
   }
   if( typeof obj !== 'object' || obj === null){
     return false
@@ -1694,45 +1711,27 @@ function isInstanceOf(obj, clazz) {
 
 //ООП - 20
 
-class ObservableSet {
+class ObservableSet extends Set {
   constructor(cb, iterable){
+    super(iterable)
     this.cb = cb
-    this.cache = new Set()
-    if(iterable !== undefined){
-      for(let key of iterable){
-        this.cache.add(key)
-      }
-    }
   }
 
-
   add(arg){
-    this.cache.add(arg);
-    this.cb('add', [arg]);
+    super.add(arg)
+    this.cb?.('add', [arg]);
     return this
   }
 
-  has(arg){
-  return this.cache.has(arg)
-  }
-
-  size(){
-  return this.cache.size
-  }
-
   delete(arg){
-    const result = this.cache.delete(arg)
+    const result = super.delete(arg)
     this.cb('delete', [arg])
-    return result
+  return result
   }
 
   clear(){
-  this.cache.clear()
-  this.cb('clear', [])
+    super.clear()
+    this.cb('clear', [])
   return this
-  }
-
-  [Symbol.iterator](){
-    return this.cache[Symbol.iterator]()
   }
 }

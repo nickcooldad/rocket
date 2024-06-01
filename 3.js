@@ -10,12 +10,20 @@
 // }
  
 Function.prototype.pipe = function (fn) {
-  const thisArg = this
-  return function inner (arg){
-    return inner.bind(thisArg, arg)
+  function inner(arg) {
+    return fn(this(arg))
   }
-  }
+  return inner.bind(this);
+}
+ 
+Function.prototype.pipe = function (fn) {
+  return function(arg) {
+    return fn(this(arg))
+  }.bind(this);
+}
 
+"qwert".toUpperCase()
+[1,2,3].map(x => x * 2);
 
 // const double = x => x * 2;
 // const cube = x => x ** 3;
