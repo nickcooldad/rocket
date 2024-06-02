@@ -1735,3 +1735,20 @@ class ObservableSet extends Set {
   return this
   }
 }
+
+//ООП - 21
+class Cat extends Animal {
+  meow() {
+    return `${this.name} says meow`;
+  }
+}
+// ES - 5
+function Cat (name, age){
+  Animal.call(this, name, age)
+}
+Cat.prototype = Object.create(Animal.prototype)
+
+Cat.prototype.meow = function(){
+  return `${this.name} says meow`
+}
+
