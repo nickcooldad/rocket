@@ -1752,3 +1752,7 @@ Cat.prototype.meow = function(){
   return `${this.name} says meow`
 }
 
+// Промисы - 1
+function sum(p1, p2) {
+  return p1.then(p1 => p2.then(p2 => p1 + p2))
+}
