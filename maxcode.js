@@ -1756,3 +1756,9 @@ Cat.prototype.meow = function(){
 function sum(p1, p2) {
   return p1.then(p1 => p2.then(p2 => p1 + p2))
 }
+
+//Промисы - 2
+function sum(...args) {
+  return Promise.all(args).then(argsArray =>
+     argsArray.reduce((acc,item) => acc + item, 0))
+}
