@@ -1762,3 +1762,23 @@ function sum(...args) {
   return Promise.all(args).then(argsArray =>
      argsArray.reduce((acc,item) => acc + item, 0))
 }
+
+//Промисы - 3
+function and(p1, p2) {
+  return Promise.all([p1, p2]).then(promis => promis)
+}
+
+//Промисы - 4
+function countFulfilledPromises(...args) {
+  return Promise.allSettled(args).then(promis => promis
+    .filter(item => item.status === 'fulfilled').length)
+}
+
+//Промисы - 5
+function race(iterable) {
+  return new Promise((resolve, reject) =>{
+   for(const promis of iterable){
+     Promise.resolve(promis).then(resolve, reject)
+   }
+  })
+ }
