@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 function all(promises) {
   return new Promise((resolve, reject) => {
     const cache = []
@@ -36,3 +37,5 @@ all([p1, p2, p3, p4]).then(
     value => console.log("1 >>>", value),
     reason => console.log("2 >>>", reason),
 );
+=======
+>>>>>>> debf6d34df11f2f78590ae2a981a9104508a9ef0
