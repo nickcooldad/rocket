@@ -1838,3 +1838,67 @@ function all(promises) {
     }
   })
 }
+//Промисы - 8
+
+function allSettled(iterable) {
+  return new Promise((resolve) => {
+    const cache = []
+    let firstCount = 0
+    let lastCount = 0
+    
+    for(const promis of iterable){
+      const index = firstCount
+      firstCount++
+      
+      Promise.resolve(promis)
+      .then(value => {
+        cache[index] = {status: 'fulfilled', value: value}
+         lastCount++
+
+         if(firstCount === lastCount){
+          resolve(cache)
+         }
+      }).catch(er => {
+        cache[index] = {status: 'rejected', reason: er}
+        
+        lastCount++
+        if(firstCount === lastCount){
+          resolve(cache)
+         }
+      })
+       
+    }
+    if(firstCount === 0){
+      resolve(cache)
+    }
+  })
+}
+
+//Промисы - 9
+
+function any(iterable) {
+  return new Promise((resolve, reject) =>{
+    const errors = []
+    let firstCount = 0
+    let lastCount = 0
+    for(const promise of iterable){
+      const index = firstCount
+      firstCount++
+
+      Promise.resolve(promise).then(value => {
+        resolve(value)
+    })
+    .catch(error => {
+      errors[index] = error
+      lastCount++
+
+      if(lastCount === firstCount){
+        reject(new AggregateError(errors, "All promises were rejected"))
+      }
+    })
+  }
+  if(firstCount === 0){
+    reject(new AggregateError(errors, "All promises were rejected"))
+  }
+  })
+}
