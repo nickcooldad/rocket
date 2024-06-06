@@ -1838,8 +1838,7 @@ function all(promises) {
     }
   })
 }
-//Промисы - 8
-
+//Промисы -8
 function allSettled(iterable) {
   return new Promise((resolve) => {
     const cache = []
@@ -1873,7 +1872,6 @@ function allSettled(iterable) {
     }
   })
 }
-
 //Промисы - 9
 
 function any(iterable) {
@@ -1896,9 +1894,9 @@ function any(iterable) {
         reject(new AggregateError(errors, "All promises were rejected"))
       }
     })
-  }
-  if(firstCount === 0){
-    reject(new AggregateError(errors, "All promises were rejected"))
-  }
+    }
+    if(firstCount === 0){
+      reject(new AggregateError(errors, "All promises were rejected"))
+    }
   })
 }
