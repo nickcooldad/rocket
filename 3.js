@@ -1,42 +1,29 @@
-// Function.prototype.pipe = function (fn) {
-//   return (arg) => fn(this(arg))
-//   }
-
-// Function.prototype.pipe = function (fn) {
-//   const thisArg = this
-//   return function inner(arg) {
-//     return  fn(thisArg(arg))
-//   }
+// function sum(...args) {
+//   return Promise.all(args).then(argsArray =>
+//      argsArray.reduce((acc,item) => acc + item, 0))
 // }
- 
-Function.prototype.pipe = function (fn) {
-  function inner(arg) {
-    return fn(this(arg))
-  }
-  return inner.bind(this);
+// function sum(...args){
+//   return args.reduce(
+//     (acc, item) => acc.then(value => item.then(value1 => value + value1)),
+//     Promise.resolve(0)
+//   )
+// }
+function sum(...args){
+  if(args.length === 0){
+    return Promise.resolve(0)
+  } 
+
+  const [first, ...rest] = args;
+  return first.then(value1 => sum(...rest).then(value2 => value1 + value2))
 }
- 
-Function.prototype.pipe = function (fn) {
-  return function(arg) {
-    return fn(this(arg))
-  }.bind(this);
-}
 
-"qwert".toUpperCase()
-[1,2,3].map(x => x * 2);
 
-// const double = x => x * 2;
-// const cube = x => x ** 3;
-// const inc = x => x + 1;
 
-// const foo = compose(double, cube, inc);
+const p1 = new Promise(resolve => resolve(1));
+const p2 = new Promise(resolve => resolve(2));
+const p3 = new Promise(resolve => resolve(3));
 
-// console.log(foo(2)); // 54
-
-const double = x => x * 2;
-const cube = x => x ** 3;
-const inc = x => x + 1;
-
-const foo2 = inc.pipe(cube).pipe(double);
-
-console.log(foo2(2)); // 54
+sum().then(console.log);            // 0
+sum(p1).then(console.log);          // 1
+sum(p1, p2).then(console.log);      // 3
+sum(p1, p2, p3).then(console.log);  // 6

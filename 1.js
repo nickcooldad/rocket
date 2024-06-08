@@ -1,72 +1,58 @@
-"use strict"
-
-Object.prototype.set = function (patch, value) {
-  const [key, ...restKeys] = patch.split('.')
-
-  if(restKeys === 0){
-    this[key] = value
-    return
-  }
-
-  this[key] ??= {}
-  this[key].set(restKeys.join("."), value);
+function Animal(name, ageInYears) {
+  this.name = name.toUpperCase();
+  this.ageInMonths = ageInYears * 12;
 }
 
-
-const obj1 = {
-  a: {
-    b: {
-      x: 1,
-    },
-  },
+Animal.prototype.play = function() {
+  return `${this.name} is playing`;
 };
 
-obj1.set("a.b.y", 6);
-console.log(obj1)
-// obj1 === {
-//   a: {
-//     b: {
-//       x: 1,
-//       y: 6,
-//     },
-//   },
-// };
+// -----------------------------------------
+function Cat (name, age){
+  Animal.call(this, name, age)
+}
 
-const obj2 = {
-  a: {
-    b: {
-      x: 1,
-    },
-  },
-};
+Cat.prototype.meow = function(){
+  return `${this.name} says meow`
+}
+console.log (Cat.prototype.__proto__)
+Object.setPrototypeOf(Cat.prototype, Animal.prototype)
+// Cat.prototype.__proto__ = Animal.prototype
+console.log (Cat.prototype.__proto__)
+//Cat.prototype = Object.create(Animal.prototype)
+//Cat.prototype.constructor === Cat
 
-obj2.set("a.b", 7);
-console.log(obj2)
-// obj2 === {
-//   a: {
-//     b: 7,
-//   },
-// };
+// -----------------------------------------
 
-const obj3 = {
-  a: {
-    b: {
-      x: 1,
-    },
-  },
-};
+const barsique = new Cat("Barsik", 2);
 
-obj3.set("a.m.n.y", 8);
-console.log(obj3)
-// obj3 === {
-//   b: {
-//     x: 1,
-//   },
-//   a: {
-//     m: {
-//       n: {
-//         y: 8,
-//       },
-//     },
-//   },
-// };
+console.log(barsique.name); // "BARSIK"
+console.log(barsique.ageInMonths); // 24
+console.log(barsique.meow())
+console.log(barsique.play())
+
+///////////////////------------------
+class ObservableSet extends Set {
+  constructor(cb, iterable){
+    super(iterable)
+    this.cb = cb
+  }
+
+  add(arg){
+    super.add(arg)
+    this.cb?.('add', [arg]);
+    return this
+  }
+
+  delete(arg){
+    const result = super.delete(arg)
+    this.cb('delete', [arg])
+  return result
+  }
+
+  clear(){
+    super.clear()
+    this.cb('clear', [])
+  return this
+  }
+}

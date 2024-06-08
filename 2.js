@@ -1,22 +1,11 @@
-Array.prototype.map2 = function (callback, thisArg) {
-  const arr = Array(this.length)
-  for(let i = 0; i < this.length; i++){
-    if(i in this){
-      arr[i] = callback.call(thisArg, this[i], i, this)
-    }
-  }
-  return arr
+function sum(p1, p2) {
+  return p1.then(p1 => p2.then(p2 => p1 + p2))
 }
 
-const multiplicator = {
-  x: 5,
-  multiply(num) {
-    return num * this.x;    
-  },
-};
 
-console.log([1, 2, 3].map2(multiplicator.multiply));
-// [NaN, NaN, NaN]
+const p1 = new Promise(resolve => resolve(1));
+const p2 = new Promise(resolve => resolve(2));
 
-console.log([1, 2, 3].map2(multiplicator.multiply, multiplicator));
-// [5, 10, 15]
+sum(p1, p2).then(result => {
+  console.log(result); // 1 + 2 === 3
+})

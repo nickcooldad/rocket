@@ -1,13 +1,26 @@
-Array.prototype.map2 = function (callback, thisArg) {
-    const arr = Array(this.length)
-    for(let i = 0; i < this.length; i++){
-      if(i in this){
-        if(thisArg !== undefined){
-          arr[i] = callback.call(thisArg, this[i], i, this)
-        } else{
-          arr[i] = callback(this[i], i, this)
-        }
+function any(iterable) {
+  return new Promise((resolve, reject) =>{
+    const errors = []
+    let firstCount = 0
+    let lastCount = 0
+    for(const promise of iterable){
+      const index = firstCount
+      firstCount++
+
+      Promise.resolve(promise).then(value => {
+        resolve(value)
+    })
+    .catch(error => {
+      errors[index] = error
+      lastCount++
+
+      if(lastCount === firstCount){
+        reject(new AggregateError(errors, "All promises were rejected"))
       }
+    })
     }
-    return arr
-  }
+    if(firstCount === 0){
+      reject(new AggregateError(errors, "All promises were rejected"))
+    }
+  })
+}

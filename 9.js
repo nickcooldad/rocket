@@ -1,62 +1,33 @@
-Object.prototype.set = function (link, target) {
-  let patchObj = this
-  link.split('.').forEach((key, index, array) => {
-    if (index === array.length - 1) {
-      patchObj[key] = target
+function allSettled(iterable) {
+  return new Promise((resolve) => {
+    const cache = []
+    let firstCount = 0
+    let lastCount = 0
+    
+    for(const promis of iterable){
+      const index = firstCount
+      firstCount++
+      
+      Promise.resolve(promis)
+      .then(value => {
+        cache[index] = {status: 'fulfilled', value: value}
+         lastCount++
+
+         if(firstCount === lastCount){
+          resolve(cache)
+         }
+      }).catch(er => {
+        cache[index] = {status: 'rejected', reason: er}
+        
+        lastCount++
+        if(firstCount === lastCount){
+          resolve(cache)
+         }
+      })
+       
     }
-    if (!(key in patchObj)) {
-      patchObj[key] = {}
+    if(firstCount === 0){
+      resolve(cache)
     }
-    patchObj = patchObj[key]
-  });
+  })
 }
-
-Object.prototype.set = function (link, target) {
-  let patchObj = this
-  let linksArray = link.split('.')
-  for (let i = 0; i < linksArray.length - 1; i++) {
-    patchObj[linksArray[i]] ??= {}
-    patchObj = patchObj[linksArray[i]]
-  }
-  patchObj[linksArray.at(-1)] = target
-}
-
-Object.prototype.set = function (patch, value, patchObj = this, index = 0) {
-  const patchLink = patch.split('.')
-  if(index === patchLink.length - 1){
-    patchObj[patchLink[index]] = value
-    return
-   }
-
-  patchObj[patchLink[index]] ??= {}
-  patchObj = patchObj[patchLink[index]]
-  set(patch, value, patchObj , index + 1)
-}
-
-
-  
-
-
-  const obj3 = {
-    a: {
-      b: {
-        x: 1,
-      },
-    },
-  };
-  
-  obj3.set("a.m.n.y", 8);
-  console.log(obj3)
-  // obj3 === {
-  //   b: {
-  //     x: 1,
-  //   },
-  //   a: {
-  //     m: {
-  //       n: {
-  //         y: 8,
-  //       },
-  //     },
-  //   },
-  // };
-  

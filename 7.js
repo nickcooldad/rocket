@@ -1,20 +1,25 @@
-function isInstanceOf(obj, clazz) {
-  if(typeof clazz !== 'function' ){
-    throw Error("Right-hand side of 'instanceof' is not an object!")
-  }
-  if( typeof obj !== 'object' || obj === null){
-    return false
-  }
-  
-  let proto = Object.getPrototypeOf(obj)
-  while(proto !== null){
-    if(proto === clazz.prototype){
-      return true
-    }
-    proto = Object.getPrototypeOf(proto)
-  }
-  return false
-  }
+function all(promises) {
+  return new Promise((resolve) => {
+    const cache = []
+    let firstCount = 0
+    let lastCount = 0
 
-console.log(Array.prototype instanceof Array)
-console.log(isInstanceOf(Array.prototype, Array))
+    for (const promis of promises){
+      const index = firstCount
+      firstCount++
+
+      Promise.resolve(promis).then(value => {
+        cache[index] = value
+        lastCount++
+
+        if(lastCount === firstCount){
+          resolve(cache)
+        }
+      })
+    }
+
+    if(firstCount === 0){
+      resolve(cache)
+    }
+  })
+}
