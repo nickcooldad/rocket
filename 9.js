@@ -12,8 +12,7 @@ function allSettled(iterable) {
       .then(value => {
         cache[index] = {status: 'fulfilled', value: value}
          lastCount++
-
-         if(firstCount === lastCount){
+ 
           resolve(cache)
          }
       }).catch(er => {

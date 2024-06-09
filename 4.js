@@ -9,9 +9,28 @@
 //     })
 // }
 
-function and(p1,p2){
-  return p1.then(() => p2)
+// function and(p1,p2){
+//   return p1.then(() => p2)
+//   .catch(() => Promise.reject())
+// }
+function and(p1, p2){
+
+  return new Promise((resolve, reject) => {
+    let countPromise = 0
+
+    const promisFunct = () => {
+      countPromise++
+
+      if(countPromise === 2){
+        resolve()
+      }
+    }
+    p1.then(promisFunct).catch(reject)
+    p2.then(promisFunct).catch(reject)
+    
+  })
 }
+
 
 
 const p1 = new Promise((r) => setTimeout(r, 3000))

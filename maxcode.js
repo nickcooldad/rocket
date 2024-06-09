@@ -1742,6 +1742,24 @@ class Cat extends Animal {
     return `${this.name} says meow`;
   }
 }
+///
+
+function Cat (name, age){
+  Animal.call(this, name, age)
+}
+
+Cat.prototype.meow = function(){
+  return `${this.name} says meow`
+}
+console.log (Cat.prototype.__proto__)
+Object.setPrototypeOf(Cat.prototype, Animal.prototype)
+// Cat.prototype.__proto__ = Animal.prototype
+console.log (Cat.prototype.__proto__)
+//Cat.prototype = Object.create(Animal.prototype)
+//Cat.prototype.constructor === Cat
+
+
+
 // ES - 5
 function Cat (name, age){
   Animal.call(this, name, age)
@@ -1762,10 +1780,44 @@ function sum(...args) {
   return Promise.all(args).then(argsArray =>
      argsArray.reduce((acc,item) => acc + item, 0))
 }
+////
+function sum(...args){
+  return args.reduce(
+    (acc, item) => acc.then(value => item.then(value1 => value + value1)),
+    Promise.resolve(0)
+  )
+}
+//////
+function sum(...args){
+  if(args.length === 0){
+    return Promise.resolve(0)
+  } 
+
+  const [first, ...rest] = args;
+  return first.then(value1 => sum(...rest).then(value2 => value1 + value2))
+}
 
 //Промисы - 3
 function and(p1, p2) {
   return Promise.all([p1, p2]).then(promis => promis)
+}
+///
+function and(p1, p2){
+
+  return new Promise((resolve, reject) => {
+    let countPromise = 0
+
+    const promisFunct = () => {
+      countPromise++
+
+      if(countPromise === 2){
+        resolve()
+      }
+    }
+    p1.then(promisFunct).catch(reject)
+    p2.then(promisFunct).catch(reject)
+    
+  })
 }
 // Промисы - 4
 function countFulfilledPromises(...args) {
@@ -1899,4 +1951,10 @@ function any(iterable) {
       reject(new AggregateError(errors, "All promises were rejected"))
     }
   })
+}
+
+//Промисы - 10
+
+function sleep(ms) {
+  return (value) => new Promise(resolve => setTimeout(() => resolve(value), ms))
 }
