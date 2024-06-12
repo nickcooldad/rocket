@@ -1970,11 +1970,11 @@ function timeLimit(fn, ms) {
 
 function getState(promise) {
    return new Promise ((resolve) => {
-     promise.then(value => {
+     promise.then(() => {
        resolve('fulfilled')
-   }).catch(reason =>{
+   }).catch(() =>{
       resolve('rejected')
    })
      setTimeout(()=> resolve('pending'), 0)
- })
+  })
  }
