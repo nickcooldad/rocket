@@ -1958,3 +1958,11 @@ function any(iterable) {
 function sleep(ms) {
   return (value) => new Promise(resolve => setTimeout(() => resolve(value), ms))
 }
+
+//Промисы 11
+function timeLimit(fn, ms) {
+  return (...value) => new Promise((resolve, reject) => {
+    setTimeout(() => reject("Time Limit Exceeded"), ms)
+    Promise.race([fn(...value)]).then(value => resolve(value), reason => reject(reason))
+  })
+}
