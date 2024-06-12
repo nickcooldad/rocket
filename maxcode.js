@@ -1969,13 +1969,12 @@ function timeLimit(fn, ms) {
 //Промисы - 12
 
 function getState(promise) {
-  let state = 'pending'
    return new Promise ((resolve) => {
      promise.then(value => {
        resolve('fulfilled')
    }).catch(reason =>{
       resolve('rejected')
    })
-     setTimeout(()=> resolve(state), 0)
+     setTimeout(()=> resolve('pending'), 0)
  })
  }
