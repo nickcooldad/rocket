@@ -1985,3 +1985,9 @@ function getState(promise) {
     queueMicrotask(() => resolve('pending'))
  })
 }
+
+//Промисы - 13
+Promise.prototype.myCatch = function(callback) {
+  return this.then(undefined, callback)
+}
+
