@@ -1809,13 +1809,13 @@ function and(p1, p2){
 
     const promisFunct = () => {
       countPromise++
-
+      
       if(countPromise === 2){
         resolve()
       }
     }
-    p1.then(promisFunct).catch(reject)
-    p2.then(promisFunct).catch(reject)
+    p1.then(promisFunct, reject)
+    p2.then(promisFunct, reject)
     
   })
 }
@@ -1823,6 +1823,13 @@ function and(p1, p2){
 function countFulfilledPromises(...args) {
   return Promise.allSettled(args).then(promis => promis
     .filter(item => item.status === 'fulfilled').length)
+}
+//
+function sum(...args){
+  return args.reduce((acc, item) => {
+    // return item.then(value => acc.then(() => value + 1)).catch(() => acc)
+    return acc.then(value => item.then(() => value + 1, () => acc))
+  }, Promise.resolve(0))
 }
 //Промисы -5
 function race(iterable) {
@@ -1838,24 +1845,24 @@ function race(iterable) {
  function all(promises) {
   return new Promise((resolve) => {
     const cache = []
-    let firstCount = 0
-    let lastCount = 0
+    let innerCount = 0
+    let promisCount = 0
 
     for (const promis of promises){
-      const index = firstCount
-      firstCount++
+      const index = innerCount
+      innerCount++
 
       Promise.resolve(promis).then(value => {
         cache[index] = value
-        lastCount++
+        promisCount++
 
-        if(lastCount === firstCount){
+        if(promisCount === innerCount){
           resolve(cache)
         }
       })
     }
 
-    if(firstCount === 0){
+    if(innerCount === 0){
       resolve(cache)
     }
   })
@@ -1881,8 +1888,7 @@ function all(promises) {
         if(lastCount === firstCount){
           resolve(cache)
         }
-      })
-      .catch(eror => reject(eror))
+      }, error => reject(error))
     }
 
     if(firstCount === 0){
@@ -1894,32 +1900,24 @@ function all(promises) {
 function allSettled(iterable) {
   return new Promise((resolve) => {
     const cache = []
-    let firstCount = 0
-    let lastCount = 0
+    let innerCount = 0
+    let promisesCount = 0
     
     for(const promis of iterable){
-      const index = firstCount
-      firstCount++
+      const index = innerCount
+      innerCount++
       
       Promise.resolve(promis)
-      .then(value => {
-        cache[index] = {status: 'fulfilled', value: value}
-         lastCount++
-
-         if(firstCount === lastCount){
+      .then(value => ({status: 'fulfilled', value}), reason => ({status: 'rejected', reason}))
+      .then(obj => {
+        cache[index] = obj
+        promisesCount++
+        if(innerCount === promisesCount){
           resolve(cache)
-         }
-      }).catch(er => {
-        cache[index] = {status: 'rejected', reason: er}
-        
-        lastCount++
-        if(firstCount === lastCount){
-          resolve(cache)
-         }
-      })
-       
+        }
+       })
     }
-    if(firstCount === 0){
+    if(innerCount === 0){
       resolve(cache)
     }
   })
@@ -1929,25 +1927,24 @@ function allSettled(iterable) {
 function any(iterable) {
   return new Promise((resolve, reject) =>{
     const errors = []
-    let firstCount = 0
-    let lastCount = 0
+    let innerCount = 0
+    let promisesCount = 0
     for(const promise of iterable){
-      const index = firstCount
-      firstCount++
+      const index = innerCount
+      innerCount++
 
       Promise.resolve(promise).then(value => {
         resolve(value)
-    })
-    .catch(error => {
-      errors[index] = error
-      lastCount++
+      }, error => {
+        errors[index] = error
+        promisesCount++
 
-      if(lastCount === firstCount){
-        reject(new AggregateError(errors, "All promises were rejected"))
-      }
-    })
+        if(promisesCount === innerCount){
+          reject(new AggregateError(errors, "All promises were rejected"))
+        }
+      })
     }
-    if(firstCount === 0){
+    if(innerCount === 0){
       reject(new AggregateError(errors, "All promises were rejected"))
     }
   })
@@ -1966,15 +1963,25 @@ function timeLimit(fn, ms) {
     Promise.race([fn(...value)]).then(value => resolve(value), reason => reject(reason))
   })
 }
+///
+function timeLimit(fn, ms){
+  return (...value) => {
+    return Promise.race([reason(ms), fn(...value)])
+  }
+}
+
+function reason(ms){
+  return new Promise((_, reject) => setTimeout(()=> reject("Time Limit Exceeded"), ms))
+}
 //Промисы - 12
 
 function getState(promise) {
-   return new Promise ((resolve) => {
-     promise.then(() => {
-       resolve('fulfilled')
-   }).catch(() =>{
+  return new Promise ((resolve) => {
+    promise.then(() => {
+      resolve('fulfilled')
+    }, () => {
       resolve('rejected')
-   })
-     setTimeout(()=> resolve('pending'), 0)
-  })
- }
+    })
+    queueMicrotask(() => resolve('pending'))
+ })
+}
