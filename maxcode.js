@@ -1991,3 +1991,13 @@ Promise.prototype.myCatch = function(callback) {
   return this.then(undefined, callback)
 }
 
+//Промисы - 14
+Promise.prototype.myFinally = function(callback) {
+  return this.then(value => Promise.resolve(callback())
+  .then(() => value), 
+  reason => Promise.resolve(callback())
+  .then(() => {
+    throw reason
+  }))
+  
+ }

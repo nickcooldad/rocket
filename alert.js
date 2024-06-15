@@ -1,21 +1,23 @@
-Promise.prototype.myCatch = function(callback) {
-  return this.then(undefined, callback)
+Promise.prototype.myFinally = function(callback) {
+ return this.then(value => callback().then(() => value), 
+reason => callback().then(() => {throw reason}))
+ 
 }
 
-Promise.prototype.myCatch = function(callback) {
-  return this.then(undefined, reason => callback(reason))
-}
-Promise.resolve(10)
-  .then(x => x + 100)
-  .then(x => {
-    throw x * 2;
+Promise.resolve(100)
+  .myFinally(() => {
+    return "ok";
   })
-  .then(x => x + 20)
-  .then(x => x + 30)
-  .myCatch(x => {
-    console.log(x); // 220
-    return x / 10;
+  .then(
+    x => console.log(x), // 100
+    x => console.log(x),
+  );
+
+Promise.resolve(100)
+  .myFinally(() => {
+    throw "oops";
   })
-  .then(x => {
-    console.log(x); // 22
-  });
+  .then(
+    x => console.log(x),
+    x => console.log(x), // "oops"
+  );
