@@ -1,25 +1,25 @@
-function all(promises) {
-  return new Promise((resolve) => {
-    const cache = []
-    let firstCount = 0
-    let lastCount = 0
+function any(iterable) {
+  return new Promise((resolve, reject) =>{
+    const errors = []
+    let innerCount = 0
+    let promisesCount = 0
+    for(const promise of iterable){
+      const index = innerCount
+      innerCount++
 
-    for (const promis of promises){
-      const index = firstCount
-      firstCount++
+      Promise.resolve(promise).then(value => {
+        resolve(value)
+      }, error => {
+        errors[index] = error
+        promisesCount++
 
-      Promise.resolve(promis).then(value => {
-        cache[index] = value
-        lastCount++
-
-        if(lastCount === firstCount){
-          resolve(cache)
+        if(promisesCount === innerCount){
+          reject(new AggregateError(errors, "All promises were rejected"))
         }
       })
     }
-
-    if(firstCount === 0){
-      resolve(cache)
+    if(innerCount === 0){
+      reject(new AggregateError(errors, "All promises were rejected"))
     }
   })
 }

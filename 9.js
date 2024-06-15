@@ -1,32 +1,16 @@
-function allSettled(iterable) {
-  return new Promise((resolve) => {
-    const cache = []
-    let firstCount = 0
-    let lastCount = 0
-    
-    for(const promis of iterable){
-      const index = firstCount
-      firstCount++
-      
-      Promise.resolve(promis)
-      .then(value => {
-        cache[index] = {status: 'fulfilled', value: value}
-         lastCount++
- 
-          resolve(cache)
-         }
-      }).catch(er => {
-        cache[index] = {status: 'rejected', reason: er}
-        
-        lastCount++
-        if(firstCount === lastCount){
-          resolve(cache)
-         }
-      })
-       
-    }
-    if(firstCount === 0){
-      resolve(cache)
-    }
-  })
+// function timeLimit(fn, ms) {
+//   return (...value) => new Promise((resolve, reject) => {
+//     setTimeout(() => reject("Time Limit Exceeded"), ms)
+//     fn(...value).then(value => resolve(value), reason => reject(reason))
+//   })
+// }
+
+function timeLimit(fn, ms){
+  return (...value) => {
+    return Promise.race([reason(ms), fn(...value)])
+  }
+}
+
+function reason(ms){
+  return new Promise((_, reject) => setTimeout(()=> reject("Time Limit Exceeded"), ms))
 }

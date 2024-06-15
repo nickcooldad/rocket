@@ -1,58 +1,64 @@
-function Animal(name, ageInYears) {
-  this.name = name.toUpperCase();
-  this.ageInMonths = ageInYears * 12;
+// function and(p1, p2) {
+//   return Promise.all([p1, p2])
+// }
+
+// function and(p1, p2){
+//     return new Promise((resolve, reject) => {
+//       return p1.then(value1 => p2.then(value2 => resolve()))
+//       .catch(() => reject())
+//     })
+// }
+
+// function and(p1,p2){
+//   return p1.then(() => p2)
+//   .catch(() => Promise.reject())
+// }
+function and(p1, p2){
+
+  return new Promise((resolve, reject) => {
+    let countPromise = 0
+
+    const promisFunct = () => {
+      countPromise++
+      
+      if(countPromise === 2){
+        resolve()
+      }
+    }
+    p1.then(promisFunct, reject)
+    p2.then(promisFunct, reject)
+    
+  })
 }
 
-Animal.prototype.play = function() {
-  return `${this.name} is playing`;
-};
 
-// -----------------------------------------
-function Cat (name, age){
-  Animal.call(this, name, age)
-}
 
-Cat.prototype.meow = function(){
-  return `${this.name} says meow`
-}
-console.log (Cat.prototype.__proto__)
-Object.setPrototypeOf(Cat.prototype, Animal.prototype)
-// Cat.prototype.__proto__ = Animal.prototype
-console.log (Cat.prototype.__proto__)
-//Cat.prototype = Object.create(Animal.prototype)
-//Cat.prototype.constructor === Cat
+const p1 = new Promise((r) => setTimeout(r, 3000))
+const p2 = new Promise((_, r) => setTimeout(r, 2000))
+p2.then(() => {}, () => {});
 
-// -----------------------------------------
+console.time("1");
+and(p1, p2).then(
+  () => console.timeEnd("1"),
+  () => console.timeEnd("1"),
+);
 
-const barsique = new Cat("Barsik", 2);
 
-console.log(barsique.name); // "BARSIK"
-console.log(barsique.ageInMonths); // 24
-console.log(barsique.meow())
-console.log(barsique.play())
+// and(Promise.resolve(1), Promise.resolve(2)).then(
+//   () => console.log("1 fulfulled"), // ✓
+//   () => console.log("1 rejected"),
+// )
 
-///////////////////------------------
-class ObservableSet extends Set {
-  constructor(cb, iterable){
-    super(iterable)
-    this.cb = cb
-  }
+// and(Promise.reject(1), Promise.resolve(2)).then(
+//   () => console.log("2 fulfulled"),
+//   () => console.log("2 rejected"),  // ✓
+// )
 
-  add(arg){
-    super.add(arg)
-    this.cb?.('add', [arg]);
-    return this
-  }
-
-  delete(arg){
-    const result = super.delete(arg)
-    this.cb('delete', [arg])
-  return result
-  }
-
-  clear(){
-    super.clear()
-    this.cb('clear', [])
-  return this
-  }
-}
+// and(Promise.reject(1), Promise.reject(2)).then(
+//   () => console.log("3 fulfulled"),
+//   () => console.log("3 rejected"),  // ✓
+// )
+// and(Promise.reject(1), Promise.reject(2)).then(
+//   () => console.log("4 fulfulled"),
+//   () => console.log("4 rejected"),  // ✓
+// )
