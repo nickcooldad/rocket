@@ -2005,3 +2005,7 @@ Promise.prototype.myFinally = function(callback) {
  function compose(fns) {
   return (arg) => fns.reduceRight((acc, item) => acc.then(value => item(value)), Promise.resolve(arg))
  } 
+ //
+ function  compose(fns){
+  return (arg) => fns.reduceRight(async (acc, fn) => fn(await acc), Promise.resolve(arg))
+} 

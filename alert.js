@@ -1,16 +1,19 @@
-function compose(fns) {
- return (arg) => fns.reduceRight((acc, item) => acc.then(value => item(value)), Promise.resolve(arg))
-} 
+function polling(fetcher, isCompleted, delay) {
 
+}
+const testingResponse = { status: "testing" };
+const timeLimitResponse = { status: "timeLimit" };
+let i = 0;
 
-const square = x => new Promise(r => setTimeout(r, 2000, x ** 2));
-const divideBy5 = x => new Promise(r => setTimeout(r, 1500, x / 5));
-const multiplyBy3 = x => new Promise(r => setTimeout(r, 500, x * 3));
+const fakeFetcher = async () => {
+  return i++ < 3 ? testingResponse : timeLimitResponse;
+}
 
-const foo = compose([square, divideBy5, multiplyBy3]); 
+const result = polling(
+  fakeFetcher,
+  (response) => response.status !== "testing",
+  500,
+);
 
-console.time("xxx");
-foo(10).then(value => {
-  console.log(value);
-  console.timeEnd("xxx");
-});
+result.then(data => console.log(data));
+// через 1.5 секунды получим объект со статусом "timeLimit"
