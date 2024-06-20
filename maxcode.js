@@ -2009,3 +2009,13 @@ Promise.prototype.myFinally = function(callback) {
  function  compose(fns){
   return (arg) => fns.reduceRight(async (acc, fn) => fn(await acc), Promise.resolve(arg))
 } 
+
+//Промисы - 16
+async function run(fns, limit) {
+  let cache = []
+   for(let i = 0; i <= fns.length; i += limit){
+    let functionResult = await Promise.all(fns.slice(i, i + limit).map(async fn => await fn()))
+    cache.push(...functionResult)
+   }
+  return cache
+}
