@@ -9,27 +9,34 @@
 //   })
 // }
 
-async function polling(fetcher, isCompleted, delay){
-  let condition = true
-  while(condition){
-    try{
-      let fetchResult = await fetcher()
-      if(isCompleted(fetchResult) === true){
-        condition = false
-        return fetchResult
+// async function polling(fetcher, isCompleted, delay) {
+//   while (true) {
+//     try {
+//       const fetchResult = await fetcher()
+//       if (isCompleted(fetchResult)) {
+//         return fetchResult
+//       }
+//     } catch {
+//     }
+//     await new Promise(resolve => setTimeout(resolve, delay))
+//   }
+// }
+
+function polling(fetcher, isCompleted, delay){
+  return fetcher().then(value => {
+      if(isCompleted(value) === true){
+        return value
       }
-    }  catch{
-        (error) => {
-          if(isCompleted(error) === true){
-          condition = false
-          return error
-          }
-        }
-      }
-    await new Promise(resolve => setTimeout(resolve, delay))
-  }
+      return sleep(delay)
+        .then(() => polling(fetcher, isCompleted, delay))
+    }, () => setTimeout(() => polling(fetcher, isCompleted, delay).then(value => value), delay))
+
+}
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+///////-------------------------------------------------
 const testingResponse = { status: "testing" };
 const timeLimitResponse = { status: "timeLimit" };
 let i = 0;
