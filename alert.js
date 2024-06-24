@@ -1,13 +1,22 @@
 async function run(fns, limit) {
-  let { promise, resolve, reject} = Promise.withResolvers()
-  console.log(promise, resolve, reject)
-  let cache = []
-  for(let i = 0; i <= fns.length; i += limit){
-  let functionResult = await Promise.all(fns.slice(i, i + limit).map(fn => fn()))
-  cache.push(...functionResult)
+  const results = new Array(fns.length)
+  const cache = new Set()
+
+  for (let i = 0; i < fns.length; i++) {
+    const promiseFn = fns[i]()
+    promiseFn.then(value => {
+      results[i] = value
+      cache.delete(promiseFn)
+    })
+    cache.add(promiseFn);
+    if (cache.size >= limit) {
+      await Promise.race(cache)
+    }
   }
-  return Promise.resolve(cache)
-}  
+  await Promise.all(cache)
+  return results
+}
+
   
   
 const fn1 = () => new Promise(r => setTimeout(r, 3400, "a"));

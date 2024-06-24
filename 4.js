@@ -1,55 +1,32 @@
-// function polling(fetcher, isCompleted, delay) {
-//   return new Promise((resolve) =>{
-//     const result = setInterval(() => fetcher().then(value =>{
-//       if(isCompleted(value) === true){
-//         clearInterval(result)
-//         resolve(value)
-//       }
-//     }, () =>  result), delay)
-//   })
-// }
+async function run(fns, limit) {
+  const results = new Array(fns.length)
+  const cache = new Set()
 
-// async function polling(fetcher, isCompleted, delay) {
-//   while (true) {
-//     try {
-//       const fetchResult = await fetcher()
-//       if (isCompleted(fetchResult)) {
-//         return fetchResult
-//       }
-//     } catch {
-//     }
-//     await new Promise(resolve => setTimeout(resolve, delay))
-//   }
-// }
-
-function polling(fetcher, isCompleted, delay){
-  return fetcher().then(value => {
-      if(isCompleted(value) === true){
-        return value
-      }
-      return sleep(delay)
-        .then(() => polling(fetcher, isCompleted, delay))
-    }, () => setTimeout(() => polling(fetcher, isCompleted, delay).then(value => value), delay))
-
-}
-function sleep(ms){
-  return new Promise(resolve => setTimeout(resolve, ms));
+  for (let i = 0; i < fns.length; i++) {
+    const promiseFn = fns[i]()
+    cache.add(promiseFn)
+    promiseFn.then(value => {
+      results[i] = value
+      cache.delete(promiseFn)
+    })
+    if (cache.size >= limit) {
+      await Promise.race(cache)
+    }
+  }
+  await Promise.all(cache)
+  return results
 }
 
-///////-------------------------------------------------
-const testingResponse = { status: "testing" };
-const timeLimitResponse = { status: "timeLimit" };
-let i = 0;
 
-const fakeFetcher = async () => {
-  return i++ < 3 ? testingResponse : timeLimitResponse;
-}
 
-const result = polling(
-  fakeFetcher,
-  (response) => response.status !== "testing",
-  500,
-);
+const fn1 = () => new Promise(r => setTimeout(r, 3400, "a"));
+const fn2 = () => new Promise(r => setTimeout(r, 600, "b"));
+const fn3 = () => new Promise(r => setTimeout(r, 2000, "c"));
+const fn4 = () => new Promise(r => setTimeout(r, 1400, "d"));
+const fn5 = () => new Promise(r => setTimeout(r, 1800, "e"));
+const fn6 = () => new Promise(r => setTimeout(r, 400, "f"));
 
-result.then(data => console.log(data));
-// через 1.5 секунды получим объект со статусом "timeLimit"
+
+run([fn1, fn2, fn3, fn4, fn5, fn6], 2).then(arr => {
+  console.log(arr); // arr === ["a", "b", "c", "d", "e", "f"]
+});
