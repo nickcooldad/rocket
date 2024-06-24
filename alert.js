@@ -4,11 +4,11 @@ async function run(fns, limit) {
 
   for (let i = 0; i < fns.length; i++) {
     const promiseFn = fns[i]()
+    cache.add(promiseFn)
     promiseFn.then(value => {
       results[i] = value
       cache.delete(promiseFn)
     })
-    cache.add(promiseFn);
     if (cache.size >= limit) {
       await Promise.race(cache)
     }
@@ -16,17 +16,27 @@ async function run(fns, limit) {
   await Promise.all(cache)
   return results
 }
+//////
+function loadAll(urls, load, limit, cb) {
+  const fns = urls.map(url => () => load(url));
+  run(fns, limit).then(cb);
+}
 
-  
-  
-const fn1 = () => new Promise(r => setTimeout(r, 3400, "a"));
-const fn2 = () => new Promise(r => setTimeout(r, 600, "b"));
-const fn3 = () => new Promise(r => setTimeout(r, 2000, "c"));
-const fn4 = () => new Promise(r => setTimeout(r, 1400, "d"));
-const fn5 = () => new Promise(r => setTimeout(r, 1800, "e"));
-const fn6 = () => new Promise(r => setTimeout(r, 400, "f"));
+const url2duration = {
+  A: 2000,
+  B: 1000,
+  C: 1400,
+  D:  600,
+  E: 1200,
+  F: 1800,
+  G:  800,
+};
 
+const load = (url) => new Promise(resolve => setTimeout(resolve, url2duration[url], url));
+const urls = ["A", "B", "C", "A", "D", "B", "E", "B", "F", "G"];
 
-run([fn1, fn2, fn3, fn4, fn5, fn6], 2).then(arr => {
-  console.log(arr); // arr === ["a", "b", "c", "d", "e", "f"]
+console.time("run");
+loadAll(urls, load, 3, (result) => {
+  console.log(result);
+  console.timeEnd("run");
 });
