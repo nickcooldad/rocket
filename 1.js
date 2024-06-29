@@ -27,8 +27,12 @@ function polling(fetcher, isCompleted, delay){
     if(isCompleted(value) === true){
       return value
       }
-    return sleep(delay).then(() => polling(fetcher, isCompleted, delay))
-  }, () => sleep(delay).then(() => polling(fetcher, isCompleted, delay)))
+      throw new Error
+      // throw new Error()
+      // throw Error()
+      
+      // throw Error
+  }).catch(() => sleep(delay).then(() => polling(fetcher, isCompleted, delay)))
 }
 function sleep(ms){
   return new Promise(resolve => setTimeout(resolve, ms));
