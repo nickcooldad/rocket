@@ -2058,7 +2058,7 @@ function polling(fetcher, isCompleted, delay) {
     }, () =>  result), delay)
   })
 }
-//////
+
 async function polling(fetcher, isCompleted, delay) {
   while (true) {
     try {
@@ -2071,26 +2071,21 @@ async function polling(fetcher, isCompleted, delay) {
     await new Promise(resolve => setTimeout(resolve, delay))
   }
 }
-////
+
 function polling(fetcher, isCompleted, delay){
   return fetcher().then(value => {
     if(isCompleted(value) === true){
       return value
       }
-    return sleep(delay).then(() => polling(fetcher, isCompleted, delay))
-  }, () => sleep(delay).then(() => polling(fetcher, isCompleted, delay)))
+      throw new Error
+      // throw new Error()
+      // throw Error()
+      
+      // throw Error
+  }).catch(() => sleep(delay).then(() => polling(fetcher, isCompleted, delay)))
 }
 function sleep(ms){
   return new Promise(resolve => setTimeout(resolve, ms));
-}
-//Промисы - 17
-async function run(fns, limit) {
-  let cache = []
-   for(let i = 0; i <= fns.length; i += limit){
-    let functionResult = await Promise.all(fns.slice(i, i + limit).map(fn => fn()))
-    cache.push(...functionResult)
-   }
-  return cache
 }
 
 // Промисы - 18

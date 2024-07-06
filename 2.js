@@ -1,90 +1,80 @@
-// async function run(fns, limit) {
-//   let cache = []
-//    for(let i = 0; i < fns.length; i += limit){
-//     let functionResult = await Promise.all(fns.slice(i, i + limit).map(fn => fn()))
-//     cache.push(...functionResult)
-//     // cache.push(functionResult)
-//    }
-//   return cache
-// }  
+// function withRetry(fn, limit) {
+//   return async (...args) => {
+//     const errors = []
 
-// const p1 = new Promise(resolve => resolve(1));
-// const p2 = new Promise(resolve => resolve(2));
-// const p3 = new Promise(resolve => resolve(3));
+//     while(true){
+//       try {
+//         // const resultFunction = await fn(...args)
+//         // return resultFunction
+//         return await fn(...args)
+//       } catch(error) {
+//         errors.push(error)
+//         if(errors.length === limit){
+//           throw new AggregateError(errors, "Too Many Calls")
+//         }
+//       }
+//     }
+//   }
+// }
 
-// sum(p1, p2, p3).then((val) => console.log(val))
-// return fns[0]().then(x => sum += x)
-//   .then(() => fns[1]().then(x => sum += x))
-//   .then(() => fns[2]().then(x => sum += x))
-//   .then(() => fns[3]().then(x => sum += x))
-//   .then(() => fns[4]().then(x => sum += x))
-//   .then(() => sum);
+// function withRetry(fn, limit){
+//   return async (...args) => {
+//     const errors = []
 
+//     for(let i = 0; i < limit; i++){
+//       try{
+//         return await fn(...args)
+//       } catch(error){
+//         errors.push(error)
+//       }
+//     }
+//     throw new AggregateError(errors, "Too Many Calls")
+//   }
+// }
 
-//         length === 6 limit === 2
-function run(fns, limit) {
-  let cache = []
+function withRetry(fn, limit){
   
-  let p = Promise.resolve();
-  for(let i = 0; i < fns.length; i += limit){
-    p = p.then(() => Promise.all(fns.slice(i, i + limit).map(fn => fn()))).then(arr => cache.push(...arr))
+  function inner (args, errors = []) {
+    if(errors.length === limit){
+      return Promise.reject(new AggregateError(errors, "Too Many Calls"))
+    }
+
+    return fn(...args).catch(error => {
+      errors.push(error)
+      return inner(args, errors)
+    })
   }
-  return p.then(() => cache);
+
+  return (...args) => inner(args);
 }
 
 
-  // p = p.then(() => Promise.all(fns.slice(0, 2).map(fn => fn())).then(arr1 => cache.push(...arr1)))
-  // p = p.then(() => Promise.all(fns.slice(2, 4).map(fn => fn())).then(arr2 => cache.push(...arr2)))
-  // p = p.then(() => Promise.all(fns.slice(4, 6).map(fn => fn())).then(arr3 => cache.push(...arr3)))
 
-
-  
-
-
-
-// async function foo() {
-//   const a = await fa();
-//   const b = await fb(a);
-//   const c = await fc(b);
-//   return c;
-// }
-
-// async function foo() {
-//   return fa().then(a => {
-//     return fb(a).then(b => {
-//       return fc(b).then(c => {
-//         return c + 1;
-//       });
-//     });
-//   });
-// }
-
-const fn1 = () => {
-  console.log("fn1");
-  return new Promise(r => setTimeout(r, 3400, "a"));
-}
-const fn2 = () => {
-  console.log("fn2");
-  return new Promise(r => setTimeout(r, 600, "b"));
-}
-const fn3 = () => {
-  console.log("fn3");
-  return new Promise(r => setTimeout(r, 2000, "c"));
-}
-const fn4 = () => {
-  console.log("fn4");
-  return new Promise(r => setTimeout(r, 1400, "d"));
-}
-const fn5 = () => {
-  console.log("fn5");
-  return new Promise(r => setTimeout(r, 1800, "e"));
-}
-const fn6 = () => {
-  console.log("fn6");
-  return new Promise(r => setTimeout(r, 400, "f"));
+function sum(a, b) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (Math.random() < 0.3) {
+        resolve(a + b);
+      } else {
+        reject("err");
+      }
+    }, 500);
+  });
 }
 
+// sum(3, 2).then(
+//   value => console.log(value),
+//   // 5 (с вероятностью 30%)
+//   reason => console.log(reason),
+//   // 'err' (с вероятностью 70%)
+// );
 
-run([fn1, fn2, fn3, fn4, fn5, fn6], 2).then(arr => {
-  console.log(arr); // arr === ["a", "b", "c", "d", "e", "f"]
-});
+const enhancedSum = withRetry(sum, 4);
+
+enhancedSum(3, 2).then(
+  value => console.log(value),    
+  // 5 (с вероятностью 76%)
+  reason => console.log(reason.errors),
+  // ['err1', 'err2', 'err3', 'err4']
+  // (с вероятностью 24%)
+);

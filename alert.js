@@ -1,67 +1,41 @@
-// async function run(fns, limit) {
-//   const results = new Array(fns.length)
-//   const cache = new Set()
+class AA {
+  #array;
 
-//   for (let i = 0; i < fns.length; i++) {
-//     const promiseFn = fns[i]()
-//     cache.add(promiseFn)
-//     promiseFn.then(value => {
-//       results[i] = value
-//       cache.delete(promiseFn)
-//     })
-//     if (cache.size >= limit) {
-//       await Promise.race(cache)
-//     }
-//   }
-//   await Promise.all(cache)
-//   return results
-// }
-
-async function loadAll(urls, load, limit, cb) {
-  const results = new Array(urls.length)
-  const cache = new Set()
-  const memo = new Map()
-  let promiseFn
-  for (let i = 0; i < urls.length; i++) {
-    if(memo.has(urls[i])){
-      promiseFn = memo.get(urls[i])
-    } else{
-    promiseFn = load(urls[i])
-    memo.set(urls[i], promiseFn)
+  constructor(...array) {
+    this.#array = array;
   }
-    cache.add(promiseFn)
-    promiseFn.then(value => {
-      results[i] = value
-      cache.delete(promiseFn)
-    })
-    if (cache.size >= limit) {
-      await Promise.race(cache)
+
+  read() {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(this.#array), 100);
+    });
+  }
+}
+
+
+const example = new AA(
+  new AA(1, new AA(new AA(2)), new AA(3)),
+  new AA(4, new AA(5, 6), 7),
+  8,
+  new AA(9, new AA(10, new AA(11, 12), 13)),
+)
+
+async function flatten(value) {
+  const result = [];
+
+  for (const element of await value.read()) {
+    if (element instanceof AA) {
+      result.push(...await flatten(element));
+    } else {
+      result.push(element);
     }
   }
-  await Promise.all(cache)
-  cb(results)
-}
-//////
-function loadAll(urls, load, limit, cb) {
-  const fns = urls.map(url => () => load(url));
-  run(fns, limit).then(cb);
+  return result;
 }
 
-const url2duration = {
-  A: 2000,
-  B: 1000,
-  C: 1400,
-  D:  600,
-  E: 1200,
-  F: 1800,
-  G:  800,
-};
-
-const load = (url) => new Promise(resolve => setTimeout(resolve, url2duration[url], url));
-const urls = ["A", "B", "C", "A", "D", "B", "E", "B", "F", "G"];
-
-console.time("run");
-loadAll(urls, load, 3, (result) => {
-  console.log(result);
-  console.timeEnd("run");
+console.time("aa")
+flatten(example).then((result) => {
+  console.log(result); // [1,2,3,4,5,6,7,8,9,10,11,12,13]
+  console.timeEnd("aa"); // ≈ 1000 ms
 });
+
