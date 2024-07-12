@@ -17,6 +17,8 @@ async function run(fns, limit) {
   return results
 }
 
+
+
 function run(fns, limit) {
   const { promise, resolve } = Promise.withResolvers();
 
@@ -31,6 +33,7 @@ function run(fns, limit) {
     }
     if (started === fns.length) {
       return;
+      
     }
     const i = started;
     started++;
@@ -50,69 +53,69 @@ function run(fns, limit) {
 
 //  https://i.redd.it/sqv8b61ffod61.jpg
 
-async function run(fns, limit) {
-  const results = []
-  let i = 0
+// async function run(fns, limit) {
+//   const results = []
+//   let i = 0
 
-  async function runer() {
-    while (i < fns.length) {
-      const currentIndex = i++
-      const result = await fns[currentIndex]()
-      results[currentIndex] = result
-    }
-  }
+//   async function runer() {
+//     while (i < fns.length) {
+//       const currentIndex = i++
+//       const result = await fns[currentIndex]()
+//       results[currentIndex] = result
+//     }
+//   }
 
-  const runners = Array.from({ length: limit }, () => runer())
-  await Promise.all(runners)
-  return results
-}
+//   const runners = Array.from({ length: limit }, () => runer())
+//   await Promise.all(runners)
+//   return results
+// }
 
 // fns.length === 5;
 // limit === 3
 
-function run2(fns, limit) {
-  const results = new Array(fns.length)
-  const cache = new Set()
+// function run2(fns, limit) {
+//   const results = new Array(fns.length)
+//   const cache = new Set()
 
-  const promiseFn0 = fns[0]();
-  cache.add(promiseFn0);
-  promiseFn0.then((value) => {
-    results[0] = value;
-    cache.delete(promiseFn0);
-  })
-  const promiseFn1 = fns[1]();
-  cache.add(promiseFn1);
-  promiseFn1.then((value) => {
-    results[1] = value;
-    cache.delete(promiseFn1);
-  })
-  const promiseFn2 = fns[2]();
-  cache.add(promiseFn2);
-  promiseFn2.then((value) => {
-    results[2] = value;
-    cache.delete(promiseFn2);
-  })
+//   const promiseFn0 = fns[0]();
+//   cache.add(promiseFn0);
+//   promiseFn0.then((value) => {
+//     results[0] = value;
+//     cache.delete(promiseFn0);
+//   })
+//   const promiseFn1 = fns[1]();
+//   cache.add(promiseFn1);
+//   promiseFn1.then((value) => {
+//     results[1] = value;
+//     cache.delete(promiseFn1);
+//   })
+//   const promiseFn2 = fns[2]();
+//   cache.add(promiseFn2);
+//   promiseFn2.then((value) => {
+//     results[2] = value;
+//     cache.delete(promiseFn2);
+//   })
 
-  return Promise.race(cache).then(() => {
-    const promiseFn3 = fns[3]();
-    cache.add(promiseFn3);
-    promiseFn3.then((value) => {
-      results[3] = value;
-      cache.delete(promiseFn3);
-    })
-    return Promise.race(cache).then(() => {
-      const promiseFn4 = fns[4]();
-      cache.add(promiseFn4);
-      promiseFn4.then((value) => {
-        results[4] = value;
-        cache.delete(promiseFn4);
-      })
-      return Promise.all(cache).then(() => {
-        return results;
-      })
-    })
-  })
-}
+//   return Promise.race(cache).then(() => {
+//     const promiseFn3 = fns[3]();
+//     cache.add(promiseFn3);
+//     promiseFn3.then((value) => {
+//       results[3] = value;
+//       cache.delete(promiseFn3);
+//     })
+//     return Promise.race(cache).then(() => {
+//       const promiseFn4 = fns[4]();
+//       cache.add(promiseFn4);
+//       promiseFn4.then((value) => {
+//         results[4] = value;
+//         cache.delete(promiseFn4);
+//       })
+//       return Promise.all(cache).then(() => {
+//         return results;
+//       })
+//     })
+//   })
+// }
 
 // const asyncFn = x => Promise.resolve(x * 2);
 

@@ -2087,28 +2087,101 @@ function polling(fetcher, isCompleted, delay){
 function sleep(ms){
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+//Промисы 17
+  //async function run(fns, limit) {
+  //   let cache = []
+  //    for(let i = 0; i < fns.length; i += limit){
+  //     let functionResult = await Promise.all(fns.slice(i, i + limit).map(fn => fn()))
+  //     cache.push(...functionResult)
+  //     // cache.push(functionResult)
+  //    }
+  //   return cache
+  // }  
+  
+  // const p1 = new Promise(resolve => resolve(1));
+  // const p2 = new Promise(resolve => resolve(2));
+  // const p3 = new Promise(resolve => resolve(3));
+  
+  // sum(p1, p2, p3).then((val) => console.log(val))
+  // return fns[0]().then(x => sum += x)
+  //   .then(() => fns[1]().then(x => sum += x))
+  //   .then(() => fns[2]().then(x => sum += x))
+  //   .then(() => fns[3]().then(x => sum += x))
+  //   .then(() => fns[4]().then(x => sum += x))
+  //   .then(() => sum);
+  
+  
+  //         length === 6 limit === 2
+  // function run(fns, limit) {
+  //   let cache = []
+  
+  //   let p = Promise.resolve();
+  //   for(let i = 0; i < fns.length; i += limit){
+  // p = p.then(() => Promise.all(fns.slice(i, i + limit).map(fn => fn()))).then(arr => cache.push(...arr))
+  //   }
+  //   return p.then(() => cache);
+  //}
+  
+  function run(fns, limit) {
+    if (fns.length === 0) {
+      return Promise.resolve([])
+    }
+  
+    return Promise.all(fns.slice(0, limit).map(fn => fn()))
+      .then(arr => run(fns.slice(limit), limit)
+        .then(value => [...arr, ...value])
+      );
+  }
 
 // Промисы - 18
 function withRetry(fn, limit) {
-  return async (a, b) => {
+  return async (...args) => {
     const errors = []
-    let count = 0
-    let resultResolvePromise = true
 
-    while(resultResolvePromise){
+    while(true){
       try {
-        const resultFunction = await fn(a, b)
-        resultResolvePromise = false
-        return resultFunction
+        // const resultFunction = await fn(...args)
+        // return resultFunction
+        return await fn(...args)
       } catch(error) {
         errors.push(error)
-        count++
-        if(count === limit){
-          return Promise.reject(new AggregateError(errors, "Too Many Calls"))
+        if(errors.length === limit){
+          throw new AggregateError(errors, "Too Many Calls")
         }
       }
     }
   }
+}
+///////////////
+function withRetry(fn, limit){
+  return async (...args) => {
+    const errors = []
+
+    for(let i = 0; i < limit; i++){
+      try{
+        return await fn(...args)
+      } catch(error){
+        errors.push(error)
+      }
+    }
+    throw new AggregateError(errors, "Too Many Calls")
+  }
+}
+///////////////
+function withRetry(fn, limit){
+  
+  function inner (args, errors = []) {
+    if(errors.length === limit){
+      return Promise.reject(new AggregateError(errors, "Too Many Calls"))
+    }
+
+    return fn(...args).catch(error => {
+      errors.push(error)
+      return inner(args, errors)
+    })
+  }
+
+  return (...args) => inner(args);
 }
 
 //Промисы - 19
@@ -2129,4 +2202,101 @@ async function run(fns, limit) {
   }
   await Promise.all(cache)
   return results
+}
+
+function run(fns, limit) {
+  const { promise, resolve } = Promise.withResolvers();
+
+  const results = [];
+  let started = 0;
+  let finished = 0;
+
+  function helper() {
+    if (finished === fns.length) {
+      resolve(results);
+      //  console.log("FINISHED", results)
+    }
+    if (started === fns.length) {
+      return;
+    }
+    const i = started;
+    started++;
+    fns[i]().then((value) => {
+      results[i] = value;
+      finished++;
+      helper();
+    });
+  }
+
+  for (let i = 0; i < limit; i++) {
+    helper();
+  }
+
+  return promise;
+}
+
+//  https://i.redd.it/sqv8b61ffod61.jpg
+
+async function run(fns, limit) {
+  const results = []
+  let i = 0
+
+  async function runer() {
+    while (i < fns.length) {
+      const currentIndex = i++
+      const result = await fns[currentIndex]()
+      results[currentIndex] = result
+    }
+  }
+
+  const runners = Array.from({ length: limit }, () => runer())
+  await Promise.all(runners)
+  return results
+}
+
+// fns.length === 5;
+// limit === 3
+
+function run2(fns, limit) {
+  const results = new Array(fns.length)
+  const cache = new Set()
+
+  const promiseFn0 = fns[0]();
+  cache.add(promiseFn0);
+  promiseFn0.then((value) => {
+    results[0] = value;
+    cache.delete(promiseFn0);
+  })
+  const promiseFn1 = fns[1]();
+  cache.add(promiseFn1);
+  promiseFn1.then((value) => {
+    results[1] = value;
+    cache.delete(promiseFn1);
+  })
+  const promiseFn2 = fns[2]();
+  cache.add(promiseFn2);
+  promiseFn2.then((value) => {
+    results[2] = value;
+    cache.delete(promiseFn2);
+  })
+
+  return Promise.race(cache).then(() => {
+    const promiseFn3 = fns[3]();
+    cache.add(promiseFn3);
+    promiseFn3.then((value) => {
+      results[3] = value;
+      cache.delete(promiseFn3);
+    })
+    return Promise.race(cache).then(() => {
+      const promiseFn4 = fns[4]();
+      cache.add(promiseFn4);
+      promiseFn4.then((value) => {
+        results[4] = value;
+        cache.delete(promiseFn4);
+      })
+      return Promise.all(cache).then(() => {
+        return results;
+      })
+    })
+  })
 }

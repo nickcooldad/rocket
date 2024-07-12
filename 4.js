@@ -1,24 +1,44 @@
-async function loadAll(urls, load, limit, cb) {
-  const results = new Array(urls.length)
-  const cache = new Set()
-  const memo = new Map()
-  let promiseFn
-  for (let i = 0; i < urls.length; i++) {
-    if(memo.has(urls[i])){
-      promiseFn = memo.get(urls[i])
-    } else{
-    promiseFn = load(urls[i])
-    memo.set(urls[i], promiseFn)
-    }
-    cache.add(promiseFn)
-    promiseFn.then(value => {
-      results[i] = value
-      cache.delete(promiseFn)
-    })
-    if (cache.size >= limit) {
-      await Promise.race(cache)
-    }
+function loadAll(urls, load, limit, cb) {
+  const result = new Array(urls.length)
+  const cache = new Map()
+  let started = 0
+  let finished = 0
+
+  if(urls.length === 0){
+    return cb(result)
   }
-  await Promise.all(cache)
-  cb(results)
+
+  function helper() {
+    if (finished === urls.length){
+     return cb(result);
+    }
+
+    if(started === urls.length){
+      return;
+    }
+
+    const i = started
+    started++
+    if(cache.has(urls[i])){
+      cache.get(urls[i]).then(value => {
+        result[i] = value
+      })
+      finished++
+      helper()
+    } else {
+     const promise = load(urls[i]).then(value => {
+        cache.set(urls[i], Promise.resolve(value))
+        result[i] = value
+        finished++
+        helper()
+        return value
+      })
+      cache.set(urls[i], promise)
+    }
+   
+  }
+
+  for(let i = 0; i < limit; i++){
+    helper()
+  }
 }
