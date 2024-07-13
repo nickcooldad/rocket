@@ -21,16 +21,17 @@ class AA {
   )
   
 
-  const promisFlat = arg =>{
-    return arg.reduce((acc, item) => {
-        if(Array.isArray(item)){
-           acc.push(...promisFlat(item))
-        } else{
-            acc.push(item)
-        }
-        return acc
-    }, [])
-  }
+  // const promisFlat = arg =>{
+  //   return arg.reduce((acc, item) => {
+  //       if(Array.isArray(item)){
+  //          acc.push(...promisFlat(item))
+  //       } else{
+  //           acc.push(item)
+  //       }
+  //       return acc
+  //   }, [])
+  // }
+  
   async function flatten(value) {
     let promises = (await value.read()).map(async (item) => {
         if(item instanceof AA){
@@ -39,7 +40,8 @@ class AA {
         return item
     })
 
-    return promisFlat(await Promise.all(promises))
+    // return promisFlat(await Promise.all(promises))
+    return Promise.all(promises).then(x => x.flat());
   }
   
   console.time("aa")

@@ -8,10 +8,11 @@ async function sum(a, b) {
 function callbackify(fn) {
   return (...arg) => {
     const cb = arg.at(-1)
-    const args = arg.slice(0, arg.length - 1)
-    fn(...args).then(value => {
-      cb(null, value)
-    }, error => cb(error))
+    const args = arg.slice(0, -1)
+    fn(...args).then(
+      value => cb(null, value),
+      error => cb(error),
+    )
   }
 }
 

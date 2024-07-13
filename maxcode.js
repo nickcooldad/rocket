@@ -2300,3 +2300,127 @@ function run2(fns, limit) {
     })
   })
 }
+//Промисы - 20
+function loadAll(urls, load, limit, cb) {
+  const result = new Array(urls.length)
+  const cache = new Map()
+  let started = 0
+  let finished = 0
+  let active = 0
+
+  if (urls.length === 0) {
+    return cb(result)
+  }
+
+  function helper() {
+    if (active === limit) {
+      return;
+    }
+
+    if (finished === urls.length) {
+      return cb(result);
+    }
+
+    if (started === urls.length) {
+      return;
+    }
+
+    const i = started
+    started++
+
+    if (cache.has(urls[i])) {
+      helper()
+    } else {
+      active++
+      cache.set(
+        urls[i],
+        load(urls[i]).finally(() => active--),
+      );
+    }
+
+    cache.get(urls[i]).then(value => {
+      result[i] = value
+      finished++
+      helper()
+    })
+  }
+
+  for (let i = 0; i < limit; i++) {
+    helper()
+  }
+}
+
+// Промисы -21
+  // const promisFlat = arg =>{
+  //   return arg.reduce((acc, item) => {
+  //       if(Array.isArray(item)){
+  //          acc.push(...promisFlat(item))
+  //       } else{
+  //           acc.push(item)
+  //       }
+  //       return acc
+  //   }, [])
+  // }
+  
+  async function flatten(value) {
+    let promises = (await value.read()).map(async (item) => {
+        if(item instanceof AA){
+            return flatten(item)
+        }
+        return item
+    })
+
+    // return promisFlat(await Promise.all(promises))
+    return Promise.all(promises).then(x => x.flat());
+  }
+  
+// Промисы - 22
+
+function promisify(fn) {
+  return (...args) => {
+      return new Promise((resolve, reject) => {
+        fn(...args, (err, result) => {
+          if(err === null){
+            resolve(result)
+          } else {
+            reject(err)
+          }
+        })
+      })
+  }
+} 
+
+// Промисы - 23
+function callbackify(fn) {
+  return (...arg) => {
+    const cb = arg.at(-1)
+    const args = arg.slice(0, -1)
+    fn(...args).then(
+      value => cb(null, value),
+      error => cb(error),
+    )
+  }
+}
+
+// Промисы - 24
+function compose(fns) {
+  return fns.reduceRight(compose2, (x, cb) => cb(null, x))
+}
+
+
+function compose2(fn1, fn2){
+return (arg, cb) => {
+  fn1(arg, (err, result) => {
+    if(err === null){
+      fn2(result, (err2, result2) => {
+        if(err2 === null){
+          return cb(null, result2)
+        }
+          return cb(err2)
+      })
+    } else {
+        return cb(err)
+      }
+  })
+}
+}

@@ -19,9 +19,9 @@ function sum(a, b, cb) {
   
 
   function promisify(fn) {
-    return (...arg) => {
+    return (...args) => {
         return new Promise((resolve, reject) => {
-          fn(...arg, (err, result) => {
+          fn(...args, (err, result) => {
             if(err === null){
               resolve(result)
             } else {
