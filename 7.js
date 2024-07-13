@@ -1,25 +1,25 @@
-function any(iterable) {
-  return new Promise((resolve, reject) =>{
-    const errors = []
-    let innerCount = 0
-    let promisesCount = 0
-    for(const promise of iterable){
-      const index = innerCount
-      innerCount++
-
-      Promise.resolve(promise).then(value => {
-        resolve(value)
-      }, error => {
-        errors[index] = error
-        promisesCount++
-
-        if(promisesCount === innerCount){
-          reject(new AggregateError(errors, "All promises were rejected"))
-        }
-      })
-    }
-    if(innerCount === 0){
-      reject(new AggregateError(errors, "All promises were rejected"))
-    }
-  })
+async function sum(a, b) {
+  if (Math.random() < .5) {
+    return a + b; // success
+  }
+  throw "error"; // bad luck
 }
+
+function callbackify(fn) {
+  return (...arg) => {
+    const cb = arg.at(-1)
+    const args = arg.slice(0, arg.length - 1)
+    fn(...args).then(value => {
+      cb(null, value)
+    }, error => cb(error))
+  }
+}
+
+const callbackifiedSum = callbackify(sum);
+
+callbackifiedSum(2, 5, (err, result) => {
+  if (err === null) {
+    console.log(result); // 7
+  }
+});
+
