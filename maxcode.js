@@ -2424,3 +2424,24 @@ return (arg, cb) => {
   })
 }
 }
+
+//Промисы - 25
+function findAllJavascriptFiles(folder, callback, result = []) {
+  let countFolder = 0
+  folder.size((limit) => {
+    for(let i = 0; i < limit; i++){
+      folder.read(i, (file) => {
+        if(typeof file === 'object'){
+          countFolder++
+          findAllJavascriptFiles(file, callback, result)
+        }
+        if(typeof file === 'string' && file.endsWith('.js')){
+          result.push(file)
+        }
+        if(i === limit - 1 && countFolder === 0 ){
+          callback(result)
+        }
+      })
+    }   
+  })
+}
