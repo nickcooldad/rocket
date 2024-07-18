@@ -1,37 +1,43 @@
-function getState(promise) {
-  return new Promise ((resolve) => {
-    promise.then(() => {
-      resolve('fulfilled')
-    }, () => {
-      resolve('rejected')
-    })
-    queueMicrotask(() => resolve('pending'))
- })
+class TimeLimitedCache {
+  #cache = new Map()
+  #timeout = new Map()
+
+  set(key, value, duration) {
+    const timerId = setTimeout(() => {
+      this.#cache.delete(key)
+      this.#timeout.delete(key)
+    }, duration)
+
+    clearTimeout(this.#timeout.get(key))
+
+    if(this.#cache.has(key)){
+      this.#cache.set(key, value)
+      this.#timeout.set(key, timerId)
+      return true
+    }
+
+    this.#cache.set(key, value)
+    this.#timeout.set(key, timerId)
+
+    return false
+  }
+
+  get(key) {
+    return this.#cache.get(key) ?? -1
+  }
+
+  count() {
+    return this.#cache.size
+  }
 }
 
-// // Промис резолвится через 2 секунды
-// const p = new Promise(resolve => {
-//   setTimeout(() => resolve("xxx"), 2000);
-// });
+const cache = new TimeLimitedCache();
 
-// // Через 1 секунду функция говорит, что он pending
-// setTimeout(() => {
-//   getState(p).then(status => console.log(status)); // "pending"
-// }, 1000);
-
-// // Через 3 секунды тот же промис уже fulfilled
-// setTimeout(() => {
-//   getState(p).then(status => console.log(status)); // "fulfilled"
-// }, 3000);
-
-
-const p1 = new Promise(r => {
-  Promise.resolve().then(r);
-})
-
-console.log(p1);
-
-getState(p1).then(actual => {
-  console.log(p1);
-  console.log({ actual, expected: "pending" });
-});
+setTimeout(() => console.log(cache.set(1, 500, 450)),   0);   // false
+setTimeout(() => console.log(cache.get(1)),           100);   // 500
+setTimeout(() => console.log(cache.set(2, 600, 350)), 200);   // false
+setTimeout(() => console.log(cache.get(2)),           300);   // 600
+setTimeout(() => console.log(cache.count()),          400);   // 2
+setTimeout(() => console.log(cache.set(2, 800, 250)), 500);   // true
+setTimeout(() => console.log(cache.count()),          600);   // 1
+setTimeout(() => console.log(cache.get(2)),           700);   // 800

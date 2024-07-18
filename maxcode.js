@@ -2445,3 +2445,37 @@ function findAllJavascriptFiles(folder, callback, result = []) {
     }   
   })
 }
+
+// Таймеры -26
+class TimeLimitedCache {
+  #cache = new Map()
+  #timeout = new Map()
+
+  set(key, value, duration) {
+    const timerId = setTimeout(() => {
+      this.#cache.delete(key)
+      this.#timeout.delete(key)
+    }, duration)
+
+    clearTimeout(this.#timeout.get(key))
+
+    if(this.#cache.has(key)){
+      this.#cache.set(key, value)
+      this.#timeout.set(key, timerId)
+      return true
+    }
+
+    this.#cache.set(key, value)
+    this.#timeout.set(key, timerId)
+
+    return false
+  }
+
+  get(key) {
+    return this.#cache.get(key) ?? -1
+  }
+
+  count() {
+    return this.#cache.size
+  }
+}
