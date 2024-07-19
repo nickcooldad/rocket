@@ -2475,7 +2475,19 @@ class TimeLimitedCache {
     return this.#cache.get(key) ?? -1
   }
 
-  count() {
+  count() { 
     return this.#cache.size
+  }
+}
+
+// Таймеры - 27
+
+function debounce(fn, ms) {
+  let timeId
+  return (...args) => {
+    clearTimeout(timeId)
+    timeId = setTimeout(() => {
+      fn(...args)
+    }, ms)
   }
 }
