@@ -19,35 +19,35 @@
 //   })
 // }
 
-// function findAllJavascriptFiles(folder, callback) {
-//   if (typeof folder === 'string') {
-//     if (folder.endsWith('.js')) {
-//       callback([folder])
-//     } else {
-//       callback([])
-//     }
-//     return
-//   }
+function findAllJavascriptFiles(folder, callback) {
+  if (typeof folder === 'string') {
+    if (folder.endsWith('.js')) {
+      callback([folder])
+    } else {
+      callback([])
+    }
+    return
+  }
 
-//   folder.size((limit) => {
-//     if (limit === 0) {
-//       callback([])
-//     }
-//     let cache = []
-//     let countFile = 0
-//     for (let i = 0; i < limit; i++) {
-//       folder.read(i, (file) => {
-//         findAllJavascriptFiles(file, (result) => {
-//           cache.push(...result)
-//           countFile++
-//           if (countFile === limit) {
-//             callback(cache)
-//           }
-//         })
-//       })
-//     }
-//   })
-// }
+  folder.size((limit) => {
+    if (limit === 0) {
+      callback([])
+    }
+    let cache = []
+    let countFile = 0
+    for (let i = 0; i < limit; i++) {
+      folder.read(i, (file) => {
+        findAllJavascriptFiles(file, (result) => {
+          cache.push(...result)
+          countFile++
+          if (countFile === limit) {
+            callback(cache)
+          }
+        })
+      })
+    }
+  })
+}
 
 
 
@@ -58,7 +58,7 @@ async function findAllJavascriptFilesPromise(folder) {
     }
     return []
   }
-  
+
   const read = promisify(folder.read);
   const size = promisify(folder.size);
 

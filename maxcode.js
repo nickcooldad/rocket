@@ -2426,24 +2426,64 @@ return (arg, cb) => {
 }
 
 //Промисы - 25
-function findAllJavascriptFiles(folder, callback, result = []) {
-  let countFolder = 0
+function findAllJavascriptFiles(folder, callback) {
+  if (typeof folder === 'string') {
+    if (folder.endsWith('.js')) {
+      callback([folder])
+    } else {
+      callback([])
+    }
+    return
+  }
+
   folder.size((limit) => {
-    for(let i = 0; i < limit; i++){
+    if (limit === 0) {
+      callback([])
+    }
+    let cache = []
+    let countFile = 0
+    for (let i = 0; i < limit; i++) {
       folder.read(i, (file) => {
-        if(typeof file === 'object'){
-          countFolder++
-          findAllJavascriptFiles(file, callback, result)
-        }
-        if(typeof file === 'string' && file.endsWith('.js')){
-          result.push(file)
-        }
-        if(i === limit - 1 && countFolder === 0 ){
-          callback(result)
-        }
+        findAllJavascriptFiles(file, (result) => {
+          cache.push(...result)
+          countFile++
+          if (countFile === limit) {
+            callback(cache)
+          }
+        })
       })
-    }   
+    }
   })
+}
+///
+async function findAllJavascriptFilesPromise(folder) {
+  if (typeof folder === 'string') {
+    if (folder.endsWith('.js')) {
+      return [folder]
+    }
+    return []
+  }
+
+  const read = promisify(folder.read);
+  const size = promisify(folder.size);
+
+  const promises = []
+  const limit = await size();
+
+  for (let i = 0; i < limit; i++) {
+    promises.push(read(i).then(findAllJavascriptFilesPromise));
+  }
+
+  const result = await Promise.all(promises);
+  return result.flat();
+}
+
+function promisify(fn) {
+  return (...args) => {
+    return new Promise((resolve) => {
+      fn(...args, resolve);
+    });
+  };
 }
 
 // Таймеры -26
