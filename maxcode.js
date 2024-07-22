@@ -2531,3 +2531,22 @@ function debounce(fn, ms) {
     }, ms)
   }
 }
+
+//Таймеры - 28
+function throttle(fn, ms) {
+  let start = 0
+  let timer
+    return (...args) => {
+    let finish = Date.now()
+    if(finish - start >= ms){
+      start = finish
+      fn(...args)
+    } else {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        start = Date.now()
+        fn(...args)
+       }, ms - (finish - start))
+      }
+    }
+  }
