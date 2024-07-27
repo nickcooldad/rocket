@@ -1,7 +1,124 @@
+
 async function filterProducts(catalog, minPrice, maxPrice) {
-  return [];
+  // const getName = withRetry(promisify(catalog.getName.bind(catalog)))
+  const getName = compose(
+    withRetry,
+    promisify
+  )(catalog.getName.bind(catalog));
+
+  // const checkInStock = rejectFn(withRetry(promisify(catalog.checkInStock.bind(catalog))), (x) => x);
+  const checkInStock = compose(
+    rejectFn((x) => x),
+    withRetry,
+    promisify
+  )(catalog.checkInStock.bind(catalog));
+  
+  
+  const inStockPromise = checkInStock()
+
+  if (catalog instanceof Product) {
+    const getPrice = rejectFn(withRetry(promisify(catalog.getPrice.bind(catalog))), (x) => x >= minPrice && x <= maxPrice)
+    const pricePromise = getPrice()
+
+    try {
+      const [name, price ] = await Promise.all([getName(), pricePromise, inStockPromise]);
+        return [{ name, price }];
+    } catch {
+        return []
+      }
+    } 
+
+  if (catalog instanceof Category) {
+    const getChildren = withRetry(promisify(catalog.getChildren.bind(catalog)))
+    try{
+        const [children] = await Promise.all([getChildren(), inStockPromise]);
+        const results = await Promise.all(children.map(child => filterProducts(child, minPrice, maxPrice)))
+        return results.flat()
+    } catch {
+        return []
+      }
+  }
 }
 
+function rejectFn (rule){
+  return function(fn) {
+    return (...args) => {
+      return fn(...args).then(value => {
+        if(rule(value)){
+          return value
+        } 
+        throw new Error()
+      })
+    }
+  }
+}
+function promisify(fn) {
+  return (...args) => {
+      return new Promise((resolve, reject) => {
+        fn(...args, (err, result) => {
+          if(err === null){
+            resolve(result)
+          } else {
+            reject(err)
+          }
+        })
+      })
+  }
+} 
+
+function withRetry(fn) {
+  return async (...args) => {
+    while(true){
+      try {
+        return await fn(...args)
+      } catch {
+        }
+    }
+  }
+}
+class Category {
+  #name;
+  #inStock;
+  #children;
+
+  constructor(name, inStock, children) {
+    this.#name = name;
+    this.#inStock = inStock;
+    this.#children = children;
+  }
+
+  getName(cb) {
+    helper(cb, this.#name);
+  }
+  checkInStock(cb) {
+    helper(cb, this.#inStock);
+  }
+  getChildren(cb) {
+    helper(cb, this.#children);
+  }
+}
+
+class Product {
+  #name;
+  #inStock;
+  #price;
+
+  constructor(name, inStock, price) {
+    this.#name = name;
+    this.#inStock = inStock;
+    this.#price = price;
+  }
+
+  getName(cb) {
+    helper(cb, this.#name);
+  }
+  checkInStock(cb) {
+    helper(cb, this.#inStock);
+  }
+  getPrice(cb) {
+    helper(cb, this.#price);
+  }
+}
 
 const catalog = new Category("Catalog", true, [
   new Category("Electronics", true, [
@@ -47,51 +164,8 @@ filterProducts(catalog, minPrice, maxPrice)
       }
     }, ms);
   }
-  
-  class Category {
-    #name;
-    #inStock;
-    #children;
-  
-    constructor(name, inStock, children) {
-      this.#name = name;
-      this.#inStock = inStock;
-      this.#children = children;
-    }
-  
-    getName(cb) {
-      helper(cb, this.#name);
-    }
-    checkInStock(cb) {
-      helper(cb, this.#inStock);
-    }
-    getChildren(cb) {
-      helper(cb, this.#children);
-    }
-  }
-  
-  class Product {
-    #name;
-    #inStock;
-    #price;
-  
-    constructor(name, inStock, price) {
-      this.#name = name;
-      this.#inStock = inStock;
-      this.#price = price;
-    }
-  
-    getName(cb) {
-      helper(cb, this.#name);
-    }
-    checkInStock(cb) {
-      helper(cb, this.#inStock);
-    }
-    getPrice(cb) {
-      helper(cb, this.#price);
-    }
-  }
-  
+
+
 
   // products === [  
   //   { name: "Non-Fiction book 2", price: 300 },  
