@@ -2486,7 +2486,93 @@ function promisify(fn) {
   };
 }
 
-// Таймеры -26
+// Промисы - 26
+
+async function filterProducts(catalog, minPrice, maxPrice) {
+
+  const getName = compose(
+    withRetry,
+    promisify
+  )(catalog.getName.bind(catalog));
+
+  const checkInStock = compose(
+    rejectFn((x) => x),
+    withRetry,
+    promisify
+  )(catalog.checkInStock.bind(catalog));
+  
+  
+  const inStockPromise = checkInStock()
+
+  if (catalog instanceof Product) {
+    const getPrice = compose(
+      rejectFn((x) => x >= minPrice && x <= maxPrice),
+      withRetry,
+      promisify
+    )(catalog.getPrice.bind(catalog))
+    const pricePromise = getPrice()
+
+    try {
+      const [name, price ] = await Promise.all([getName(), pricePromise, inStockPromise]);
+        return [{ name, price }];
+    } catch {
+        return []
+      }
+    } 
+
+  if (catalog instanceof Category) {
+    const getChildren = compose(withRetry
+      ,promisify
+    )(catalog.getChildren.bind(catalog))
+    try{
+        const [children] = await Promise.all([getChildren(), inStockPromise]);
+        const results = await Promise.all(children.map(child => filterProducts(child, minPrice, maxPrice)))
+        return results.flat()
+    } catch {
+        return []
+      }
+  }
+}
+function compose(...fn){
+  return (variable) => fn.reduceRight((acc, fn) => fn(acc), variable)
+}
+function rejectFn (rule){
+  return function(fn) {
+    return (...args) => {
+      return fn(...args).then(value => {
+        if(rule(value)){
+          return value
+        } 
+        throw new Error()
+      })
+    }
+  }
+}
+function promisify(fn) {
+  return (...args) => {
+      return new Promise((resolve, reject) => {
+        fn(...args, (err, result) => {
+          if(err === null){
+            resolve(result)
+          } else {
+            reject(err)
+          }
+        })
+      })
+  }
+} 
+
+function withRetry(fn) {
+  return async (...args) => {
+    while(true){
+      try {
+        return await fn(...args)
+      } catch {
+        }
+    }
+  }
+}
+// Таймеры -27
 class TimeLimitedCache {
   #cache = new Map()
   #timeout = new Map()
@@ -2520,7 +2606,7 @@ class TimeLimitedCache {
   }
 }
 
-// Таймеры - 27
+// Таймеры - 28
 
 function debounce(fn, ms) {
   let timeId
@@ -2532,7 +2618,7 @@ function debounce(fn, ms) {
   }
 }
 
-//Таймеры - 28
+//Таймеры - 29
 function throttle(fn, ms) {
   let start = 0
   let timer
