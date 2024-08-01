@@ -1,27 +1,26 @@
 * {
     margin: 0;
     padding: 0;
+    
 }
 
 body{
     height: 100vh;
-    width: 100vw;
+    width: 100vw; 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    background-color: black; 
 }
 .home {
     display: flex;
-    background-color: black;
-    height: 100vh;
-    width: 100vw;
     flex-direction: column;
     justify-content: center;
     align-content: center;
 }
 
 .title {
-    margin-top: 400x;
+    margin-top: 50px;
     display: flex;
     color: white; 
     justify-content: center;
