@@ -1,11 +1,22 @@
-.card {
+.card1 {
     display: flex;
     flex-direction: column;
     justify-content:center;
     align-items: center;
     width: 360px;
     height: 360px;
-    background-color: red;
+    background-color: #B22222;
+    border-radius: 50%;
+}
+
+.card2 {
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    width: 360px;
+    height: 360px;
+    background-color: green;
     border-radius: 50%;
 }
 
@@ -15,6 +26,7 @@
     margin-top: 20px;
     font-size: 35px;
     color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .photo{
@@ -45,4 +57,15 @@
     border: none;
     letter-spacing: 1px;
     border-radius: 10px;
+}
+
+.counter{
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 150px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+    margin-top: 10px;
 }
