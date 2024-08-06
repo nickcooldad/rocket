@@ -3,19 +3,7 @@ import { useState } from 'react';
 import "./counter.css"
 
 
-export const Counter = ({ incrementCount, dicrementCount, name, id }) => {
-
-  const [caught, setCaught] = useState(false)
-
-  const hundleClick = () => {
-    setCaught(!caught)
-    
-    if (!caught) {
-      incrementCount()
-    } else {
-      dicrementCount()
-    }
-  }
+export const Counter = ({ name, id, caught, checked}) => {
 
   return (
     <div className={caught ? 'pokemon caught' : 'pokemon'}>
@@ -23,7 +11,7 @@ export const Counter = ({ incrementCount, dicrementCount, name, id }) => {
       <div className="photo">
         <img className="resized-image" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`} alt="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png" />
       </div>
-      <button className="botton" onClick={hundleClick}>{caught ? "ОТПУСТИТЬ" : 'ПОЙМАТЬ'}</button>
+      <button className="botton" onClick={checked}>{caught ? "ОТПУСТИТЬ" : 'ПОЙМАТЬ'}</button>
     </div>
   )
 }

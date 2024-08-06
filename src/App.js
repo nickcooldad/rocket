@@ -86,22 +86,23 @@ const pokemons = [
 ]
 
 function App() {
-  const [count, setCount] = useState(0)
-  const incrementCount = () => {
-    setCount(count + 1)
-  }
-  
-  const dicrementCount = () => {
-    setCount(count - 1)
+  const [caughtPokemons, setCaughtPokemons] = useState([])
+
+  const checked = (pokemon) => {
+    if(caughtPokemons.includes(pokemon)){
+      setCaughtPokemons(caughtPokemons.filter(item => item !== pokemon))
+    } else {
+      setCaughtPokemons([...caughtPokemons, pokemon])
+    }
   }
 
   return ( 
     <div className="home">
       <h className='title'>Поймано покемонов</h>
-      <h1 className='counter'>{`${count} / ${pokemons.length}`}</h1>
+      <h1 className='counter'>{`${caughtPokemons.length} / ${pokemons.length}`}</h1>
       <div className='note'>{
         pokemons.map(pokemon => {
-          return <Counter incrementCount={incrementCount} dicrementCount={dicrementCount} id={pokemon.id} name={pokemon.name}/>
+          return <Counter checked={() => checked(pokemon.name)} id={pokemon.id} name={pokemon.name} caught={caughtPokemons.includes(pokemon.name)}/>
         })
         }
       </div>
