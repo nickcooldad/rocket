@@ -36,11 +36,8 @@ export function StarAndCup() {
       <div className='line5'></div>
       </div>
       </div>
-    </div>
-    
-    
-  
-    <div className='bottomBlockNumber'>
+      
+      <div className='bottomBlockNumber'>
       <div className='bottomBlockNull'>0</div>
     <div className='bottomBlock'>
     <div className='numberBigStar'>20/25</div>
@@ -49,6 +46,7 @@ export function StarAndCup() {
     <div  className='numberStar'><div>200</div></div>
     <div  className='numberStar'><div>500</div></div>
     <div  className='numberCup'><div>1000</div></div>
+    </div>
     </div>
     </div>
     </div>

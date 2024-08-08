@@ -70,21 +70,16 @@ body{
   display: flex;
   justify-content: center;
 }
+
 .bottomBlockNumber{
-  width: 900px;
   display: flex;
-  justify-content: center;
-  gap: 130px;
-}
-.bottomBlockNull{
-   width: 100px;
-   display: flex; 
   justify-content: flex-end;
+  gap: 95px;
 }
 .bottomBlock{
   display: flex;
   gap: 130px;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
 }
 
 .numberBigStar {
