@@ -1,11 +1,13 @@
 
 import './App.css';
-import { StarAndCup } from './components/starAndCup';
+import { ProgressBar } from './components/progressBar';
 
 function App() {
   return (
     <div className="App">
-      <StarAndCup/>
+      <ProgressBar
+      thresholds={[25,50, 100, 200, 500, 1000]}
+      value={20}/>
     </div>
   );
 }

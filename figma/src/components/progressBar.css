@@ -72,14 +72,18 @@ body{
 }
 
 .bottomBlockNumber{
+  margin-top: 10px;
   display: flex;
   justify-content: flex-end;
-  gap: 95px;
+  gap: 90px;
+  color: rgb(151, 147, 147);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 14px;
 }
+
 .bottomBlock{
   display: flex;
   gap: 130px;
-  /* justify-content: flex-end; */
 }
 
 .numberBigStar {

@@ -1,7 +1,7 @@
 import React from 'react'
-import "./starAndCup.css"
+import "./progressBar.css"
 
-export function StarAndCup() {
+export function ProgressBar({thresholds, value}) {
   return (
     <div className='rating'>
     <div className='topBlock'>
@@ -13,8 +13,6 @@ export function StarAndCup() {
        <img className='cup' src='./images/cup.svg' alt='cup'/>
     </div>
           
-
-
     <div className='restangle'>
       <div className='lines'>
       <div className='lineBigStar'>
@@ -40,12 +38,12 @@ export function StarAndCup() {
       <div className='bottomBlockNumber'>
       <div className='bottomBlockNull'>0</div>
     <div className='bottomBlock'>
-    <div className='numberBigStar'>20/25</div>
-    <div className='numberStar'>50</div>
-    <div className='numberStar'><div>100</div></div>
-    <div  className='numberStar'><div>200</div></div>
-    <div  className='numberStar'><div>500</div></div>
-    <div  className='numberCup'><div>1000</div></div>
+    <div className='numberBigStar'>{value < 25 ? `${value}/25` : '25/25'}</div>
+    <div className='numberStar'>{thresholds[1]}</div>
+    <div className='numberStar'><div>{thresholds[2]}</div></div>
+    <div  className='numberStar'><div>{thresholds[3]}</div></div>
+    <div  className='numberStar'><div>{thresholds[4]}</div></div>
+    <div  className='numberCup'><div>{thresholds[5]}</div></div>
     </div>
     </div>
     </div>
