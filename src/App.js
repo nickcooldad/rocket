@@ -85,16 +85,19 @@ const pokemons = [
   }
 ].slice(0, 3)
 
-async function catchPokemonApi(id) {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-}
- 
+// async function catchPokemonApi(id) {
+//   await new Promise(resolve => setTimeout(resolve, 1000));
+// }
+let listPokemons
+let link = 'https://pokeapi.co/api/v2/pokemon/'
 async function fetchPokemons(){
- const result = await fetch('https://pokeapi.co/api/v2/pokemon/')
- console.log((await result.json()).results)
-
+ const result = await fetch(link)
+ console.log((await result.json()).next)
+ link = ((await result.json()).next)
+ return ((await result.json()).result)
+//  const listPokemons = (await result.json().results)
  // [{name, url}] → [{name, id}]
-}
+}   
 // GET https://pokeapi.co/api/v2/pokemon/
 // https://pokeapi.co/api/v2/pokemon/20/
 //                                   id
@@ -116,12 +119,13 @@ async function fetchPokemons(){
 function App() {
   console.log("🎨 App")
   const [caughtPokemons, setCaughtPokemons] = useState([])
+  const [list, setList] = useState()
 
   const catchOrReleasePokemon = async (pokemon) => {
-    catchPokemonApi().catch(() => {
-      // ...
-      // reset state changes
-    })
+    // catchPokemonApi().catch(() => {
+    //   // ...
+    //   // reset state changes
+    // })
     // if(caughtPokemons.includes(pokemon)){
     //   setCaughtPokemons(caughtPokemons.filter(item => item !== pokemon))
     // } else {
@@ -148,9 +152,13 @@ function App() {
   
   return ( 
     <div className="home">
-      <h className='title'>Поймано покемонов</h>
+      <h1 className='title'>Поймано покемонов</h1>
       <h1 className='counter'>{`${caughtPokemons.length} / ${pokemons.length}`}</h1>
-      <button onClick={fetchPokemons}>+</button>
+      <button className='fetchButton' onClick={fetchPokemons}>Загрузить список покемонов</button>
+      <div className='buttonsNextAndBack'>
+      <button className='fetchButtonNext' onClick={fetchPokemons}>Вперед...</button>
+      <button className='fetchButtonBack' onClick={fetchPokemons}>Назад...</button>
+      </div>
       <div className='note'>{
         pokemons.map(pokemon => {
           return <Pokemon
