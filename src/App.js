@@ -1,100 +1,113 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import "./App.css"
 import {Pokemon} from './components/pokemon';
-const pokemons = [
-  {
-    name: "bulbasaur",
-    id: "1"
-  },
-  {
-    name: "ivysaur",
-    id: "2"
-  },
-  {
-    name: "venusaur",
-    id: "3"
-  },
-  {
-    name: "charmander",
-    id: "4"
-  },
-  {
-    name: "charmeleon",
-    id: "5"
-  },
-  {
-    name: "charizard",
-    id: "6"
-  },
-  {
-    name: "squirtle",
-    id: "7"
-  },
-  {
-    name: "wartortle",
-    id: "8"
-  },
-  {
-    name: "blastoise",
-    id: "9"
-  },
-  {
-    name: "caterpie",
-    id: "10"
-  },
-  {
-    name: "metapod",
-    id: "11"
-  },
-  {
-    name: "butterfree",
-    id: "12"
-  },
-  {
-    name: "weedle",
-    id: "13"
-  },
-  {
-    name: "kakuna",
-    id: "14"
-  },
-  {
-    name: "beedrill",
-    id: "15"
-  },
-  {
-    name: "pidgey",
-    id: "16"
-  },
-  {
-    name: "pidgeotto",
-    id: "17"
-  },
-  {
-    name: "pidgeot",
-    id: "18"
-  },
-  {
-    name: "rattata",
-    id: "19"
-  },
-  {
-    name: "raticate",
-    id: "20"
-  }
-].slice(0, 3)
+// const pokemons = [
+//   {
+//     name: "bulbasaur",
+//     id: "1"
+//   },
+//   {
+//     name: "ivysaur",
+//     id: "2"
+//   },
+//   {
+//     name: "venusaur",
+//     id: "3"
+//   },
+//   {
+//     name: "charmander",
+//     id: "4"
+//   },
+//   {
+//     name: "charmeleon",
+//     id: "5"
+//   },
+//   {
+//     name: "charizard",
+//     id: "6"
+//   },
+//   {
+//     name: "squirtle",
+//     id: "7"
+//   },
+//   {
+//     name: "wartortle",
+//     id: "8"
+//   },
+//   {
+//     name: "blastoise",
+//     id: "9"
+//   },
+//   {
+//     name: "caterpie",
+//     id: "10"
+//   },
+//   {
+//     name: "metapod",
+//     id: "11"
+//   },
+//   {
+//     name: "butterfree",
+//     id: "12"
+//   },
+//   {
+//     name: "weedle",
+//     id: "13"
+//   },
+//   {
+//     name: "kakuna",
+//     id: "14"
+//   },
+//   {
+//     name: "beedrill",
+//     id: "15"
+//   },
+//   {
+//     name: "pidgey",
+//     id: "16"
+//   },
+//   {
+//     name: "pidgeotto",
+//     id: "17"
+//   },
+//   {
+//     name: "pidgeot",
+//     id: "18"
+//   },
+//   {
+//     name: "rattata",
+//     id: "19"
+//   },
+//   {
+//     name: "raticate",
+//     id: "20"
+//   }
+// ].slice(0, 3)
 
 // async function catchPokemonApi(id) {
 //   await new Promise(resolve => setTimeout(resolve, 1000));
 // }
-let listPokemons
+let counter
+let pokemonsList
 let link = 'https://pokeapi.co/api/v2/pokemon/'
 async function fetchPokemons(){
  const result = await fetch(link)
- console.log((await result.json()).next)
- link = ((await result.json()).next)
- return ((await result.json()).result)
+ const resultJson = (await result.json())
+ counter = await resultJson.count
+ //console.log(await resultJson.next, await resultJson.results)
+ link = await resultJson.next
+ pokemonsList = await resultJson.results.map(pokemon => {
+  let index = -2
+  while(pokemon.url.at(index) !== '/'){
+    index--
+  }
+  return {name : pokemon.name, id : pokemon.url.slice(index + 1, -1)}
+ })
+ fetchPokemons()
+ console.log(pokemonsList)
+//  const links = (await result.json()).next
+//  return ((await result.json()).result)
 //  const listPokemons = (await result.json().results)
  // [{name, url}] → [{name, id}]
 }   
@@ -117,10 +130,15 @@ async function fetchPokemons(){
 
 
 function App() {
+  useEffect(() => {fetchPokemons()},[])
   console.log("🎨 App")
   const [caughtPokemons, setCaughtPokemons] = useState([])
-  const [list, setList] = useState()
+  const [list, setList] = useState(pokemonsList)
 
+  const request = () =>{
+    fetchPokemons()
+    setList(pokemonsList)
+  }
   const catchOrReleasePokemon = async (pokemon) => {
     // catchPokemonApi().catch(() => {
     //   // ...
@@ -153,14 +171,14 @@ function App() {
   return ( 
     <div className="home">
       <h1 className='title'>Поймано покемонов</h1>
-      <h1 className='counter'>{`${caughtPokemons.length} / ${pokemons.length}`}</h1>
-      <button className='fetchButton' onClick={fetchPokemons}>Загрузить список покемонов</button>
+      <h1 className='counter'>{`${caughtPokemons.length} / ${counter}`}</h1>
+      <button className='fetchButton' onClick={request}>Загрузить список покемонов</button>
       <div className='buttonsNextAndBack'>
       <button className='fetchButtonNext' onClick={fetchPokemons}>Вперед...</button>
       <button className='fetchButtonBack' onClick={fetchPokemons}>Назад...</button>
       </div>
       <div className='note'>{
-        pokemons.map(pokemon => {
+        list.map(pokemon => {
           return <Pokemon
             id={pokemon.id}
             name={pokemon.name}
