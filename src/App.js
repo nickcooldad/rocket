@@ -131,21 +131,27 @@ function App() {
 
   console.log("🎨 App")
   const [caughtPokemons, setCaughtPokemons] = useState([])
-  const [list, setList] = useState([[], {offset:0, limit:12}])
+  const [list, setList] = useState([[], 0,{offset:0, limit:12}])
 
   // useEffect( async () =>{
   //   setList(await fetchPokemons())}
   // ,[])
 
   const hundleClickBotton = async () => {
-    setList([(await fetchPokemons(list.at(-1).offset, list.at(-1).limit)), {offset : 12, limit: 12}])
+    setList([(await fetchPokemons(list.at(-1).offset, list.at(-1).limit)),
+      (await fetchPokemons(list.at(-1).offset, list.at(-1).limit)).count,
+      {offset : 0, limit: 12}])
   }
   const hundleClickBottonBack = async () => {
-    setList([(await fetchPokemons(list.at(-1).offset - 12, list.at(-1).limit)), {offset : list.at(-1).offset -= 12, limit: 12}])
+    setList([(await fetchPokemons(list.at(-1).offset - 12, list.at(-1).limit)), 
+      (await fetchPokemons(list.at(-1).offset, list.at(-1).limit)).count, 
+      {offset : list.at(-1).offset -= 12, limit: 12}])
   }
 
   const hundleClickBottonNext = async () => {
-    setList([(await fetchPokemons(list.at(-1).offset, list.at(-1).limit)), {offset : list.at(-1).offset += 12, limit: 12}])
+    setList([(await fetchPokemons(list.at(-1).offset + 12, list.at(-1).limit)), 
+      (await fetchPokemons(list.at(-1).offset, list.at(-1).limit)).count, 
+      {offset : list.at(-1).offset += 12, limit: 12}])
   }
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -204,8 +210,8 @@ function App() {
   return ( 
     <div className="home">
       <h1 className='title'>Поймано покемонов</h1>
-      <h1 className='counter'>{`${caughtPokemons.length} / ${list.at(-1).count ?? '0'}`}</h1>
-      <button className='fetchButton' onClick={hundleClickBotton} disabled={list.at(-1).offset > 0} >Загрузить список покемонов</button>
+      <h1 className='counter'>{`${caughtPokemons.length} / ${list[1]}`}</h1>
+      <button className='fetchButton' onClick={hundleClickBotton} disabled={list.at(-2) > 0} >Загрузить список покемонов</button>
       <div className='buttonsNextAndBack'>
       <button className='fetchButtonNext' onClick={hundleClickBottonBack} disabled={list.at(-1).offset === 0} >Назад...</button>
       <button className='fetchButtonBack'onClick={hundleClickBottonNext} >Вперед...</button>
