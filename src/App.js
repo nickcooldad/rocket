@@ -2,95 +2,11 @@
 import { useState, useCallback, useEffect } from 'react';
 import "./App.css"
 import {Pokemon} from './components/pokemon';
-const pokemons = [
-  {
-    name: "bulbasaur",
-    id: "1"
-  },
-  {
-    name: "ivysaur",
-    id: "2"
-  },
-  {
-    name: "venusaur",
-    id: "3"
-  },
-  {
-    name: "charmander",
-    id: "4"
-  },
-  {
-    name: "charmeleon",
-    id: "5"
-  },
-  {
-    name: "charizard",
-    id: "6"
-  },
-  {
-    name: "squirtle",
-    id: "7"
-  },
-  {
-    name: "wartortle",
-    id: "8"
-  },
-  {
-    name: "blastoise",
-    id: "9"
-  },
-  {
-    name: "caterpie",
-    id: "10"
-  },
-  {
-    name: "metapod",
-    id: "11"
-  },
-  {
-    name: "butterfree",
-    id: "12"
-  },
-  {
-    name: "weedle",
-    id: "13"
-  },
-  {
-    name: "kakuna",
-    id: "14"
-  },
-  {
-    name: "beedrill",
-    id: "15"
-  },
-  {
-    name: "pidgey",
-    id: "16"
-  },
-  {
-    name: "pidgeotto",
-    id: "17"
-  },
-  {
-    name: "pidgeot",
-    id: "18"
-  },
-  {
-    name: "rattata",
-    id: "19"
-  },
-  {
-    name: "raticate",
-    id: "20"
-  }
-].slice(0, 3)
 
 // async function catchPokemonApi(id) {
 //   await new Promise(resolve => setTimeout(resolve, 1000));
 // }
-async function fetchPokemons(offset, limit){
-return await(await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`)).json()
-}
+
 //counter = await resultJson.count
  //console.log(await resultJson.next, await resultJson.results)
  //link = await resultJson.next
@@ -133,25 +49,25 @@ function App() {
   const [caughtPokemons, setCaughtPokemons] = useState([])
   const [list, setList] = useState([[], 0,{offset:0, limit:12}])
 
-  // useEffect( async () =>{
-  //   setList(await fetchPokemons())}
-  // ,[])
+  async function fetchPokemons(offset, limit){
+    return await(await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`)).json()
+    }
 
+  const auxiliaryBottonFunct = async (offsetLink) => {
+    setList([(await fetchPokemons(offsetLink,12)),
+      (await fetchPokemons(offsetLink, 12)).count,
+      {offset : offsetLink, limit: 12}])
+  }
+    
   const hundleClickBotton = async () => {
-    setList([(await fetchPokemons(list.at(-1).offset, list.at(-1).limit)),
-      (await fetchPokemons(list.at(-1).offset, list.at(-1).limit)).count,
-      {offset : 0, limit: 12}])
+    await auxiliaryBottonFunct(list.at(-1).offset)
   }
   const hundleClickBottonBack = async () => {
-    setList([(await fetchPokemons(list.at(-1).offset - 12, list.at(-1).limit)), 
-      (await fetchPokemons(list.at(-1).offset, list.at(-1).limit)).count, 
-      {offset : list.at(-1).offset -= 12, limit: 12}])
+    await auxiliaryBottonFunct(list.at(-1).offset - 12)
   }
 
   const hundleClickBottonNext = async () => {
-    setList([(await fetchPokemons(list.at(-1).offset + 12, list.at(-1).limit)), 
-      (await fetchPokemons(list.at(-1).offset, list.at(-1).limit)).count, 
-      {offset : list.at(-1).offset += 12, limit: 12}])
+    await auxiliaryBottonFunct(list.at(-1).offset + 12)
   }
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -198,14 +114,6 @@ function App() {
   //     setCaughtPokemons([...caughtPokemons, pokemon])
   //   }
   // }, []);
-
-//   const pokemonsList = list.results.map(pokemon => {
-//   let index = -2
-//   while(pokemon.url.at(index) !== '/'){
-//     index--
-//   }
-//   return {name : pokemon.name, id : pokemon.url.slice(index + 1, -1)}
-// })
 
   return ( 
     <div className="home">
