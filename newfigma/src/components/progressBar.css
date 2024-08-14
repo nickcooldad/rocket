@@ -1,0 +1,28 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.parentBar{
+    display: flex;
+    justify-content: space-between;
+    width: 900px;
+    height: 102px;
+}
+
+.topBlock{
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.centerBlock{
+    flex: 1;
+    height: 40px;
+    border-radius: 10px;
+    background-color: blue;
+}
+
