@@ -2,18 +2,19 @@
     box-sizing: border-box;
 }
 body{
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
 }
 .parentBar{
     display: flex;
-    justify-content: space-between;
-    width: 900px;
+    width: 1000px;
     height: 102px;
 }
 
 .topBlock{
+    height: 20px;
+    margin-bottom: 10px;
     flex: 1;
     display: flex;
     justify-content: flex-end;
@@ -22,7 +23,17 @@ body{
 .centerBlock{
     flex: 1;
     height: 40px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     background-color: blue;
+}
+.bottomBlock{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.bottomBlockNumber{
+    display: flex;
+    justify-content: flex-end;
+    margin-left: 10px;
 }
 
