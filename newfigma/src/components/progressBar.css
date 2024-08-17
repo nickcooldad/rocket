@@ -2,9 +2,9 @@
     box-sizing: border-box;
 }
 body{
-    /* display: flex;
+    display: flex;
     justify-content: center;
-    align-items: center; */
+    align-items: center;
 }
 .parentBar{
     display: flex;
@@ -21,15 +21,18 @@ body{
 }
 
 .centerBlock{
-    flex: 1;
+
     height: 40px;
     /* border-radius: 10px; */
-    background-color: blue;
+    background-color: rgb(233, 233, 233);
 }
 .bottomBlock{
     margin-top: 10px;
     display: flex;
     justify-content: space-between;
+    font-size: 14px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #cac7c7;
 }
 .bottomBlockNumber{
     display: flex;
@@ -37,3 +40,17 @@ body{
     margin-left: 10px;
 }
 
+.inputArray{
+    width: 450px;
+    display: flex;
+    justify-content: center;
+}
+
+.inputValue{
+    width: 450px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    align-items: center;
+    flex-direction: column;
+}

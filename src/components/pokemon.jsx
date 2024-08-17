@@ -13,7 +13,7 @@ export const Pokemon_ = ({
   console.log("🐝", name)
   return (
     <div className={caught ? 'pokemon caught' : 'pokemon'}>
-      <h1 className="titleName">{name}</h1>
+      <h1 className="titleName">{`${name}/${id}`}</h1>
       <div className="photo">
         <img className="resized-image" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`} alt="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png" />
       </div>

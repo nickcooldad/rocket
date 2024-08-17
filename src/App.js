@@ -2,7 +2,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import "./App.css"
 import {Pokemon} from './components/pokemon';
-
+import { fetchPokemons } from './API/fetchPokemons';
+fetchPokemons()
 // async function catchPokemonApi(id) {
 //   await new Promise(resolve => setTimeout(resolve, 1000));
 // }
@@ -41,62 +42,41 @@ import {Pokemon} from './components/pokemon';
 //    https://pokeapi.co/api/v2/pokemon/?offset=30&limit=20
 
 
+// 1. Дисейблить кнопку назад, если это первая страница
+// 2. Дисейблить кнопку вперед, если это последняя страница
+// 3. Дисейблить обе кнопки, если в данный момент загружаются новые покемоны
+// 4. Сделать селект с выбором количества покемонов на странице
+//    Опции селекста: 8 12 20 24 40
+// 5*. При изменении размера страницы менять номер страницы так,
+//     чтобы мы оставались примерно в том же месте
+// 6. Почитать про AbortController
+
 
 function App() {
 
 
   console.log("🎨 App")
   const [caughtPokemons, setCaughtPokemons] = useState([])
-  const [list, setList] = useState([[], 0,{offset:0, limit:12}])
+  const [list, setList] = useState([])
+  const [pageData, setPageData] = useState({number: 0, size: 12})
+  const [count, setCount] = useState(0);
 
-  async function fetchPokemons(offset, limit){
-    return await(await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`)).json()
-    }
+  useEffect(() =>{
+    fetchPokemons(pageData.number, pageData.size).then(({ results, count }) => {
+      setList(results)
+      setCount(count);
+    });
+  }, [pageData])
 
-  const auxiliaryBottonFunct = async (offsetLink) => {
-    setList([(await fetchPokemons(offsetLink,12)),
-      (await fetchPokemons(offsetLink, 12)).count,
-      {offset : offsetLink, limit: 12}])
-  }
-    
-  const hundleClickBotton = async () => {
-    await auxiliaryBottonFunct(list.at(-1).offset)
-  }
   const hundleClickBottonBack = async () => {
-    await auxiliaryBottonFunct(list.at(-1).offset - 12)
+    setPageData((prev) => ({...prev, number : prev.number - 1}))
   }
 
   const hundleClickBottonNext = async () => {
-    await auxiliaryBottonFunct(list.at(-1).offset + 12)
+    setPageData((prev) => ({...prev, number : prev.number + 1}))
   }
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await fetchPokemons()
-  //     setList(data)
-  //   }
-  //   fetchData()
-  // },[])
-  const pokemonsList = list[0].length === 0 ? [] :
-    list[0].results.map(pokemon => {
-    let index = -2
-    while(pokemon.url.at(index) !== '/'){
-      index--
-    }
-    return {name : pokemon.name, id : pokemon.url.slice(index + 1, -1)}
-  })
 
-  console.log(pokemonsList)
   const catchOrReleasePokemon = async (pokemon) => {
-    // catchPokemonApi().catch(() => {
-    //   // ...
-    //   // reset state changes
-    // })
-    // if(caughtPokemons.includes(pokemon)){
-    //   setCaughtPokemons(caughtPokemons.filter(item => item !== pokemon))
-    // } else {
-    //   setCaughtPokemons([...caughtPokemons, pokemon])
-    // }
-    
     setCaughtPokemons(prev => {
       if(prev.includes(pokemon)){
         return prev.filter(item => item !== pokemon);
@@ -106,26 +86,18 @@ function App() {
     })
   }
 
-  // const catchOrReleasePokemon = useCallback((pokemon) => {
-  //   if(caughtPokemons.includes(pokemon)){
 
-  //     setCaughtPokemons(caughtPokemons.filter(item => item !== pokemon))
-  //   } else {
-  //     setCaughtPokemons([...caughtPokemons, pokemon])
-  //   }
-  // }, []);
-
+  console.log(">>>", list);
   return ( 
     <div className="home">
       <h1 className='title'>Поймано покемонов</h1>
-      <h1 className='counter'>{`${caughtPokemons.length} / ${list[1]}`}</h1>
-      <button className='fetchButton' onClick={hundleClickBotton} disabled={list.at(-2) > 0} >Загрузить список покемонов</button>
+      <h1 className='counter'>{`${caughtPokemons.length} / ${count}`}</h1>
       <div className='buttonsNextAndBack'>
-      <button className='fetchButtonNext' onClick={hundleClickBottonBack} disabled={list.at(-1).offset === 0} >Назад...</button>
+      <button className='fetchButtonNext' onClick={hundleClickBottonBack}  >Назад...</button>
       <button className='fetchButtonBack'onClick={hundleClickBottonNext} >Вперед...</button>
       </div>
       <div className='note'>{
-        pokemonsList.map(pokemon => {
+        list.map(pokemon => {
           return <Pokemon
             id={pokemon.id}
             name={pokemon.name}
