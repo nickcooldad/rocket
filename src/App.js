@@ -86,15 +86,15 @@ function App() {
     })
   }
 
-
+  
   console.log(">>>", list);
   return ( 
     <div className="home">
       <h1 className='title'>Поймано покемонов</h1>
       <h1 className='counter'>{`${caughtPokemons.length} / ${count}`}</h1>
       <div className='buttonsNextAndBack'>
-      <button className='fetchButtonNext' onClick={hundleClickBottonBack}  >Назад...</button>
-      <button className='fetchButtonBack'onClick={hundleClickBottonNext} >Вперед...</button>
+      <button className='fetchButtonNext' onClick={hundleClickBottonBack}  disabled={pageData.number === 0} >Назад...</button>
+      <button className='fetchButtonBack'onClick={hundleClickBottonNext} disabled={Math.floor(count / pageData.size) === pageData.number}>Вперед...</button>
       </div>
       <div className='note'>{
         list.map(pokemon => {
