@@ -42,9 +42,9 @@ fetchPokemons()
 //    https://pokeapi.co/api/v2/pokemon/?offset=30&limit=20
 
 
-// 1. Дисейблить кнопку назад, если это первая страница
-// 2. Дисейблить кнопку вперед, если это последняя страница
-// 3. Дисейблить обе кнопки, если в данный момент загружаются новые покемоны
+// 1. Дисейблить кнопку назад, если это первая страница-ок
+// 2. Дисейблить кнопку вперед, если это последняя страница-ок
+// 3. Дисейблить обе кнопки, если в данный момент загружаются новые покемоны - ок
 // 4. Сделать селект с выбором количества покемонов на странице
 //    Опции селекста: 8 12 20 24 40
 // 5*. При изменении размера страницы менять номер страницы так,
@@ -58,15 +58,22 @@ function App() {
   console.log("🎨 App")
   const [caughtPokemons, setCaughtPokemons] = useState([])
   const [list, setList] = useState([])
-  const [pageData, setPageData] = useState({number: 0, size: 12})
+  const [pageData, setPageData] = useState({number: 0, size: 4})
   const [count, setCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() =>{
-    fetchPokemons(pageData.number, pageData.size).then(({ results, count }) => {
-      setList(results)
+    setIsLoading(true)
+    fetchPokemons(pageData.number, pageData.size).then(({results, count}) => {
+      setList(results) 
       setCount(count);
-    });
-  }, [pageData])
+      setIsLoading(false)
+    })}, [pageData])
+
+    
+    const hundlClickSelect = (event) => {
+      setPageData((prev) => ({...prev, size: event.target.value}))
+    }
 
   const hundleClickBottonBack = async () => {
     setPageData((prev) => ({...prev, number : prev.number - 1}))
@@ -76,6 +83,7 @@ function App() {
     setPageData((prev) => ({...prev, number : prev.number + 1}))
   }
 
+
   const catchOrReleasePokemon = async (pokemon) => {
     setCaughtPokemons(prev => {
       if(prev.includes(pokemon)){
@@ -83,18 +91,26 @@ function App() {
       } else {
         return [...prev, pokemon];
       }
+
     })
   }
 
-  
   console.log(">>>", list);
   return ( 
     <div className="home">
       <h1 className='title'>Поймано покемонов</h1>
       <h1 className='counter'>{`${caughtPokemons.length} / ${count}`}</h1>
+      <select name='pageSize' className='selectPageSize' onChange={hundlClickSelect}>
+        <option value='' disabled selected>Выберите количество покемонов</option>
+        <option value={8}>8</option>
+        <option value={12}>12</option>
+        <option value={20}>20</option>
+        <option value={24}>24</option>
+        <option value={40}>40</option>
+      </select>
       <div className='buttonsNextAndBack'>
-      <button className='fetchButtonNext' onClick={hundleClickBottonBack}  disabled={pageData.number === 0} >Назад...</button>
-      <button className='fetchButtonBack'onClick={hundleClickBottonNext} disabled={Math.floor(count / pageData.size) === pageData.number}>Вперед...</button>
+      <button className='fetchButtonNext' onClick={hundleClickBottonBack}  disabled={pageData.number === 0 || isLoading} >Назад...</button>
+      <button className='fetchButtonBack'onClick={hundleClickBottonNext} disabled={Math.floor(count / pageData.size) === pageData.number || isLoading}>Вперед...</button>
       </div>
       <div className='note'>{
         list.map(pokemon => {
