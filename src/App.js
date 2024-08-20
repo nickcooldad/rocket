@@ -12,13 +12,6 @@ fetchPokemons()
  //console.log(await resultJson.next, await resultJson.results)
  //link = await resultJson.next
  
-//  pokemonsList = await resultJson.results.map(pokemon => {
-//   let index = -2
-//   while(pokemon.url.at(index) !== '/'){
-//     index--
-//   }
-  //return {name : pokemon.name, id : pokemon.url.slice(index + 1, -1)}
-// })
  //console.log(pokemonsList)
 //  const links = (await result.json()).next
 //  return ((await result.json()).result)
@@ -66,18 +59,18 @@ function App() {
 
   useEffect(() => {
     const controller = new AbortController();
-  
       //setIsLoading(true);
-        fetchPokemons(pageData.number, pageData.size, controller.signal).then(({ results, count }) => {
+        fetchPokemons(pageData.number, pageData.size, controller.signal).then(({results, count}) => {
           setList(results);
-          setCount(count);
+          setCount(count)
+        }, () => {})
           //setIsLoading(false)
-        })
-    
+        
     return () => {
       controller.abort();
     };
   }, [pageData]);
+
 
     console.log(pageData.number,'>>>><<')
   const hundlClickSelect = (event) => {
