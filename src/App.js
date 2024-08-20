@@ -60,15 +60,24 @@ function App() {
   const [list, setList] = useState([])
   const [pageData, setPageData] = useState({number: 0, size: 8})
   const [count, setCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(true)
+ // const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() =>{
-    setIsLoading(true)
-    fetchPokemons(pageData.number, pageData.size).then(({results, count}) => {
-      setList(results) 
-      setCount(count);
-      setIsLoading(false)
-    })}, [pageData])
+
+
+  useEffect(() => {
+    const controller = new AbortController();
+  
+      //setIsLoading(true);
+        fetchPokemons(pageData.number, pageData.size, controller.signal).then(({ results, count }) => {
+          setList(results);
+          setCount(count);
+          //setIsLoading(false)
+        })
+    
+    return () => {
+      controller.abort();
+    };
+  }, [pageData]);
 
     console.log(pageData.number,'>>>><<')
   const hundlClickSelect = (event) => {
@@ -109,8 +118,8 @@ function App() {
         <option value={40}>40</option>
       </select>
       <div className='buttonsNextAndBack'>
-      <button className='fetchButtonNext' onClick={hundleClickBottonBack}  disabled={pageData.number === 0 || isLoading} >Назад...</button>
-      <button className='fetchButtonBack'onClick={hundleClickBottonNext} disabled={Math.floor(count / pageData.size) === pageData.number || isLoading}>Вперед...</button>
+      <button className='fetchButtonNext' onClick={hundleClickBottonBack}  disabled={pageData.number === 0 } >Назад...</button>
+      <button className='fetchButtonBack'onClick={hundleClickBottonNext} disabled={Math.floor(count / pageData.size) === pageData.number }>Вперед...</button>
       </div>
       <div className='note'>{
         list.map(pokemon => {
