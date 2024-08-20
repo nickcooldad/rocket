@@ -58,7 +58,7 @@ function App() {
   console.log("🎨 App")
   const [caughtPokemons, setCaughtPokemons] = useState([])
   const [list, setList] = useState([])
-  const [pageData, setPageData] = useState({number: 0, size: 4})
+  const [pageData, setPageData] = useState({number: 0, size: 8})
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true)
 
@@ -70,10 +70,10 @@ function App() {
       setIsLoading(false)
     })}, [pageData])
 
-    
-    const hundlClickSelect = (event) => {
-      setPageData((prev) => ({...prev, size: event.target.value}))
-    }
+    console.log(pageData.number,'>>>><<')
+  const hundlClickSelect = (event) => {
+    setPageData((prev) => ({number: Math.floor(pageData.number*pageData.size/event.target.value), size: event.target.value}))
+  }
 
   const hundleClickBottonBack = async () => {
     setPageData((prev) => ({...prev, number : prev.number - 1}))
