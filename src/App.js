@@ -3,6 +3,8 @@ import { useState, useCallback, useEffect } from 'react';
 import "./App.css"
 import {Pokemon} from './components/pokemon';
 import { fetchPokemons } from './API/fetchPokemons';
+import { getLastPageNumber } from './test/getLastPageNumber';
+import { Select } from './components/select';
 fetchPokemons()
 // async function catchPokemonApi(id) {
 //   await new Promise(resolve => setTimeout(resolve, 1000));
@@ -63,8 +65,9 @@ function App() {
         fetchPokemons(pageData.number, pageData.size, controller.signal).then(({results, count}) => {
           setList(results);
           setCount(count)
+            //setIsLoading(false)
         }, () => {})
-          //setIsLoading(false)
+        
         
     return () => {
       controller.abort();
@@ -73,8 +76,12 @@ function App() {
 
 
     console.log(pageData.number,'>>>><<')
-  const hundlClickSelect = (event) => {
-    setPageData((prev) => ({number: Math.floor(pageData.number*pageData.size/event.target.value), size: event.target.value}))
+
+  const hundlClickSelect = (sizeSelect) => {
+    setPageData((prev) => ({
+      number: Math.floor(prev.number*prev.size/sizeSelect),
+      size: sizeSelect,
+    }))
   }
 
   const hundleClickBottonBack = async () => {
@@ -96,23 +103,25 @@ function App() {
 
     })
   }
+  const lastNumberPage = getLastPageNumber(count, pageData.size)
 
   console.log(">>>", list);
   return ( 
     <div className="home">
       <h1 className='title'>Поймано покемонов</h1>
       <h1 className='counter'>{`${caughtPokemons.length} / ${count}`}</h1>
-      <select name='pageSize' className='selectPageSize' onChange={hundlClickSelect}>
+      <Select hundleclickSelect={hundlClickSelect} pageDataSize={pageData.size} selectList={[8,12,20,24,40]}/>
+      {/* <select name='pageSize' className='selectPageSize' onChange={hundlClickSelect}>
         <option value='' disabled selected>Выберите количество покемонов</option>
-        <option value={8}>8</option>
+        <option value={8}>8</option>-
         <option value={12}>12</option>
         <option value={20}>20</option>
         <option value={24}>24</option>
         <option value={40}>40</option>
-      </select>
+      </select> */}
       <div className='buttonsNextAndBack'>
       <button className='fetchButtonNext' onClick={hundleClickBottonBack}  disabled={pageData.number === 0 } >Назад...</button>
-      <button className='fetchButtonBack'onClick={hundleClickBottonNext} disabled={Math.floor(count / pageData.size) === pageData.number }>Вперед...</button>
+      <button className='fetchButtonBack'onClick={hundleClickBottonNext} disabled={pageData.number === lastNumberPage}>Вперед...</button>
       </div>
       <div className='note'>{
         list.map(pokemon => {
@@ -131,3 +140,41 @@ function App() {
 }
 
 export default App;
+
+
+// const employees = [
+//   {
+//     name: "Andrew Clark",
+//     vacations: [
+//       ["21.04.24", "24.04.24"],
+//       ["06.05.24", "13.05.24"],
+//       ["24.05.24", "08.06.24"],
+//       ["28.06.24", "18.07.24"],
+//     ],
+//   },
+//   {
+//     name: "Dan Abramov",
+//     vacations: [
+//       ["12.05.24", "20.05.24"],
+//       ["04.05.24", "06.05.24"],
+//       ["25.05.24", "26.05.24"],
+//     ],
+//   },
+//   {
+//     name: "Jason Bonta",
+//     vacations: [
+//       ["13.05.24", "16.05.24"],
+//       ["11.06.24", "12.06.24"],
+//       ["26.05.24", "26.05.24"],
+//       ["25.05.24", "26.05.24"],
+//     ],
+//   },
+//   {
+//     name: "Joe Savona",
+//     vacations: [
+//       ["04.04.24", "06.05.24"],
+//       ["26.05.24", "01.06.24"],
+//       ["13.05.24", "16.05.24"],
+//     ],
+//   },
+// ];

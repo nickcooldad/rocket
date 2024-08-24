@@ -22,10 +22,10 @@ const hundleSubmit = (event) =>{
   setBackGroundColor(`linear-gradient(to bottom, ${tempValue.rgb1}, ${tempValue.rgb2})`)
 
 }
-//style={{ background: `linear-gradient(to bottom, ${tempValue.rgb1} 50%, ${tempValue.rgb2} 50%)` }
+//style={{ background: `linear-gradient(to bottom, ${tempValue.rgb1}, ${tempValue.rgb2})` }
 return (
 
-    <div className="buttonsRgb" >
+    <div className="buttonsRgb" style={{ background: backGroundColor }} >
         <div className='inputs'>
         <input className="firstColor" placeholder='RGB' onChange={hundleChangeFirst}/>
         <input className="lastColor" placeholder='RGB' onChange={hundleChangeLast}/>
