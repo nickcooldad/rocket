@@ -1,0 +1,42 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+}
+
+.centrBlock, .days{
+    display: flex;
+}
+
+.blockInMoth{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.fullName, .emptyBlock{
+    height: 50px;
+    width: 300px;
+}
+
+.number, .day{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+}
+
+.block{
+    height: 40px;
+    width: 40px;
+    background-color: black;
+    border-radius: 10px;
+}
+
+.tableNumbers{
+    display: flex;
+}
