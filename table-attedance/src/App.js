@@ -1,6 +1,6 @@
 
 import './App.css';
-import { TabbleAttedance } from './components/NameFamaly/tabbleAttedance/tabbleAttedance';
+import { TabbleAttedance } from './tabbleAttedance/tabbleAttedance';
 
 
 

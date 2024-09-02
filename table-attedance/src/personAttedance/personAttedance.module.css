@@ -6,8 +6,10 @@ body{
     display: flex;
 }
 
-.centrBlock, .days{
+
+.centerBlock, .topBlock, .days{
     display: flex;
+    justify-content: center;
 }
 
 .blockInMoth{
@@ -39,4 +41,6 @@ body{
 
 .tableNumbers{
     display: flex;
+    gap: 10px;
 }
+
