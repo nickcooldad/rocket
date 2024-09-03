@@ -7,7 +7,7 @@ export function PersonAttedance({employees, numberDaysMoth, month, year}) {
   const days = new Array(numberDaysMoth).fill(null).map((_, index) => index + 1)
   const styleAttedance = 
   {
-    backgroundColor : 'yellow' 
+    backgroundColor : '#fcdf03' 
   }
 
 
@@ -22,17 +22,21 @@ export function PersonAttedance({employees, numberDaysMoth, month, year}) {
              }
           </div>
       </div>
-
         <div className='centerBlock'>
         {
           employees.map(person => {
-            
             const vacation = visitPerson(person.vacations)
+            console.log(vacation)
             return <div className={s.centerBlock}>
               <div className={s.fullName}>{person.name}</div>
-              <div className={s.tableNumbers}>{days.map((day) => {
-                return <div className={s.block} style={vacation[year][month] !== undefined && vacation[year][month].has(day) ? styleAttedance : {}}></div>
-              })}</div>
+              <div className={s.tableNumbers}>
+              {
+                days.map((day) => {
+                  console.log('++')
+                  return <div className={s.block} style={vacation[year] !== undefined && vacation[year][month] !== undefined && vacation[year][month].has(day) ? styleAttedance : {}}></div>
+                })
+              }
+              </div>
             </div>
           })
         }

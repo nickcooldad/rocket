@@ -17,7 +17,7 @@ const hundleClickNext = () => {
     }
   })
 }
-
+console.log(monthAndYear.month, monthList[monthAndYear.month - 1])
 const hundleClickBack = () => {
   setMonthAndYear((prev) => {
     if(prev.month <= 1){
@@ -37,7 +37,7 @@ const hundleClickBack = () => {
               <img src='/images/arrow.svg' alt='arrowLeft' className="imgButtonLeft"/>
           </button>
           <div className="mothYear">{`${monthList[monthAndYear.month - 1]} ${monthAndYear.year}`}</div>
-          <button className='buttonRight' onClick={hundleClickNext} disabled={monthAndYear.year === 2024 && monthAndYear.month === 12}>
+          <button className='buttonRight' onClick={hundleClickNext}>
               <img  src='/images/arrow.svg' alt='arrowRight' className="imgButtonRight" />
           </button>
         </div>
