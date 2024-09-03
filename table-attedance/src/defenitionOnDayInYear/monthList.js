@@ -1,4 +1,4 @@
-export const mothList =
+export const monthList =
 [
  'January', 
  'February', 

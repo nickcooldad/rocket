@@ -1,29 +1,48 @@
 import React, { useState } from 'react'
-import { mothList } from '../defenitionOnDayInYear/mothList'
+import { monthList } from '../defenitionOnDayInYear/monthList'
 import { defineInDays } from '../defenitionOnDayInYear/defineInDays'
 import { PersonAttedance } from '../personAttedance/personAttedance';
 import { visitPerson } from '../visitPerson/visitPerson';
 import './tabbleAttedance.css'
-
 export function TabbleAttedance({employees}) {
 
-const [mothAndYear, setMothAndYear] = useState({moth: 0, year: 2024})
+const [monthAndYear, setMonthAndYear] = useState({month: 1, year: 2024})
+
+const hundleClickNext = () => {
+  setMonthAndYear((prev) => {
+    if(prev.month >= 12){
+      return {month: 1, year: prev.year + 1}
+    } else{
+      return {...prev, month: prev.month + 1}
+    }
+  })
+}
+
+const hundleClickBack = () => {
+  setMonthAndYear((prev) => {
+    if(prev.month <= 1){
+      return {month: 12, year: prev.year - 1}
+    } else{
+      return {...prev, month: prev.month - 1}
+    }
+  })
+}
 
 
   return (
     <div>
         <div className="table">
         <div className="topBlock">
-          <button className='buttonLeft' >
+          <button className='buttonLeft' onClick={hundleClickBack} >
               <img src='/images/arrow.svg' alt='arrowLeft' className="imgButtonLeft"/>
           </button>
-          <div className="mothYear">{`${mothList[mothAndYear.moth]} 2024`}</div>
-          <button className='buttonRight'>
-              <img  src='/images/arrow.svg' alt='arrowRight' className="imgButtonRight"/>
+          <div className="mothYear">{`${monthList[monthAndYear.month - 1]} ${monthAndYear.year}`}</div>
+          <button className='buttonRight' onClick={hundleClickNext} disabled={monthAndYear.year === 2024 && monthAndYear.month === 12}>
+              <img  src='/images/arrow.svg' alt='arrowRight' className="imgButtonRight" />
           </button>
         </div>
         <div className='tableAttedance'>{
-           <PersonAttedance employees={employees} numberDaysMoth={defineInDays()} mothList={mothList}/>
+           <PersonAttedance employees={employees} numberDaysMoth={defineInDays(monthAndYear.year, monthList[monthAndYear.month - 1])} month={monthAndYear.month} year={monthAndYear.year}/>
           }</div>
       </div>
     </div>

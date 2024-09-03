@@ -11,7 +11,7 @@ function App() {
   {
     name: "Andrew Clark",
     vacations: [
-      ["21.04.24", "24.04.24"],
+      ["21.01.24", "24.01.24"],
       ["06.05.24", "13.05.24"],
       ["24.05.24", "08.06.24"],
       ["28.06.24", "18.07.24"],
@@ -44,11 +44,7 @@ function App() {
   },
 ];
 
-function hundleClickNext(){
-}
 
-function hundleClickBack(){
-}
 
   return (
     <div className="App">

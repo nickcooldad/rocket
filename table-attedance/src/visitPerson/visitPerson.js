@@ -11,8 +11,8 @@ export function visitPerson(vacations) {
     result[yearEndKey] ??= {};
 
     const addDays = (yearKey, month, startDay, endDay) => {
-      result[yearKey][month] ??= new Set()
-      result[yearKey][month] = new Set([...result[yearKey][month], ...numbersDayInMonth(startDay, endDay)])
+      result[yearKey][+month] ??= new Set()
+      result[yearKey][+month] = new Set([...result[yearKey][+month], ...numbersDayInMonth(startDay, endDay)])
     }
     if (firstYear === lastYear) {
       if (firstMonth === lastMonth) {
