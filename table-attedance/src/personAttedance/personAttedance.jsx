@@ -1,6 +1,8 @@
 import React from 'react'
 import s from './personAttedance.module.css'
 import { visitPerson } from '../visitPerson/visitPerson';
+import { vacationAllDay } from '../visitPerson/vacationAllDay';
+import { vacationDay } from '../visitPerson/vacationDay';
 //console.log(s);
  
 export function PersonAttedance({employees, numberDaysMoth, month, year}) {
@@ -9,8 +11,17 @@ export function PersonAttedance({employees, numberDaysMoth, month, year}) {
   {
     backgroundColor : '#fcdf03' 
   }
+  
+  const styleAttedanceAll = 
+  {
+    backgroundColor : 'red'
+  }
 
-
+const vacation2 = [
+  ['29.12.24', '05.01.25'],
+  ['01.01.2024', '01.03.2024']
+]
+console.log(visitPerson(vacation2))
   return (
     <div classname={s.fullNameAndTable}>
       <div className={s.topBlock}>
@@ -26,14 +37,16 @@ export function PersonAttedance({employees, numberDaysMoth, month, year}) {
         {
           employees.map(person => {
             const vacation = visitPerson(person.vacations)
-            console.log(vacation)
             return <div className={s.centerBlock}>
               <div className={s.fullName}>{person.name}</div>
               <div className={s.tableNumbers}>
               {
                 days.map((day) => {
-                  console.log('++')
-                  return <div className={s.block} style={vacation[year] !== undefined && vacation[year][month] !== undefined && vacation[year][month].has(day) ? styleAttedance : {}}></div>
+                  return <div className={s.block} style={
+                    vacationAllDay(employees, day, month, year) 
+                    ? styleAttedanceAll : vacationDay(vacation, day, month, year) 
+                    ? styleAttedance : {}
+                  }></div>
                 })
               }
               </div>
